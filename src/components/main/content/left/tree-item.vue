@@ -60,13 +60,13 @@
     }
     .font-icon-home {
       margin-top: -2px;
-      background-image: url("../../../assets/image/menu_icon.png");
+      background-image: url("../../../../assets/image/menu_icon.png");
       background-position: -16px -496px;
     }
     .font-icon-folder {
       height: 18px !important;
       width: 18px !important;
-      background-image: url("../../../assets/image/folder_win10_small.png");
+      background-image: url("../../../../assets/image/folder_win10_small.png");
     }
     .item-text {
       vertical-align: middle;

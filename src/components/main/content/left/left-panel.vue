@@ -44,8 +44,11 @@
        * @param node
        */
       handleNodeClick(obj, node) {
+        if (node.data.id && node.data.id === 1) {
+          return
+        }
         let path = node.data.name
-        while (node.parent && node.parent.id !== 1) {
+        while (node.parent && node.parent.data.id !== 1) {
           path = node.parent.data.name + '/' + path
           node = node.parent
         }

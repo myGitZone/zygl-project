@@ -31,68 +31,33 @@
       </div>
     </div>
     <div class="file-container">
-      <file-block ref="fileBlock" v-for="(item, index) in testData" :key="index" :class="getClass(item)"
-                  :checked="!!getClass(item)"
-                  @mouseup.native.prevent.stop="fileMouseup(item,$event)"
-                  @mousedown.native.prevent.stop="fileMousedown(item,$event)"></file-block>
+      <empty-block v-show="!folderDatas||folderDatas.length===0"></empty-block>
+      <!--<file-block ref="fileBlock" v-for="(item, index) in testData" :key="index" :class="getClass(item)"-->
+      <!--:checked="!!getClass(item)"-->
+      <!--@mouseup.native.prevent.stop="fileMouseup(item,$event)"-->
+      <!--@mousedown.native.prevent.stop="fileMousedown(item,$event)"></file-block>-->
     </div>
   </div>
 </template>
 
 <script>
   import FileBlock from './file-block.vue'
+  import EmptyBlock from './empty-block'
   import {mapGetters, mapMutations} from 'vuex'
   import {RIGHT_CODE} from '@/assets/js/const-value.js'
 
   export default {
+    props: {
+      folderDatas: {
+        type: Array,
+        default() {
+          return []
+        }
+      }
+    },
     data() {
       return {
-        selectFiles: [],
-        testData: [
-          {
-            name: 123
-          }, {
-            name: 1231
-          }, {
-            name: 12311
-          }, {
-            name: 123111
-          }, {
-            name: 1231111
-          }, {
-            name: 12311111
-          }, {
-            name: 123111112
-          }, {
-            name: 1232
-          }, {
-            name: 12322
-          }, {
-            name: 123222
-          }, {
-            name: 1233333
-          }, {
-            name: 12333333
-          }, {
-            name: 123444
-          }, {
-            name: 1235
-          }, {
-            name: 1234
-          }, {
-            name: 1237
-          }, {
-            name: 1238
-          }, {
-            name: 1230
-          }, {
-            name: 12309
-          }, {
-            name: 123654
-          }, {
-            name: 1234010
-          }
-        ]
+        selectFiles: []
       }
     },
     computed: {
@@ -186,7 +151,8 @@
       ...mapMutations({pushPath: 'PUSH_PATH', changeIndex: 'CHANGE_INDEX', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW'})
     },
     components: {
-      FileBlock
+      FileBlock,
+      EmptyBlock
     }
   }
 </script>
@@ -202,7 +168,7 @@
       width: 100%;
       min-width: 600px;
       background: #f8f8f8;
-      background: #f8f8f8 url("../../../assets/image/bg.gif") 0px -2px repeat-x;
+      background: #f8f8f8 url("../../../../assets/image/bg.gif") 0px -2px repeat-x;
       border-bottom: 1px solid #ddd;
       .header-left {
         display: inline-block;
@@ -240,7 +206,7 @@
           cursor: pointer;
           .font-icon-home {
             display: inline-block;
-            background-image: url("../../../assets/image/menu_icon.png");
+            background-image: url("../../../../assets/image/menu_icon.png");
             width: 16px !important;
             background-position: -16px -496px;
             background-size: auto !important;
@@ -258,7 +224,7 @@
           margin-left: -1px;
           box-shadow: #e6e6e6 0px 0px 20px inset;
           background: #f8f8f8;
-          background: #f8f8f8 url("../../../assets/image/bg.gif") 0px -2px repeat-x;
+          background: #f8f8f8 url("../../../../assets/image/bg.gif") 0px -2px repeat-x;
           vertical-align: middle;
           .el-breadcrumb {
             line-height: 2;
@@ -272,7 +238,7 @@
     display: inline-block;
     padding: 3px 7px;
     border-color: #ddd;
-    background: url("../../../assets/image/buttons_40.png") 0 0px repeat-x;
+    background: url("../../../../assets/image/buttons_40.png") 0 0px repeat-x;
     border-radius: 0px;
     font-size: 12px;
     box-sizing: border-box;

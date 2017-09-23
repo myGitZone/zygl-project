@@ -1,6 +1,12 @@
+/*
+* @Author: ycl
+* @Date:
+* @description
+*/
 <template>
-  <router-view></router-view>
+
 </template>
+
 <script>
   export default {}
 </script>
