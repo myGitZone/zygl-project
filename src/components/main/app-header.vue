@@ -16,6 +16,9 @@
       <span class="nav-item">
         <router-link to="organization">组织机构</router-link>
       </span>
+      <span class="nav-item">
+        <router-link to="personmanagement">人员管理</router-link>
+      </span>
     </div>
   </header>
 </template>

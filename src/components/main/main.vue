@@ -44,6 +44,7 @@
         }
       }).then((res) => {
         let dataTree = res.data.data
+        debugger
         dataTree.id = 1
         let data = [dataTree]
         this.setTreeData(data)

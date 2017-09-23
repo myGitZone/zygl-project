@@ -4,16 +4,13 @@
 * @description
 */
 <template>
-  <div class="tree-item-container" @mouseup.prevent.stop="mouseup" @mousedown.prevent.stop="mousedown">
+  <div class="tree-item-container">
     <i class="font-icon-common" :class="[id===1?'font-icon-home':'font-icon-folder']"></i>
     <span class="item-text">{{label}}</span>
   </div>
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
-  import {RIGHT_CODE} from '@/assets/js/const-value.js'
-
   export default {
     props: {
       label: {
@@ -23,23 +20,7 @@
         type: Number
       }
     },
-    methods: {
-      /**
-       * 鼠标右键抬起
-       */
-      mouseup(e) {
-        if (e.button === RIGHT_CODE) {
-          this.changeMenuShow({isShow: true, left: e.clientX, top: e.clientY})
-        }
-      },
-      /**
-       * 鼠标按下
-       */
-      mousedown(e) {
-        this.changeMenuShow({isShow: false, left: 0, top: 0})
-      },
-      ...mapMutations({changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW'})
-    }
+    methods: {}
   }
 </script>
 
@@ -55,18 +36,17 @@
       width: 16px !important;
       margin-right: 0px;
       vertical-align: middle;
-      background-size: auto !important;
+      background-size: 100% auto;
       background-repeat: no-repeat;
     }
     .font-icon-home {
       margin-top: -2px;
-      background-image: url("../../../../assets/image/menu_icon.png");
-      background-position: -16px -496px;
+      background-image: url("../../../assets/image/groupRoot.png");
     }
     .font-icon-folder {
       height: 18px !important;
       width: 18px !important;
-      background-image: url("../../../../assets/image/folder_win10_small.png");
+      background-image: url("../../../assets/image/groupGuest.png");
     }
     .item-text {
       vertical-align: middle;

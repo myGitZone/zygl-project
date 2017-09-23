@@ -55,7 +55,7 @@
         height: 100%;
         display: inline-block;
         pointer-events: none;
-        background-image: url("../../../../assets/image/folder_win10.png");
+        background-image: url("../../../../../assets/image/folder_win10.png");
       }
     }
     .file-name {

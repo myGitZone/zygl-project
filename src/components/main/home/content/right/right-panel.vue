@@ -168,7 +168,7 @@
       width: 100%;
       min-width: 600px;
       background: #f8f8f8;
-      background: #f8f8f8 url("../../../../assets/image/bg.gif") 0px -2px repeat-x;
+      background: #f8f8f8 url("../../../../../assets/image/bg.gif") 0px -2px repeat-x;
       border-bottom: 1px solid #ddd;
       .header-left {
         display: inline-block;
@@ -206,7 +206,7 @@
           cursor: pointer;
           .font-icon-home {
             display: inline-block;
-            background-image: url("../../../../assets/image/menu_icon.png");
+            background-image: url("../../../../../assets/image/menu_icon.png");
             width: 16px !important;
             background-position: -16px -496px;
             background-size: auto !important;
@@ -224,7 +224,7 @@
           margin-left: -1px;
           box-shadow: #e6e6e6 0px 0px 20px inset;
           background: #f8f8f8;
-          background: #f8f8f8 url("../../../../assets/image/bg.gif") 0px -2px repeat-x;
+          background: #f8f8f8 url("../../../../../assets/image/bg.gif") 0px -2px repeat-x;
           vertical-align: middle;
           .el-breadcrumb {
             line-height: 2;
@@ -238,7 +238,7 @@
     display: inline-block;
     padding: 3px 7px;
     border-color: #ddd;
-    background: url("../../../../assets/image/buttons_40.png") 0 0px repeat-x;
+    background: url("../../../../../assets/image/buttons_40.png") 0 0px repeat-x;
     border-radius: 0px;
     font-size: 12px;
     box-sizing: border-box;
