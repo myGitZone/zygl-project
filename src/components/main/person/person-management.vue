@@ -4,129 +4,169 @@
 * @description
 */
 <template>
-  <panel-split :leftWidth="400"
-               :left-max-width="600">
-    <div slot="left" class="left-panel-orgtree">
-      <el-tree :data="data" :props="defaultProps"
-               @node-click="handleNodeClick"></el-tree>
+  <div class="person-content">
+    <el-row>
+      <el-col class="query-label" :span="2">
+        <label>姓 名：</label>
+      </el-col>
+      <el-col :span="4">
+        <el-input size="small"></el-input>
+      </el-col>
+      <el-col class="query-label" :span="2">
+        <label>部 门：</label>
+      </el-col>
+      <el-col :span="4">
+        <el-cascader size="small"></el-cascader>
+      </el-col>
+      <el-col class="query-label" :span="2">
+        <el-button size="small" type="primary">查 询</el-button>
+      </el-col>
+    </el-row>
+    <el-row ref="table" class="table-content">
+      <el-table
+        :data="tableData"
+        border
+        :height="tableHeight"
+        highlight-current-row
+        style="width: 100%">
+        <el-table-column
+          prop="nickname"
+          label="姓名"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          prop="orgid"
+          label="部门">
+        </el-table-column>
+        <el-table-column
+          prop="username"
+          label="帐号">
+        </el-table-column>
+        <el-table-column
+          prop="password"
+          label="密码">
+        </el-table-column>
+        <el-table-column
+          prop="email"
+          label="邮箱">
+        </el-table-column>
+        <el-table-column
+          prop="mobilephone"
+          label="电话">
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage2"
+        :page-sizes="[100, 200, 300, 400]"
+        :page-size="100"
+        layout="sizes, prev, pager, next"
+        :total="1000">
+      </el-pagination>
+    </el-row>
+    <div class="btn-content">
+      <el-button size="small" type="primary" @click="addClick">添 加</el-button>
+      <el-button size="small" type="primary">编 辑</el-button>
+      <el-button size="small" type="primary">删 除</el-button>
     </div>
-    <div class="right-panel-editorg" slot="right">
-      <div class="org-title-content">
-        <div class="btn-content">
-          <el-button type="primary" size="small">编  辑</el-button>
-          <el-button type="primary" size="small">添加同级机构</el-button>
-          <el-button type="primary" size="small">添加下级机构</el-button>
-        </div>
-        <div class="edit-content">
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">机构名称：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input :disabled="!edit"></el-input>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">机构编码：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input disabled></el-input>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">机构描述：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input :disabled="!edit" type="textarea"></el-input>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">&nbsp</label>
-            </el-col>
-            <el-col :span="18">
-              <el-button type="primary" size="small">保 存</el-button>
-              <el-button type="primary" size="small">取 消</el-button>
-            </el-col>
-          </el-row>
-        </div>
-      </div>
-    </div>
-  </panel-split>
+    <el-dialog
+      :modal="false"
+      custom-class="dialog-custom-add-edit"
+      title="提示"
+      :visible.sync="showDialog"
+      size="small"
+      :before-close="handleClose">
+      <add-editPerson @cancelClick="cancelClick" @saveClick="saveClick"></add-editPerson>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-  import PanelSplit from '@/base/panel-split'
+  import AddEditPerson from './add-edit-person'
+  import {SIGUP_URL} from '@/assets/js/const-value'
 
   export default {
     data() {
       return {
-        edit: true,
-        data: [{
-          label: '一级 1',
-          children: [{
-            label: '二级 1-1',
-            children: [{
-              label: '三级 1-1-1'
-            }]
-          }]
-        }],
-        defaultProps: {
-          children: 'children',
-          label: 'label'
-        }
+        tableHeight: 0,
+        showDialog: false,
+        tableData: []
       }
     },
+    mounted() {
+      this.$nextTick(() => {
+        debugger
+        this.tableHeight = this.$refs.table.$el.clientHeight
+      })
+    },
     methods: {
-      handleNodeClick(data) {
-        console.log(data)
+      /**
+       * 添加按钮点击事件
+       */
+      addClick() {
+        this.showDialog = true
+      },
+      /**
+       * 取消按钮点击事件
+       */
+      cancelClick() {
+        this.showDialog = false
+      },
+      /**
+       * 保存按钮点击事件
+       */
+      saveClick(obj) {
+        let params = new URLSearchParams()
+        debugger
+        params.set('nickName', obj.nickName)
+        params.set('orgId', obj.orgId)
+        params.set('userName', obj.userName)
+        params.set('passWord', obj.passWord)
+        params.set('email', obj.email)
+        params.set('mobilePhone', obj.mobilePhone)
+        this.$axios.post(SIGUP_URL, params).then((res) => {
+          if (res.data.status) {
+          } else {
+          }
+        })
+        this.showDialog = false
       }
     },
     components: {
-      PanelSplit
+      AddEditPerson
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .left-panel-orgtree {
-    padding-left: 20px;
-    padding-top: 10px;
-    box-sizing: border-box;
-    .el-tree {
-      border: none;
+<style lang="scss">
+  .dialog-custom-add-edit {
+    box-shadow: 0px 0px 20px rgba(0, 140, 255, 0.46);
+    border: 1px solid #71b9f3;
+    .el-dialog__body {
+      padding: 0 !important;
     }
   }
-
-  .right-panel-editorg {
-    font-size: 2rem;
-    &:after {
-      content: '';
-      display: table;
-      clear: both;
+</style>
+<style lang="scss" scoped>
+  .person-content {
+    .query-label {
+      text-align: right;
+    }
+    .table-content {
+      position: absolute;
+      top: 100px;
+      bottom: 60px;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      .el-pagination {
+        padding: 10px 0 0 0;
+      }
     }
     .btn-content {
-      float: right;
-      padding: 5px 0;
-      margin-right: 10px;
-    }
-    .edit-content {
       position: absolute;
-      top: 30%;
-      right: 0;
-      left: 0;
-      width: 400px;
-      margin: auto;
-      .el-row {
-        margin: 10px 0;
-        text-align: center;
-        .middle-label {
-          vertical-align: middle;
-          font-size: 1.6rem;
-        }
-      }
+      right: 10px;
+      bottom: 5px;
     }
   }
 </style>

@@ -11,25 +11,57 @@
     </div>
     <div class="nav-container">
       <span class="nav-item">
-        <router-link to="home">资源管理</router-link>
+        资源管理
       </span>
       <span class="nav-item">
-        <router-link to="organization">组织机构</router-link>
+        组织机构
       </span>
       <span class="nav-item">
-        <router-link to="personmanagement">人员管理</router-link>
+        人员管理
       </span>
     </div>
+    <el-dialog
+      :modal="false"
+      custom-class="dialog-custom"
+      title="提示"
+      :visible.sync="dialogVisible"
+      size="large"
+      :before-close="handleClose">
+      <person-manage></person-manage>
+    </el-dialog>
   </header>
 </template>
 
 <script>
-  export default {}
-</script>
+  import Organization from '@/components/main/organization/organization'
+  import PersonManage from '@/components/main/person/person-management'
 
+  export default {
+    data() {
+      return {
+        dialogVisible: true
+      }
+    },
+    components: {
+      Organization,
+      PersonManage
+    }
+  }
+</script>
+<style lang="scss">
+  .dialog-custom {
+    width: 60%;
+    height: 70%;
+    box-shadow: 0px 0px 20px rgba(0,140,255,0.46);
+    border: 1px solid #71b9f3;
+    .el-dialog__body {
+      padding: 0 !important;
+    }
+  }
+</style>
 <style lang="scss" scoped>
   .header-container {
-    height:40px;
+    height: 40px;
     line-height: 40px;
     box-sizing: border-box;
     border-bottom: 1px solid #eee;
@@ -49,7 +81,7 @@
         /*vertical-align: middle;*/
       }
     }
-    .nav-container{
+    .nav-container {
       display: inline-block;
       vertical-align: top;
       font-size: 1.6rem;

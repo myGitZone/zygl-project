@@ -4,57 +4,59 @@
 * @description
 */
 <template>
-  <panel-split :leftWidth="400"
-               :left-max-width="600">
-    <div slot="left" class="left-panel-orgtree">
-      <el-tree :data="data" :props="defaultProps"
-               @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
-    </div>
-    <div class="right-panel-editorg" slot="right">
-      <div class="org-title-content">
-        <div class="btn-content">
-          <el-button type="primary" size="small">编  辑</el-button>
-          <el-button type="primary" size="small">添加同级机构</el-button>
-          <el-button type="primary" size="small">添加下级机构</el-button>
-        </div>
-        <div class="edit-content">
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">机构名称：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input :disabled="!edit"></el-input>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">机构编码：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input disabled></el-input>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">机构描述：</label>
-            </el-col>
-            <el-col :span="18">
-              <el-input :disabled="!edit" type="textarea"></el-input>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <label class="middle-label">&nbsp</label>
-            </el-col>
-            <el-col :span="18">
-              <el-button type="primary" size="small">保 存</el-button>
-              <el-button type="primary" size="small">取 消</el-button>
-            </el-col>
-          </el-row>
+  <div class="org-content">
+    <panel-split :leftWidth="400"
+                 :left-max-width="600">
+      <div slot="left" class="left-panel-orgtree">
+        <el-tree :data="data" :props="defaultProps"
+                 @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
+      </div>
+      <div class="right-panel-editorg" slot="right">
+        <div class="org-title-content">
+          <div class="btn-content">
+            <el-button type="primary" size="small">编  辑</el-button>
+            <el-button type="primary" size="small">添加同级机构</el-button>
+            <el-button type="primary" size="small">添加下级机构</el-button>
+          </div>
+          <div class="edit-content">
+            <el-row>
+              <el-col :span="6">
+                <label class="middle-label">机构名称：</label>
+              </el-col>
+              <el-col :span="18">
+                <el-input :disabled="!edit"></el-input>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="6">
+                <label class="middle-label">机构编码：</label>
+              </el-col>
+              <el-col :span="18">
+                <el-input disabled></el-input>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="6">
+                <label class="middle-label">机构描述：</label>
+              </el-col>
+              <el-col :span="18">
+                <el-input :disabled="!edit" type="textarea"></el-input>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="6">
+                <label class="middle-label">&nbsp</label>
+              </el-col>
+              <el-col :span="18">
+                <el-button type="primary" size="small">保 存</el-button>
+                <el-button type="primary" size="small">取 消</el-button>
+              </el-col>
+            </el-row>
+          </div>
         </div>
       </div>
-    </div>
-  </panel-split>
+    </panel-split>
+  </div>
 </template>
 
 <script>

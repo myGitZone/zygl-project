@@ -67,7 +67,9 @@
         let params = new URLSearchParams()
         params.set('userName', this.formdata.username)
         params.set('passWord', this.formdata.password)
+        debugger
         this.$axios.post(LOGIN_URL, params).then((res) => {
+          debugger
           if (res.data.status) {
             this.showError = false
             this.$router.push('/main')

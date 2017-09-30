@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import router from './router'
 import axios from '@/assets/js/vueAxios.js'
 import store from './store'
-
+import 'babel-polyfill'
 import '@/assets/scss/base.scss'
 import 'font-awesome/css/font-awesome.min.css'
 import 'element-ui/lib/theme-default/index.css'
