@@ -23,7 +23,7 @@
             <label>部门：</label>
           </el-col>
           <el-col :span="18">
-            <el-cascader v-model="orgId" size="small"></el-cascader>
+            <el-cascader change-on-select :props="defaultProps" :options="elCascaderOptions" v-model="orgId" size="small"></el-cascader>
           </el-col>
         </el-row>
       </el-col>
@@ -79,59 +79,111 @@
       <el-button size="small" type="primary" @click="saveClick">保 存</el-button>
     </div>
   </div>
-
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        nickName: '',
-        orgId: '',
-        userName: '',
-        passWord: '',
-        email: '',
-        mobilePhone: ''
-      }
-    },
-    methods: {
-      /**
-       * 取消按钮点击
-       */
-      cancelClick() {
-        this.$emit('cancelClick')
-      },
-      /**
-       * 保存按钮点击事件
-       */
-      saveClick() {
-        let params = {
-          nickName: this.nickName,
-          orgId: this.orgId,
-          userName: this.userName,
-          passWord: this.passWord,
-          email: this.email,
-          mobilePhone: this.mobilePhone
-        }
-        this.$emit('saveClick', params)
+import { mapGetters } from 'vuex'
+export default {
+  props: {
+    userInfo: {
+      type: Object,
+      default() {
+        return {}
       }
     }
+  },
+  data() {
+    return {
+      nickName: '',
+      orgId: [],
+      userName: '',
+      passWord: '',
+      email: '',
+      mobilePhone: '',
+      defaultProps: {
+        children: 'children',
+        label: 'orgname',
+        value: 'id'
+      },
+      elCascaderOptions: []
+    }
+  },
+  computed: {
+    ...mapGetters(['orgDatas'])
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.elCascaderOptions = this.orgDatas.rootNode.children
+      this.initData()
+    })
+  },
+  methods: {
+    /**
+     * 初始化数据
+     */
+    initData() {
+      debugger
+      if (this.userInfo) {
+        // 姓名
+        this.nickName = this.userInfo.nickname ? this.userInfo.nickname : ''
+        let orgId = this.userInfo.orgid
+        // 组织机构
+        if (orgId) {
+          this.orgId.push(+orgId)
+          let org = this.orgDatas[orgId]
+          while (org && org.orgpid) {
+            this.orgId.push(+org.orgpid)
+            org = this.orgDatas[org.orgid]
+          }
+        }
+        this.orgId.reverse()
+        // 用户名
+        this.userName = this.userInfo.username ? this.userInfo.username : ''
+        // 密码
+        this.passWord = this.userInfo.password ? this.userInfo.password : ''
+        // 邮箱
+        this.email = this.userInfo.email ? this.userInfo.email : ''
+        // 手机
+        this.mobilePhone = this.userInfo.mobilephone ? this.userInfo.mobilephone : ''
+      }
+    },
+    /**
+     * 取消按钮点击
+     */
+    cancelClick() {
+      this.$emit('cancelClick')
+    },
+    /**
+     * 保存按钮点击事件
+     */
+    saveClick() {
+      let params = {
+        nickName: this.nickName,
+        orgId: this.orgId,
+        userName: this.userName,
+        passWord: this.passWord,
+        email: this.email,
+        mobilePhone: this.mobilePhone
+      }
+      this.$emit('saveClick', params)
+    }
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .add-edit-content {
-    .el-row {
-      padding: 0 10px;
-    }
-    .text-right {
-      text-align: right;
-    }
-    .el-cascader {
-      width: 100%;
-    }
-    .dialog-footer {
-      text-align: center;
-    }
+.add-edit-content {
+  .el-row {
+    padding: 0 10px;
   }
+  .text-right {
+    text-align: right;
+  }
+  .el-cascader {
+    width: 100%;
+  }
+  .dialog-footer {
+    text-align: center;
+  }
+}
 </style>

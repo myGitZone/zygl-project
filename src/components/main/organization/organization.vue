@@ -6,7 +6,7 @@
 <template>
   <div class="org-content">
     <div class="left-panel-orgtree">
-      <el-tree :data="orgDatas" highlight-current :props="defaultProps" @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
+      <el-tree :data="orgData" highlight-current :props="defaultProps" @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
     </div>
     <div class="right-panel-editorg">
       <div class="org-title-content">
@@ -82,6 +82,9 @@ export default {
   computed: {
     editCanUse() {
       return !this.currentData || this.currentData.level === 0
+    },
+    orgData() {
+      return [this.orgDatas.rootNode]
     },
     ...mapGetters(['orgDatas'])
   },
