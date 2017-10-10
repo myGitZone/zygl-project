@@ -20,7 +20,7 @@
         人员管理
       </span>
     </div>
-    <el-dialog :modal="false" custom-class="dialog-custom" title="提示" :visible.sync="dialogVisible" size="large">
+    <el-dialog :modal="false" custom-class="dialog-custom" :title="title" :visible.sync="dialogVisible" size="large">
       <organization v-if="showDialogIndex===1"></organization>
       <person-manage v-if="showDialogIndex===2"></person-manage>
     </el-dialog>
@@ -36,6 +36,11 @@ export default {
     return {
       dialogVisible: false,
       showDialogIndex: 0
+    }
+  },
+  computed: {
+    title() {
+      return this.showDialogIndex === 1 ? '组织机构' : '人员管理'
     }
   },
   methods: {

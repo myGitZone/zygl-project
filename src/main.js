@@ -10,7 +10,8 @@ import 'babel-polyfill'
 import '@/assets/scss/base.scss'
 import 'font-awesome/css/font-awesome.min.css'
 import 'element-ui/lib/theme-default/index.css'
-
+import { GET_ORGS } from '@/assets/js/const-value'
+import { mapMutations } from 'vuex'
 document.oncontextmenu = (e) => {
   return false
 }
@@ -25,6 +26,19 @@ new Vue({
   el: '#app',
   router,
   store,
+  mounted() {
+    this.$nextTick(() => {
+      this.$axios.get(GET_ORGS).then((res) => {
+        debugger
+        if (res.data.status) {
+          this.setOrgDatas(res.data.data)
+        }
+      })
+    })
+  },
+  methods: {
+    ...mapMutations({ setOrgDatas: 'SET_ORG_DATAS' })
+  },
   template: '<App/>',
-  components: {App}
+  components: { App }
 })

@@ -7,3 +7,4 @@ export const treeData = state => state.treeData
 export const rightMenuShow = state => state.rightMenuShow
 export const left = state => state.left
 export const top = state => state.top
+export const orgDatas = state => state.orgDatas

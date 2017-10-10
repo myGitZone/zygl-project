@@ -25,6 +25,9 @@ const mutations = {
     state.treeData = data
     let name = data[0].folder.length > 0 ? data[0].folder[0].name : ''
     state.path.push(name)
+  },
+  [types.SET_ORG_DATAS](state, data) {
+    state.orgDatas = data
   }
 }
 export default mutations

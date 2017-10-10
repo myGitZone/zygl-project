@@ -14,7 +14,9 @@ const state = {
   // 右键菜单距离左侧的距离
   left: 0,
   // 右键菜单距离上面的距离
-  top: 0
+  top: 0,
+  // 组织机构的树
+  orgDatas: null
 }
 
 export default state

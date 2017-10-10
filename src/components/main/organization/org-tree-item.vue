@@ -5,7 +5,7 @@
 */
 <template>
   <div class="tree-item-container">
-    <i class="font-icon-common" :class="[id===1?'font-icon-home':'font-icon-folder']"></i>
+    <i class="font-icon-common" :class="[level===0?'font-icon-home':'font-icon-folder']"></i>
     <span class="item-text">{{label}}</span>
   </div>
 </template>
@@ -16,7 +16,7 @@
       label: {
         type: String
       },
-      id: {
+      level: {
         type: Number
       }
     },
