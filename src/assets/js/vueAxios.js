@@ -34,7 +34,9 @@ export default {
       })
     axios.interceptors.response.use(
       response => {
-        Cookies.set(JWT_TOKEN, response.headers.authorization)
+        if (response.headers.authorization) {
+          Cookies.set(JWT_TOKEN, response.headers.authorization)
+        }
         return response
       },
       err => {
