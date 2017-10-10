@@ -262,7 +262,6 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      debugger
       this.tableHeight = this.$refs.table.$el.clientHeight
     })
   },
@@ -284,7 +283,6 @@ export default {
      */
     saveClick(obj) {
       let params = new URLSearchParams()
-      debugger
       params.set('nickName', obj.nickName)
       params.set('orgId', obj.orgId)
       params.set('userName', obj.userName)

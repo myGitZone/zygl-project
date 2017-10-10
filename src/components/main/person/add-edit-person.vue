@@ -113,7 +113,6 @@
           email: this.email,
           mobilePhone: this.mobilePhone
         }
-        debugger
         this.$emit('saveClick', params)
       }
     }

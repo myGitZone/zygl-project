@@ -29,7 +29,6 @@ new Vue({
   mounted() {
     this.$nextTick(() => {
       this.$axios.get(GET_ORGS).then((res) => {
-        debugger
         if (res.data.status) {
           this.setOrgDatas(res.data.data)
         }
