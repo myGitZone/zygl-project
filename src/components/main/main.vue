@@ -18,9 +18,8 @@
 import AppHeader from './app-header'
 import AppFooter from './app-footer'
 import RigthMenu from './right-menu'
-import { FOLDER_TREE } from '@/assets/js/const-value.js'
+import { FOLDER_TREE, GET_ORGS } from '@/assets/js/const-value.js'
 import { mapGetters, mapMutations } from 'vuex'
-
 export default {
   name: 'app',
   computed: {
@@ -38,11 +37,18 @@ export default {
     }
   },
   created() {
+    debugger
     this.$axios(FOLDER_TREE).then((res) => {
       let dataTree = res.data.data
       dataTree.id = 1
       let data = [dataTree]
       this.setTreeData(data)
+    })
+    this.$axios.get(GET_ORGS).then((res) => {
+      debugger
+      if (res.data.status) {
+        this.setOrgDatas(res.data.data)
+      }
     })
   },
   mounted() {
@@ -51,7 +57,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setTreeData: 'SET_TREE_DATA' })
+    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setTreeData: 'SET_TREE_DATA', setOrgDatas: 'SET_ORG_DATAS' })
   },
   components: {
     AppHeader,
