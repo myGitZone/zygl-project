@@ -10,9 +10,6 @@
       <span class="title">迅传资源管理平台</span>
     </div>
     <div class="nav-container">
-      <span class="nav-item" @click="itemClick(0)">
-        资源管理
-      </span>
       <span class="nav-item" @click="itemClick(1)">
         组织机构
       </span>
@@ -106,6 +103,16 @@ export default {
     display: inline-block;
     vertical-align: top;
     font-size: 1.6rem;
+    margin-left: 40px;
+    .nav-item {
+      display: inline-block;
+      padding: 0 5px;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      &:hover {
+        background: #eee;
+      }
+    }
   }
 }
 </style>

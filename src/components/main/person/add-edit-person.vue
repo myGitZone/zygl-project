@@ -13,7 +13,7 @@
             <label>姓名：</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="nickName" size="small"></el-input>
+            <el-input placeholder="请输入姓名" v-model="nickName" size="small"></el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -36,7 +36,7 @@
             <label>帐号：</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="userName" size="small"></el-input>
+            <el-input placeholder="请输入帐号" v-model="userName" size="small"></el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -46,7 +46,7 @@
             <label>密码：</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="passWord" size="small"></el-input>
+            <el-input placeholder="请输入请输入密码" v-model="passWord" size="small"></el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -59,7 +59,7 @@
             <label>邮箱：</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="email" size="small"></el-input>
+            <el-input placeholder="请输入邮箱" v-model="email" size="small"></el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -69,7 +69,7 @@
             <label>电话：</label>
           </el-col>
           <el-col :span="18">
-            <el-input v-model="mobilePhone" size="small"></el-input>
+            <el-input placeholder="请输入电话" v-model="mobilePhone" size="small"></el-input>
           </el-col>
         </el-row>
       </el-col>
@@ -122,7 +122,6 @@ export default {
      * 初始化数据
      */
     initData() {
-      debugger
       if (this.userInfo) {
         // 姓名
         this.nickName = this.userInfo.nickname ? this.userInfo.nickname : ''

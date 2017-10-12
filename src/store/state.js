@@ -4,7 +4,7 @@
 // }
 const state = {
   // 记录当前所在path目录中个的索引
-  index: 0,
+  index: -1,
   // 记录点击选择的路径
   path: [],
   // 左侧目录树

@@ -37,15 +37,15 @@ export default {
     }
   },
   created() {
-    debugger
     this.$axios(FOLDER_TREE).then((res) => {
-      let dataTree = res.data.data
-      dataTree.id = 1
-      let data = [dataTree]
-      this.setTreeData(data)
+      if (res.data.status) {
+        let dataTree = res.data.data
+        dataTree.id = 1
+        let data = [dataTree]
+        this.setTreeData(data)
+      }
     })
     this.$axios.get(GET_ORGS).then((res) => {
-      debugger
       if (res.data.status) {
         this.setOrgDatas(res.data.data)
       }
@@ -57,7 +57,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setTreeData: 'SET_TREE_DATA', setOrgDatas: 'SET_ORG_DATAS' })
+    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setTreeData: 'SET_TREE_DATA', setOrgDatas: 'SET_ORG_DATAS', changeIndex: 'CHANGE_INDEX' })
   },
   components: {
     AppHeader,

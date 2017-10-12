@@ -25,7 +25,7 @@ export default {
     axios.interceptors.request.use(
       config => {
         if (Cookies.get(JWT_TOKEN)) {
-          config.headers.authorization = `Bearer ${Cookies.get(JWT_TOKEN)}`
+          config.headers.authorization = `${Cookies.get(JWT_TOKEN)}`
         }
         return config
       },

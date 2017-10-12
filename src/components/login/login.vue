@@ -35,8 +35,8 @@
 
 <script>
 import { LOGIN_URL } from '@/assets/js/const-value.js'
-// import Cookies from 'js-cookie'
-// import {JWT_TOKEN} from '@/assets/js/const-value'
+import Cookies from 'js-cookie'
+import {JWT_TOKEN} from '@/assets/js/const-value'
 const SEPARATION = 100
 const AMOUNTX = 50
 const AMOUNTY = 50
@@ -67,7 +67,7 @@ export default {
       this.$axios.post(LOGIN_URL, params).then((res) => {
         if (res.data.status) {
           this.showError = false
-          // Cookies.set(JWT_TOKEN, res.data.token)
+          Cookies.set(JWT_TOKEN, res.data.token)
           this.$router.push('/main')
         } else {
           this.showError = true

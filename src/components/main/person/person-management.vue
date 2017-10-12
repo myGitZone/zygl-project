@@ -10,7 +10,7 @@
         <label>姓 名：</label>
       </el-col>
       <el-col :span="4">
-        <el-input v-model="usernickname" size="small"></el-input>
+        <el-input placeholder="请输入姓名" v-model="usernickname" size="small"></el-input>
       </el-col>
       <el-col class="query-label" :span="2">
         <label>部 门：</label>
@@ -84,14 +84,12 @@ export default {
   computed: {
     showTableData() {
       let startIndex = (this.currentPage - 1) * this.pageSize
-      debugger
       return this.tableData ? this.tableData.slice(startIndex, startIndex + this.pageSize) : []
     },
     ...mapGetters(['orgDatas'])
   },
   mounted() {
     this.$nextTick(() => {
-      debugger
       this.tableHeight = this.$refs.table.$el.clientHeight
       this.elCascaderOptions = this.orgDatas.rootNode.children
       this.getUserInfo()
@@ -169,7 +167,6 @@ export default {
           confirmButtonText: '确定',
           callback: action => {
             if (action === 'confirm') {
-              debugger
               let params = new URLSearchParams()
               params.append('id', this.currentSelectRow.id)
               this.$axios.post(DELETE_USER, params).then((res) => {
