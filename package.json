@@ -11,11 +11,9 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
-    "@types/axios": "^0.14.0",
-    "@types/es6-promise": "0.0.33",
-    "@types/jsonp": "^0.2.0",
     "axios": "^0.16.2",
     "babel-polyfill": "^6.26.0",
+    "draggabilly": "^2.1.1",
     "element-ui": "^1.4.4",
     "es6-promise": "^4.1.1",
     "js-cookie": "^2.1.4",
