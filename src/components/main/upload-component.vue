@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-container" v-if="show">
+  <div ref="uploadContent" class="upload-container" v-if="show">
     <div class="header">
       文件上传
       <button type="button" aria-label="Close" class="el-dialog__headerbtn" @click="closeClick">
@@ -8,11 +8,11 @@
     </div>
     <div class="content">
       <!-- <div class="file-content"></div>
-                                        <div class="btn-content">
-                                          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                                          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                                        </div> -->
-      <el-upload class="upload-content" :data='bodyData' ref="upload" :action="action" :on-preview="handlePreview" :on-remove="handleRemove" multiple :file-list="fileList" :auto-upload="true" name="upfile" :headers="headers">
+                                                    <div class="btn-content">
+                                                      <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                                                      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                                                    </div> -->
+      <el-upload class="upload-content" :data='bodyData' ref="upload" :action="action" multiple :file-list="fileList" :auto-upload="false" name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       </el-upload>
@@ -24,6 +24,7 @@
 import Cookies from 'js-cookie'
 import { JWT_TOKEN } from '@/assets/js/const-value'
 import { mapGetters } from 'vuex'
+import Draggabilly from 'draggabilly'
 export default {
   props: {
     show: {
@@ -50,7 +51,18 @@ export default {
     },
     ...mapGetters(['currentPath'])
   },
+  mounted() {
+    this.$nextTick(() => {
+      /* eslint-disable no-new */
+      new Draggabilly(this.$refs.uploadContent, {
+        // options...
+      })
+    })
+  },
   methods: {
+    submitUpload() {
+      this.$refs.upload.submit()
+    },
     closeClick() {
       this.$emit('update:show', false)
     }
@@ -76,6 +88,7 @@ export default {
   border: 1px solid #71b9f3;
   background: #fff;
   border-radius: 2px;
+  z-index: 101;
   .header {
     position: absolute;
     width: 100%;
