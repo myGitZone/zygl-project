@@ -1,19 +1,18 @@
 <template>
-  <div class="upload-container">
+  <div class="upload-container" v-if="show">
     <div class="header">
       文件上传
-      <button type="button" aria-label="Close" class="el-dialog__headerbtn">
+      <button type="button" aria-label="Close" class="el-dialog__headerbtn" @click="closeClick">
         <i class="el-dialog__close el-icon el-icon-close"></i>
       </button>
     </div>
     <div class="content">
       <!-- <div class="file-content"></div>
-                              <div class="btn-content">
-                                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                                <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                              </div> -->
-      <el-upload class="upload-content" ref="upload" :action="action" :on-preview="handlePreview" :on-remove="handleRemove" multiple :file-list="fileList" :auto-upload="true" 
-      name="upfile" :headers="headers">
+                                        <div class="btn-content">
+                                          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                                          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                                        </div> -->
+      <el-upload class="upload-content" :data='bodyData' ref="upload" :action="action" :on-preview="handlePreview" :on-remove="handleRemove" multiple :file-list="fileList" :auto-upload="true" name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       </el-upload>
@@ -24,7 +23,14 @@
 <script>
 import Cookies from 'js-cookie'
 import { JWT_TOKEN } from '@/assets/js/const-value'
+import { mapGetters } from 'vuex'
 export default {
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       fileList: []
@@ -35,7 +41,18 @@ export default {
       return `/api/cloud/uploadFile`
     },
     headers() {
-      return {'authorization': Cookies.get(JWT_TOKEN)}
+      return { 'authorization': Cookies.get(JWT_TOKEN) }
+    },
+    bodyData() {
+      return {
+        folderPath: this.currentPath
+      }
+    },
+    ...mapGetters(['currentPath'])
+  },
+  methods: {
+    closeClick() {
+      this.$emit('update:show', false)
     }
   }
 }

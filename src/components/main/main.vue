@@ -11,7 +11,7 @@
     </keep-alive>
     <app-footer></app-footer>
     <rigth-menu ref="rightMenu" v-if="rightMenuShow" :style="style"></rigth-menu>
-    <upload-component class="d"></upload-component>
+    <upload-component :show.sync="showUpload" class="d"></upload-component>
   </div>
 </template>
 
@@ -24,6 +24,11 @@ import { FOLDER_TREE, GET_ORGS } from '@/assets/js/const-value.js'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'app',
+  data() {
+    return {
+      showUpload: true
+    }
+  },
   computed: {
     ...mapGetters(['rightMenuShow', 'left', 'top']),
     style() {

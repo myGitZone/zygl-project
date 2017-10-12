@@ -87,8 +87,7 @@ export default {
 <style lang="scss" scoped>
 .file-block {
   display: inline-block;
-  height: auto;
-  // max-height: 152px;
+  height: auto; // max-height: 152px;
   margin: 10px;
   padding-top: 5px;
   border: 1px solid transparent;
@@ -120,8 +119,8 @@ export default {
     font-size: 1.6rem;
     text-align: center;
     overflow: hidden;
-    text-overflow: ellipsis;
-    // white-space: nowrap;
+    text-overflow: ellipsis; // white-space: nowrap;
+    word-break: break-all;
   }
   .item-select {
     position: absolute;
