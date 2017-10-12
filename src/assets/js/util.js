@@ -22,8 +22,19 @@ export function getFoldersAndFiles(path, root) {
       }
     }
   }
-  return folderInfo ? [...folderInfo.folder, ...folderInfo.file] : []
+  // return folderInfo ? [...folderInfo.folder, ...folderInfo.file] : []
+  return folderInfo ? [...folderInfo.file] : []
 }
+
+export function downloadFiles(urls) {
+  urls.forEach((url) => {
+    let elFrame = document.createElement('iframe')
+    elFrame.style.display = 'none'
+    elFrame.src = encodeURI(url)
+    document.body.appendChild(elFrame)
+  })
+}
+
 function getItem(name, data) {
   let folders = data.folder
   let folder
