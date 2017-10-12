@@ -51,7 +51,7 @@ export default {
   computed: {
     foldersAndFiles() {
       let path = this.currentPath
-      let root = this.treeData[0]
+      let root = this.treeData ? this.treeData[0] : null
       return getFoldersAndFiles(path, root)
     },
     /**
