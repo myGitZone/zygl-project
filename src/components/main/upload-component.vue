@@ -8,10 +8,10 @@
     </div>
     <div class="content">
       <!-- <div class="file-content"></div>
-                                                    <div class="btn-content">
-                                                      <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-                                                      <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-                                                    </div> -->
+                                                        <div class="btn-content">
+                                                          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                                                          <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+                                                        </div> -->
       <el-upload class="upload-content" :data='bodyData' ref="upload" :action="action" multiple :file-list="fileList" :auto-upload="false" name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
@@ -71,6 +71,7 @@ export default {
 </script>
 <style lang="scss">
 .upload-content .el-upload-list {
+  overflow: auto;
   height: 210px;
 }
 </style>
