@@ -11,6 +11,7 @@
     </keep-alive>
     <app-footer></app-footer>
     <rigth-menu ref="rightMenu" v-if="rightMenuShow" :style="style"></rigth-menu>
+    <upload-component class="d"></upload-component>
   </div>
 </template>
 
@@ -18,6 +19,7 @@
 import AppHeader from './app-header'
 import AppFooter from './app-footer'
 import RigthMenu from './right-menu'
+import UploadComponent from './upload-component'
 import { FOLDER_TREE, GET_ORGS } from '@/assets/js/const-value.js'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
@@ -62,7 +64,8 @@ export default {
   components: {
     AppHeader,
     RigthMenu,
-    AppFooter
+    AppFooter,
+    UploadComponent
   }
 }
 </script>
