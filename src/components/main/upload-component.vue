@@ -12,7 +12,8 @@
                                 <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                                 <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
                               </div> -->
-      <el-upload class="upload-content" ref="upload" :action="action" :on-preview="handlePreview" :on-remove="handleRemove" multiple :file-list="fileList" :auto-upload="true">
+      <el-upload class="upload-content" ref="upload" :action="action" :on-preview="handlePreview" :on-remove="handleRemove" multiple :file-list="fileList" :auto-upload="true" 
+      name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       </el-upload>
@@ -31,7 +32,10 @@ export default {
   },
   computed: {
     action() {
-      return `/api/cloud/uploadFile?authorization=${Cookies.get(JWT_TOKEN)}`
+      return `/api/cloud/uploadFile`
+    },
+    headers() {
+      return {'authorization': Cookies.get(JWT_TOKEN)}
     }
   }
 }
