@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, BLANK_MENU } from '@/assets/js/const-value'
 import { downloadFiles } from '@/assets/js/util'
 import Cookies from 'js-cookie'
@@ -38,7 +38,6 @@ export default {
      * 下载点击事件
      */
     downloadClick() {
-      debugger
       if (this.menuType === LEFT_TREE_MENU) {
 
       } else if (this.menuType === FILE_MENU) {
@@ -47,7 +46,11 @@ export default {
         })
         downloadFiles(urls)
       }
-    }
+      setTimeout(() => {
+        this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: -1 })
+      }, 200)
+    },
+    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW' })
   }
 }
 </script>
