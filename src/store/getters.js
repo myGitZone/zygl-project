@@ -14,4 +14,10 @@ export const left = state => state.left
 // 右键菜单top值
 export const top = state => state.top
 // 组织机构数据
-export const orgDatas = state => state.orgDatasz
+export const orgDatas = state => state.orgDatas
+// 获取用户名
+export const username = state => state.username
+// 右键的位置
+export const menuType = state => state.menuType
+// 获取选择的文件fileList
+export const fileList = state => state.fileList

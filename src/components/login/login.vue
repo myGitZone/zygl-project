@@ -9,8 +9,8 @@
     <div class="login-info-container">
       <el-form :model=formdata>
         <el-form-item prop="username" :rules="[
-              { required: true, message: '请输入用户名', trigger: 'blur' }
-            ]">
+                { required: true, message: '请输入用户名', trigger: 'blur' }
+              ]">
           <el-input v-model="formdata.username" placeholder="请输入用户名">
             <template slot="prepend">
               <i class="login-icon fa fa-user-o" aria-hidden="true"></i>
@@ -18,8 +18,8 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password" :rules="[
-              { required: true, message: '请输入密码', trigger: 'blur' }
-            ]">
+                { required: true, message: '请输入密码', trigger: 'blur' }
+              ]">
           <el-input type="password" v-model="formdata.password" placeholder="请输入密码">
             <template slot="prepend">
               <i class="login-icon fa fa-lock" aria-hidden="true"></i>
@@ -36,7 +36,8 @@
 <script>
 import { LOGIN_URL } from '@/assets/js/const-value.js'
 import Cookies from 'js-cookie'
-import {JWT_TOKEN} from '@/assets/js/const-value'
+import { JWT_TOKEN } from '@/assets/js/const-value'
+import { mapMutations } from 'vuex'
 const SEPARATION = 100
 const AMOUNTX = 50
 const AMOUNTY = 50
@@ -68,6 +69,7 @@ export default {
         if (res.data.status) {
           this.showError = false
           Cookies.set(JWT_TOKEN, res.data.token)
+          this.setUserName(this.formdata.username)
           this.$router.push('/main')
         } else {
           this.showError = true
@@ -181,7 +183,8 @@ export default {
       }
       this.renderer.render(this.scene, this.camera)
       this.count += 0.1
-    }
+    },
+    ...mapMutations({ setUserName: 'SET_USERNAME' })
   }
 }
 </script>

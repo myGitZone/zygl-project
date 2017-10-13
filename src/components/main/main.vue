@@ -10,8 +10,8 @@
       <router-view></router-view>
     </keep-alive>
     <app-footer></app-footer>
-    <rigth-menu ref="rightMenu" v-if="rightMenuShow" :style="style"></rigth-menu>
-    <upload-component :show.sync="showUpload" class="d"></upload-component>
+    <rigth-menu ref="rightMenu"></rigth-menu>
+    <upload-component :show.sync="showUpload"></upload-component>
   </div>
 </template>
 
@@ -21,26 +21,12 @@ import AppFooter from './app-footer'
 import RigthMenu from './right-menu'
 import UploadComponent from './upload-component'
 import { FOLDER_TREE, GET_ORGS } from '@/assets/js/const-value.js'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 export default {
   name: 'app',
   data() {
     return {
       showUpload: true
-    }
-  },
-  computed: {
-    ...mapGetters(['rightMenuShow', 'left', 'top']),
-    style() {
-      let x = this.left
-      let y = this.top
-      if (window.innerWidth - x < 200) {
-        x = x - 200
-      }
-      if (window.innerHeight - y < 300) {
-        y = y - 300
-      }
-      return { left: x + 'px', top: y + 'px' }
     }
   },
   created() {
@@ -60,7 +46,7 @@ export default {
   },
   mounted() {
     document.addEventListener('mousedown', () => {
-      this.changeMenuShow({ isShow: false, left: 0, top: 0 })
+      this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: -1 })
     })
   },
   methods: {

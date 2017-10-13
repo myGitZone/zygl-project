@@ -4,22 +4,49 @@
 * @description
 */
 <template>
-  <div class="right-menu">
+  <div class="right-menu" :style="style" v-if="rightMenuShow">
     <ul class="menu-list">
-      <li class="menu-list-item" v-for="(item, index) in dsad" :key="index">{{index}}</li>
+      <li class="menu-list-item" @mousedown.stop="downloadClick">下载</li>
     </ul>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, BLANK_MENU } from '@/assets/js/const-value'
+import { downloadFiles } from '@/assets/js/util'
+import Cookies from 'js-cookie'
+console.log(BLANK_MENU)
 export default {
   computed: {
-    ...mapGetters(['dsad'])
+    ...mapGetters(['rightMenuShow', 'left', 'top', 'menuType', 'fileList', 'currentPath']),
+    style() {
+      let x = this.left
+      let y = this.top
+      let maxHeight = 2 * 25 + 20
+      if (window.innerWidth - x < 200) {
+        x = x - 200
+      }
+      if (window.innerHeight - y < maxHeight) {
+        y = y - maxHeight
+      }
+      return { left: x + 'px', top: y + 'px' }
+    }
   },
-  watch: {
-    top() {
-      alert(this.top)
+  methods: {
+    /**
+     * 下载点击事件
+     */
+    downloadClick() {
+      debugger
+      if (this.menuType === LEFT_TREE_MENU) {
+
+      } else if (this.menuType === FILE_MENU) {
+        let urls = this.fileList.map((item) => {
+          return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item}&authorization=${Cookies.get(JWT_TOKEN)}`
+        })
+        downloadFiles(urls)
+      }
     }
   }
 }

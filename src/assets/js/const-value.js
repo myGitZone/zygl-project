@@ -2,6 +2,10 @@
 export const RIGHT_CODE = 2
 // TOKEN
 export const JWT_TOKEN = 'JWT_TOKEN'
+// menuType
+export const LEFT_TREE_MENU = 0
+export const FILE_MENU = 1
+export const BLANK_MENU = 2
 
 // url
 // 目录树

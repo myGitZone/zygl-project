@@ -15,8 +15,14 @@ const state = {
   left: 0,
   // 右键菜单距离上面的距离
   top: 0,
+  // 右键的类型：0-左侧目录树，1-文件右键,2-空白右键
+  menuType: 0,
   // 组织机构的树
-  orgDatas: null
+  orgDatas: null,
+  // 用户名
+  username: null,
+  // 选择的文件，文件名（包含扩展名）的数组
+  fileList: []
 }
 
 export default state

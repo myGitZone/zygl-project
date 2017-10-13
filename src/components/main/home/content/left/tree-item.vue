@@ -12,7 +12,7 @@
 
 <script>
   import {mapMutations} from 'vuex'
-  import {RIGHT_CODE} from '@/assets/js/const-value.js'
+  import {RIGHT_CODE, LEFT_TREE_MENU} from '@/assets/js/const-value.js'
 
   export default {
     props: {
@@ -29,14 +29,14 @@
        */
       mouseup(e) {
         if (e.button === RIGHT_CODE) {
-          this.changeMenuShow({isShow: true, left: e.clientX, top: e.clientY})
+          this.changeMenuShow({isShow: true, left: e.clientX, top: e.clientY, menuType: LEFT_TREE_MENU})
         }
       },
       /**
        * 鼠标按下
        */
       mousedown(e) {
-        this.changeMenuShow({isShow: false, left: 0, top: 0})
+        this.changeMenuShow({isShow: false, left: 0, top: 0, menuType: LEFT_TREE_MENU})
       },
       ...mapMutations({changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW'})
     }

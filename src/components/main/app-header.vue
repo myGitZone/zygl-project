@@ -9,7 +9,7 @@
       <i class="fa fa-cloud"></i>
       <span class="title">迅传资源管理平台</span>
     </div>
-    <div class="nav-container">
+    <div class="nav-container" v-if="username === 'admin'">
       <span class="nav-item" @click="itemClick(1)">
         组织机构
       </span>
@@ -27,7 +27,7 @@
 <script>
 import Organization from '@/components/main/organization/organization'
 import PersonManage from '@/components/main/person/person-management'
-
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
@@ -38,7 +38,8 @@ export default {
   computed: {
     title() {
       return this.showDialogIndex === 1 ? '组织机构' : '人员管理'
-    }
+    },
+    ...mapGetters(['username'])
   },
   methods: {
     /**

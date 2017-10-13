@@ -30,7 +30,7 @@
     </div>
     <div class="file-container">
       <empty-block v-show="!foldersAndFiles||foldersAndFiles.length===0"></empty-block>
-      <file-block ref="fileBlock" v-for="(item, index) in foldersAndFiles" :currentPath="currentPath" :fileInfo='item' :key="index" :class="getClass(item)" :checked="!!getClass(item)" @mouseup.native.prevent.stop="fileMouseup(item,$event)" @mousedown.native.prevent.stop="fileMousedown(item,$event)"></file-block>
+      <file-block ref="fileBlock" v-for="(item, index) in foldersAndFiles" :fileInfo='item' :key="index" :class="getClass(item)" :checked="!!getClass(item)" @mouseup.native.prevent.stop="fileMouseup(item,$event)" @mousedown.native.prevent.stop="fileMousedown(item,$event)"></file-block>
     </div>
   </div>
 </template>
@@ -39,7 +39,7 @@
 import FileBlock from './file-block.vue'
 import EmptyBlock from './empty-block'
 import { mapGetters, mapMutations } from 'vuex'
-import { RIGHT_CODE } from '@/assets/js/const-value.js'
+import { RIGHT_CODE, BLANK_MENU, FILE_MENU } from '@/assets/js/const-value.js'
 import { getFoldersAndFiles } from '@/assets/js/util'
 
 export default {
@@ -70,6 +70,11 @@ export default {
     },
     ...mapGetters(['path', 'index', 'currentPath', 'treeData'])
   },
+  watch: {
+    selectFiles() {
+      this.setSelectFiles(this.selectFiles)
+    }
+  },
   methods: {
     /**
      * home键点击
@@ -82,6 +87,7 @@ export default {
      */
     fileMouseup(item, e) {
       if (e.button === RIGHT_CODE) {
+        this.menutype = FILE_MENU
         this._showMenu(e)
       }
     },
@@ -90,10 +96,21 @@ export default {
      */
     fileMousedown(item, e) {
       // 设置右键不显示
-      this.changeMenuShow({ isShow: false, left: 0, top: 0 })
+      this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: -1 })
       // 如果点击的是勾选钮，这执行添加
       if (e.target.className === 'fa fa-check') {
-        this.selectFiles.includes(item) || this.selectFiles.push(item)
+        // 如果已经包含了，这移除
+        if (this.selectFiles.includes(item)) {
+          let i, len
+          for (i = 0, len = this.selectFiles.length; i < len; i++) {
+            if (this.selectFiles[i] === item) {
+              break
+            }
+          }
+          this.selectFiles.splice(i, 1)
+        } else {
+          this.selectFiles.push(item)
+        }
       } else {
         this.selectFiles.includes(item) || (this.selectFiles = [item])
       }
@@ -135,19 +152,20 @@ export default {
      */
     panelMouseDown(e) {
       if (e.button === RIGHT_CODE) {
+        this.menutype = BLANK_MENU
         this._showMenu(e)
       } else {
         // 设置右键不显示
-        this.changeMenuShow({ isShow: false, left: 0, top: 0 })
+        this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: -1 })
         this.selectFiles = []
       }
     },
     _showMenu(e) {
       let x = e.clientX
       let y = e.clientY
-      this.changeMenuShow({ isShow: true, left: x, top: y })
+      this.changeMenuShow({ isShow: true, left: x, top: y, menuType: this.menutype })
     },
-    ...mapMutations({ pushPath: 'PUSH_PATH', changeIndex: 'CHANGE_INDEX', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW' })
+    ...mapMutations({ pushPath: 'PUSH_PATH', changeIndex: 'CHANGE_INDEX', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setSelectFiles: 'SET_SELECT_FILES' })
   },
   components: {
     FileBlock,
