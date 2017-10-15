@@ -4,18 +4,19 @@
 * @description
 */
 <template>
-  <div class="right-menu" :style="style" v-if="rightMenuShow">
+  <div class="right-menu" :style="style" v-if="rightMenuShow" @mousedown.stop="menuMouseDown">
     <ul class="menu-list" @click="menuClick">
-      <li class="menu-list-item" @mousedown.stop="downloadClick">下载</li>
-      <li class="menu-list-item" @mousedown.stop="uploadClick">上传</li>
-      <li class="menu-list-item" @mousedown.stop="deleteClick">删除</li>
+      <li class="menu-list-item" @mouseup.stop="downloadClick">下载</li>
+      <li class="menu-list-item" @mouseup.stop="uploadClick">上传</li>
+      <li class="menu-list-item" @mouseup.stop="deleteClick">删除</li>
+      <li class="menu-list-item" @mouseup.stop="newFolderClick">新建文件夹</li>
     </ul>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL } from '@/assets/js/const-value'
+import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL } from '@/assets/js/const-value'
 import { downloadFiles } from '@/assets/js/util'
 import Cookies from 'js-cookie'
 // console.log(BLANK_MENU)
@@ -36,6 +37,8 @@ export default {
     ...mapGetters(['rightMenuShow', 'left', 'top', 'menuType', 'fileList', 'currentPath', 'leftSelect'])
   },
   methods: {
+    menuMouseDown() {
+    },
     /**
      * 右键菜单被点击
      */
@@ -102,7 +105,26 @@ export default {
         })
       }
     },
-    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE' })
+    /**
+     * 新建文件夹
+     */
+    newFolderClick() {
+      let params = new URLSearchParams()
+      let path = this.currentPath
+      params.append('baseFolder', path)
+      params.append('newFolder', '新建文件夹')
+      this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
+        if (res.data.status) {
+          debugger
+          this.addNewFolder(res.data.newName)
+        } else {
+          this.$message({
+            message: res.data.message
+          })
+        }
+      })
+    },
+    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
   }
 }
 </script>

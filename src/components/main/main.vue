@@ -10,8 +10,8 @@
       <router-view></router-view>
     </keep-alive>
     <app-footer></app-footer>
-    <rigth-menu ref="rightMenu"></rigth-menu>
-    <upload-component></upload-component>
+    <rigth-menu></rigth-menu>
+    <upload-component v-if="showUpload"></upload-component>
   </div>
 </template>
 
@@ -21,17 +21,13 @@ import AppFooter from './app-footer'
 import RigthMenu from './right-menu'
 import UploadComponent from './upload-component'
 import { FOLDER_TREE, GET_ORGS } from '@/assets/js/const-value.js'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   name: 'app',
   created() {
     this.$axios(FOLDER_TREE).then((res) => {
       if (res.data.status) {
         let dataTree = res.data.data
-        this.id = 1
-        this.setSelectId(this.id)
-        dataTree.id = this.id
-        this.setIdToTreeData(dataTree.folder)
         let data = [dataTree]
         this.setTreeData(data)
       }
@@ -42,23 +38,15 @@ export default {
       }
     })
   },
+  computed: {
+    ...mapGetters(['showUpload'])
+  },
   mounted() {
-    document.addEventListener('mousedown', () => {
+    document.addEventListener('mousedown', (e) => {
       this.changeMenuShow({ isShow: false, left: 0, top: 0 })
     })
   },
   methods: {
-    // 给左侧树绑定id
-    setIdToTreeData(folders) {
-      for (let i = 0, len = folders.length; i < len; i++) {
-        let folder = folders[i]
-        this.id = this.id + 1
-        folder.id = this.id
-        if (folder.folder) {
-          this.setIdToTreeData(folder.folder)
-        }
-      }
-    },
     ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setTreeData: 'SET_TREE_DATA', setOrgDatas: 'SET_ORG_DATAS', changeIndex: 'CHANGE_INDEX', setSelectId: 'SET_SELECT_ID' })
   },
   components: {

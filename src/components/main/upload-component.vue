@@ -1,5 +1,5 @@
 <template>
-  <div ref="uploadContent" class="upload-container" v-show="showUpload">
+  <div ref="uploadContent" class="upload-container">
     <div class="header">
       文件上传
       <button type="button" aria-label="Close" class="el-dialog__headerbtn" @click="closeClick">
@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="content">
-      <el-upload class="upload-content" :data='bodyData' ref="upload" :on-success="success" :action="action" multiple :file-list="fileList" :auto-upload="false" name="upfile" :headers="headers">
+      <el-upload class="upload-content" :data='bodyData' ref="upload" :on-success="success" :action="action" multiple :auto-upload="false" name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       </el-upload>
@@ -17,13 +17,19 @@
 
 <script>
 import Cookies from 'js-cookie'
-import { JWT_TOKEN, LEFT_TREE_MENU } from '@/assets/js/const-value' // BLANK_MENU
+import { JWT_TOKEN } from '@/assets/js/const-value' // BLANK_MENU
 import { mapGetters, mapMutations } from 'vuex'
 import Draggabilly from 'draggabilly'
 export default {
   data() {
     return {
-      fileList: []
+      fileList: [],
+      bodyData: null
+    }
+  },
+  watch: {
+    fileList() {
+      alert(1234)
     }
   },
   computed: {
@@ -33,27 +39,28 @@ export default {
     headers() {
       return { 'authorization': Cookies.get(JWT_TOKEN) }
     },
-    bodyData() {
-      let currentPath
-      debugger
-      if (this.menuType === LEFT_TREE_MENU && this.leftSelect) {
-        // 获取选择的目录
-        let node = this.leftSelect
-        let path = [node.data.name]
-        // 遍历拼接路径
-        while (node.parent && node.parent.data.id !== 1) {
-          path.push(node.parent.data.name)
-          node = node.parent
-        }
-        currentPath = path.reverse().join('/')
-      } else {
-        currentPath = this.currentPath
-      }
-      return {
-        folderPath: currentPath
-      }
-    },
-    ...mapGetters(['currentPath', 'showUpload', 'menuType', 'leftSelect'])
+    // bodyData() {
+    //   debugger
+    //   // let currentPath
+    //   // debugger
+    //   // if (this.menuType === LEFT_TREE_MENU && this.leftSelect) {
+    //   //   // 获取选择的目录
+    //   //   let node = this.leftSelect
+    //   //   let path = [node.data.name]
+    //   //   // 遍历拼接路径
+    //   //   while (node.parent && node.parent.data.id !== 1) {
+    //   //     path.push(node.parent.data.name)
+    //   //     node = node.parent
+    //   //   }
+    //   //   currentPath = path.reverse().join('/')
+    //   // } else {
+    //   //   currentPath = this.currentPath
+    //   // }
+    //   return {
+    //     folderPath: this.currentPath
+    //   }
+    // },
+    ...mapGetters(['currentPath', 'menuType'])
   },
   mounted() {
     this.$nextTick(() => {
@@ -61,6 +68,10 @@ export default {
       new Draggabilly(this.$refs.uploadContent, {
         // options...
       })
+      this.path = this.currentPath
+      this.bodyData = {
+        folderPath: this.path
+      }
     })
   },
   methods: {
@@ -71,8 +82,11 @@ export default {
     closeClick() {
       this.setUploadState(false)
     },
-    success() {
-      this.updateTree(this.fileList)
+    success(res, file, files) {
+      this.updateTree({
+        path: this.path,
+        files: [file.name]
+      })
     },
     ...mapMutations({ updateTree: 'UPDATE_TREE', setUploadState: 'SET_UPLOAD_STATE' })
   }

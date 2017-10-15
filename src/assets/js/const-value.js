@@ -32,3 +32,5 @@ export const DOWNLOAD_URL = '/api/cloud/downloadFile'
 export const DELETE_FILE_URL = '/api/cloud/deleteFile'
 // 删除文件
 export const DELETE_FOLDER_URL = '/api/cloud/deleteFolder'
+// 新建文件夹
+export const CREATE_FOLDER_URL = '/api/cloud/createFolder'

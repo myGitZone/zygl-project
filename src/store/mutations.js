@@ -1,6 +1,20 @@
 // 定义mutations
 import * as types from './mutation-types'
 import { getFolderInfo } from '@/assets/js/util'
+// 给左侧树绑定id
+let id
+function setIdToTreeData(folders) {
+  debugger
+  for (let i = 0, len = folders.length; i < len; i++) {
+    let folder = folders[i]
+    id = id + 1
+    folder.id = id
+    if (folder.folder) {
+      setIdToTreeData(folder.folder)
+    }
+  }
+}
+
 const mutations = {
   [types.PUSH_PATH](state, path) {
     if (state.path[state.path.length - 1] === path) {
@@ -27,17 +41,25 @@ const mutations = {
   },
   [types.SET_TREE_DATA](state, data) {
     state.treeData = data
+    id = 1
+    data[0].id = id
+    setIdToTreeData(data[0].folder)
     let name = data[0].folder.length > 0 ? data[0].folder[0].name : ''
-    let id = data[0].folder.length > 0 ? data[0].folder[0].id : 0
-    state.selectId = id
+    let currentId = data[0].folder.length > 0 ? data[0].folder[0].id : 0
+    state.selectId = currentId
     state.path.push(name)
     state.index = 0
   },
   [types.SET_ORG_DATAS](state, data) {
     state.orgDatas = data
   },
-  [types.UPDATE_TREE](state, files) {
-    let currentPath = state.path[state.index]
+  [types.UPDATE_TREE](state, { path, files }) {
+    let currentPath
+    if (path) {
+      currentPath = path
+    } else {
+      currentPath = state.path[state.index]
+    }
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     folderInfo.file.push(...files)
   },
@@ -77,6 +99,16 @@ const mutations = {
   },
   [types.SET_SELECT_ID](state, id) {
     state.selectId = id
+  },
+  [types.ADD_FOLDER_NODE](state, newFolder) {
+    let currentPath = state.path[state.index]
+    let folderInfo = getFolderInfo(currentPath, state.treeData[0])
+    let newFolderInfo = {
+      id: ++id,
+      name: newFolder
+    }
+    folderInfo.folder ? folderInfo.folder.push(newFolderInfo) : (folderInfo.folder = [newFolderInfo])
   }
 }
 export default mutations
+

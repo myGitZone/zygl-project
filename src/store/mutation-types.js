@@ -27,3 +27,5 @@ export const DELETE_FILE = 'DELETE_FILE'
 export const SET_UPLOAD_STATE = 'SET_UPLOAD_STATE'
 // 设置左侧树选择的节点id
 export const SET_SELECT_ID = 'SET_SELECT_ID'
+// 更新左侧文件夹树，用于新建文件夹
+export const ADD_FOLDER_NODE = 'ADD_FOLDER_NODE'

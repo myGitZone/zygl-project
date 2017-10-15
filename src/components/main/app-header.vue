@@ -19,7 +19,7 @@
     </div>
     <el-dialog :modal="false" custom-class="dialog-custom" :title="title" :visible.sync="dialogVisible" size="large">
       <organization v-if="showDialogIndex===1"></organization>
-      <person-manage v-if="showDialogIndex===2"></person-manage>
+      <person-manage v-if="showDialogIndex===2" @close="closeClick"></person-manage>
     </el-dialog>
   </header>
 </template>
@@ -59,6 +59,12 @@ export default {
     handleClose() {
       alert(12345)
       this.showDialogIndex = 0
+    },
+    /**
+     * 上传弹框关闭
+     */
+    closeClick() {
+      this.setUploadState(false)
     }
   },
   components: {
