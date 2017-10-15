@@ -22,7 +22,13 @@ const state = {
   // 用户名
   username: null,
   // 选择的文件，文件名（包含扩展名）的数组
-  fileList: []
+  fileList: [],
+  // // 左侧目录树上右键选择的节点
+  // leftSelect: null,
+  // 是否显示上传框
+  showUpload: false,
+  // 左侧树选择的节点id
+  selectId: 0
 }
 
 export default state

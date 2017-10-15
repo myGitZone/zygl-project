@@ -21,3 +21,9 @@ export const username = state => state.username
 export const menuType = state => state.menuType
 // 获取选择的文件fileList
 export const fileList = state => state.fileList
+// // 左侧目录树右键选择的节点
+// export const leftSelect = state => state.leftSelect
+// 是否显示上传框
+export const showUpload = state => state.showUpload
+// 左侧树选择的节点id
+export const selectId = state => state.selectId

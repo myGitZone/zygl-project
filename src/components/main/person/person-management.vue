@@ -183,7 +183,7 @@ export default {
         })
       } else {
         this.$message({
-          message: '请选择要编辑的人员！'
+          message: '请选择要删除的人员！'
         })
       }
     },

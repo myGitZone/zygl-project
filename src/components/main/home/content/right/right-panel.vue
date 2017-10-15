@@ -96,7 +96,7 @@ export default {
      */
     fileMousedown(item, e) {
       // 设置右键不显示
-      this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: -1 })
+      this.changeMenuShow({ isShow: false, left: 0, top: 0 })
       // 如果点击的是勾选钮，这执行添加
       if (e.target.className === 'fa fa-check') {
         // 如果已经包含了，这移除
@@ -156,7 +156,7 @@ export default {
         this._showMenu(e)
       } else {
         // 设置右键不显示
-        this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: -1 })
+        this.changeMenuShow({ isShow: false, left: 0, top: 0 })
         this.selectFiles = []
       }
     },

@@ -7,10 +7,10 @@ export function isEmptyObject(e) {
 export function getFoldersAndFiles(path, root) {
   let folderInfo = getFolderInfo(path, root)
   // return folderInfo ? [...folderInfo.folder, ...folderInfo.file] : []
-  return folderInfo ? [...folderInfo.file] : []
+  return folderInfo && folderInfo.file ? [...folderInfo.file] : []
 }
 export function getFolderInfo(path, root) {
-  let folderInfo
+  let folderInfo = root
   if (path) {
     // 将路径分割
     let pathArr = path.split('/')

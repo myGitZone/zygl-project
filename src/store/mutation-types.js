@@ -17,3 +17,13 @@ export const UPDATE_TREE = 'UPDATE_TREE'
 export const SET_USERNAME = 'SET_USERNAME'
 // 设置用户选择的文件数组
 export const SET_SELECT_FILES = 'SET_SELECT_FILES'
+// // 设置右侧目录树
+// export const SET_LEFT_SELECT = 'SET_LEFT_SELECT'
+// 删除树上目录节点
+export const DELETE_TREE_NODE = 'DELETE_TREE_NODE'
+// 删除文件
+export const DELETE_FILE = 'DELETE_FILE'
+// 是否显示上传框
+export const SET_UPLOAD_STATE = 'SET_UPLOAD_STATE'
+// 设置左侧树选择的节点id
+export const SET_SELECT_ID = 'SET_SELECT_ID'

@@ -28,3 +28,7 @@ export const ADD_ORG = '/api/org/addOrg'
 export const EDIT_ORG = '/api/org/editOrg'
 // 下载接口
 export const DOWNLOAD_URL = '/api/cloud/downloadFile'
+// 删除文件
+export const DELETE_FILE_URL = '/api/cloud/deleteFile'
+// 删除文件
+export const DELETE_FOLDER_URL = '/api/cloud/deleteFolder'

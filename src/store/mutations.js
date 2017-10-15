@@ -21,11 +21,15 @@ const mutations = {
     state.left = left
     state.top = top
     state.rightMenuShow = isShow
-    state.menuType = menuType
+    if (menuType) {
+      state.menuType = menuType
+    }
   },
   [types.SET_TREE_DATA](state, data) {
     state.treeData = data
     let name = data[0].folder.length > 0 ? data[0].folder[0].name : ''
+    let id = data[0].folder.length > 0 ? data[0].folder[0].id : 0
+    state.selectId = id
     state.path.push(name)
     state.index = 0
   },
@@ -42,6 +46,37 @@ const mutations = {
   },
   [types.SET_SELECT_FILES](state, files) {
     state.fileList = files
+  },
+  // [types.SET_LEFT_SELECT](state, selectData) {
+  //   state.leftSelect = selectData
+  // },
+  [types.DELETE_TREE_NODE](state, { rootFolder, deleteFolder }) {
+    let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
+    let i
+    let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
+    for (i = 0; i < len; i++) {
+      let item = folderInfo.folder[i]
+      if (item.name === deleteFolder) {
+        folderInfo.folder.splice(i, 1)
+        break
+      }
+    }
+  },
+  [types.DELETE_FILE](state, deleteFiles) {
+    let currentPath = state.path[state.index]
+    let folderInfo = getFolderInfo(currentPath, state.treeData[0])
+    debugger
+    // let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
+    let files = folderInfo.file.filter((item) => {
+      return deleteFiles.indexOf(item) < 0
+    })
+    folderInfo.file = files
+  },
+  [types.SET_UPLOAD_STATE](state, isShow) {
+    state.showUpload = isShow
+  },
+  [types.SET_SELECT_ID](state, id) {
+    state.selectId = id
   }
 }
 export default mutations

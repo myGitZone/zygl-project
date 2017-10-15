@@ -5,21 +5,22 @@
 */
 <template>
   <div class="right-menu" :style="style" v-if="rightMenuShow">
-    <ul class="menu-list">
+    <ul class="menu-list" @click="menuClick">
       <li class="menu-list-item" @mousedown.stop="downloadClick">下载</li>
+      <li class="menu-list-item" @mousedown.stop="uploadClick">上传</li>
+      <li class="menu-list-item" @mousedown.stop="deleteClick">删除</li>
     </ul>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, BLANK_MENU } from '@/assets/js/const-value'
+import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL } from '@/assets/js/const-value'
 import { downloadFiles } from '@/assets/js/util'
 import Cookies from 'js-cookie'
-console.log(BLANK_MENU)
+// console.log(BLANK_MENU)
 export default {
   computed: {
-    ...mapGetters(['rightMenuShow', 'left', 'top', 'menuType', 'fileList', 'currentPath']),
     style() {
       let x = this.left
       let y = this.top
@@ -31,26 +32,77 @@ export default {
         y = y - maxHeight
       }
       return { left: x + 'px', top: y + 'px' }
-    }
+    },
+    ...mapGetters(['rightMenuShow', 'left', 'top', 'menuType', 'fileList', 'currentPath', 'leftSelect'])
   },
   methods: {
+    /**
+     * 右键菜单被点击
+     */
+    menuClick() {
+      this.changeMenuShow({ isShow: false, left: 0, top: 0 })
+    },
     /**
      * 下载点击事件
      */
     downloadClick() {
+      let urls
       if (this.menuType === LEFT_TREE_MENU) {
 
       } else if (this.menuType === FILE_MENU) {
-        let urls = this.fileList.map((item) => {
+        urls = this.fileList.map((item) => {
           return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item}&authorization=${Cookies.get(JWT_TOKEN)}`
         })
-        downloadFiles(urls)
       }
-      setTimeout(() => {
-        this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: -1 })
-      }, 200)
+      downloadFiles(urls)
     },
-    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW' })
+    /**
+     * 上传点击事件
+     */
+    uploadClick() {
+      this.setUploadState(true)
+    },
+    /**
+     * 删除点击事件
+     */
+    deleteClick() {
+      let params = new URLSearchParams()
+      // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
+      if (this.menuType === LEFT_TREE_MENU) {
+        debugger
+        let path = this.currentPath
+        let pathArr = path.split('/')
+        let deleteFolder = pathArr[pathArr.length - 1]
+        let rootFolder = pathArr.slice(0, pathArr.length - 1).join('/')
+        params.append('delFolder', deleteFolder)
+        params.append('baseFolder', rootFolder)
+        this.$axios.post(DELETE_FOLDER_URL, params).then((res) => {
+          if (res.data.status) {
+            this.deleteNode({ rootFolder, deleteFolder })
+          } else {
+            this.$message({
+              message: '刪除失败！'
+            })
+          }
+        })
+      } else if (this.menuType === FILE_MENU) {
+        // 删除文件所在文件夹
+        let path = this.currentPath
+        let deleteFiles = this.fileList
+        params.append('baseFolder', path)
+        params.append('delFileNames', deleteFiles.join('*'))
+        this.$axios.post(DELETE_FILE_URL, params).then((res) => {
+          if (res.data.status) {
+            this.deleteFile(deleteFiles)
+          } else {
+            this.$message({
+              message: '刪除失败！'
+            })
+          }
+        })
+      }
+    },
+    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE' })
   }
 }
 </script>
