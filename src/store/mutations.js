@@ -11,6 +11,11 @@ function setIdToTreeData(folders) {
     folder.id = id
     if (folder.folder) {
       setIdToTreeData(folder.folder)
+    } else {
+      folder.folder = []
+    }
+    if (!folder.file) {
+      folder.file = []
     }
   }
 }
@@ -34,13 +39,12 @@ const mutations = {
   [types.CHANGE_RIGHT_MENU_SHOW](state, { isShow, left, top, menuType }) {
     state.left = left
     state.top = top
-    state.rightMenuShow = isShow
-    if (menuType) {
+    if (menuType !== null) {
       state.menuType = menuType
     }
+    state.rightMenuShow = isShow
   },
   [types.SET_TREE_DATA](state, data) {
-    state.treeData = data
     id = 1
     data[0].id = id
     setIdToTreeData(data[0].folder)
@@ -49,6 +53,7 @@ const mutations = {
     state.selectId = currentId
     state.path.push(name)
     state.index = 0
+    state.treeData = data
   },
   [types.SET_ORG_DATAS](state, data) {
     state.orgDatas = data
@@ -74,9 +79,8 @@ const mutations = {
   // },
   [types.DELETE_TREE_NODE](state, { rootFolder, deleteFolder }) {
     let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
-    let i
     let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
-    for (i = 0; i < len; i++) {
+    for (let i = 0; i < len; i++) {
       let item = folderInfo.folder[i]
       if (item.name === deleteFolder) {
         folderInfo.folder.splice(i, 1)
@@ -101,14 +105,42 @@ const mutations = {
     state.selectId = id
   },
   [types.ADD_FOLDER_NODE](state, newFolder) {
+    debugger
     let currentPath = state.path[state.index]
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     let newFolderInfo = {
       id: ++id,
-      name: newFolder
+      name: newFolder,
+      folder: [],
+      file: []
     }
-    folderInfo.folder ? folderInfo.folder.push(newFolderInfo) : (folderInfo.folder = [newFolderInfo])
+    if (folderInfo.folder) {
+      folderInfo.folder.push(newFolderInfo)
+    } else {
+      folderInfo = Object.assign({}, folderInfo, { folder: [newFolderInfo] })
+    }
+  },
+  [types.UPDATE_FOLDER_NAME](state, { rootFolder, oldName, newName }) {
+    debugger
+    let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
+    let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
+    for (let i = 0; i < len; i++) {
+      let item = folderInfo.folder[i]
+      if (item.name === oldName) {
+        item.name = newName
+        break
+      }
+    }
+    // // 更新path里面记录的路径
+    let pathArr = state.path
+    for (let i = 0, len = pathArr.length; i < len; i++) {
+      let pathItem = pathArr[i]
+      let oldPath = rootFolder ? `${rootFolder}/${oldName}` : oldName
+      let newPath = rootFolder ? `${rootFolder}/${newName}` : newName
+      if (pathItem.startsWith(oldPath)) {
+        pathArr.splice(i, 1, pathItem.replace(oldPath, newPath))
+      }
+    }
   }
 }
 export default mutations
-

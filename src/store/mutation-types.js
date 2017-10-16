@@ -29,3 +29,5 @@ export const SET_UPLOAD_STATE = 'SET_UPLOAD_STATE'
 export const SET_SELECT_ID = 'SET_SELECT_ID'
 // 更新左侧文件夹树，用于新建文件夹
 export const ADD_FOLDER_NODE = 'ADD_FOLDER_NODE'
+// 文件夹重命名
+export const UPDATE_FOLDER_NAME = 'UPDATE_FOLDER_NAME'

@@ -34,3 +34,7 @@ export const DELETE_FILE_URL = '/api/cloud/deleteFile'
 export const DELETE_FOLDER_URL = '/api/cloud/deleteFolder'
 // 新建文件夹
 export const CREATE_FOLDER_URL = '/api/cloud/createFolder'
+// 文件夹重命名
+export const RENAME_FOLDER = '/api/cloud/renameFolder'
+// 文件重命名
+export const RENAME_FILE = '/api/cloud/renameFile'

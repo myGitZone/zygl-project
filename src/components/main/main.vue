@@ -10,7 +10,7 @@
       <router-view></router-view>
     </keep-alive>
     <app-footer></app-footer>
-    <rigth-menu></rigth-menu>
+    <rigth-menu v-if="rightMenuShow"></rigth-menu>
     <upload-component v-if="showUpload"></upload-component>
   </div>
 </template>
@@ -39,7 +39,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['showUpload'])
+    ...mapGetters(['rightMenuShow', 'showUpload'])
   },
   mounted() {
     document.addEventListener('mousedown', (e) => {

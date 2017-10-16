@@ -4,19 +4,20 @@
 * @description
 */
 <template>
-  <div class="right-menu" :style="style" v-if="rightMenuShow" @mousedown.stop="menuMouseDown">
+  <div class="right-menu" :style="style" @mousedown.stop="menuMouseDown">
     <ul class="menu-list" @click="menuClick">
       <li class="menu-list-item" @mouseup.stop="downloadClick">下载</li>
       <li class="menu-list-item" @mouseup.stop="uploadClick">上传</li>
       <li class="menu-list-item" @mouseup.stop="deleteClick">删除</li>
       <li class="menu-list-item" @mouseup.stop="newFolderClick">新建文件夹</li>
+      <li class="menu-list-item" @mouseup.stop="renameClick" v-show="fileList.length===1||menuType === 0">重命名</li>
     </ul>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL } from '@/assets/js/const-value'
+import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL, RENAME_FOLDER, RENAME_FILE } from '@/assets/js/const-value'
 import { downloadFiles } from '@/assets/js/util'
 import Cookies from 'js-cookie'
 // console.log(BLANK_MENU)
@@ -34,7 +35,7 @@ export default {
       }
       return { left: x + 'px', top: y + 'px' }
     },
-    ...mapGetters(['rightMenuShow', 'left', 'top', 'menuType', 'fileList', 'currentPath', 'leftSelect'])
+    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'leftSelect'])
   },
   methods: {
     menuMouseDown() {
@@ -124,7 +125,48 @@ export default {
         }
       })
     },
-    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
+    renameClick() {
+      let params = new URLSearchParams()
+      let url
+      let path = this.currentPath
+      let oldName
+      debugger
+      if (this.menuType === LEFT_TREE_MENU) {
+        oldName = path.split('/')
+        let pathArr = path.split('/')
+        oldName = pathArr[pathArr.length - 1]
+        path = pathArr.slice(0, pathArr.length - 1).join('/')
+        url = RENAME_FOLDER
+      } else if (this.menuType === FILE_MENU) {
+        // let name = this.fileList[0]
+        oldName = this.fileList[0] // name.substring(0, name.lastIndexOf('.'))
+        url = RENAME_FILE
+      }
+      this.$prompt('请输入文件名称', '重命名', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValue: oldName
+      }).then(({ value }) => {
+        params.append('oldName', oldName)
+        params.append('baseFolder', path)
+        params.append('newName', value)
+        this.$axios.post(url, params).then((res) => {
+          if (res.data.status) {
+            if (this.menuType === LEFT_TREE_MENU) {
+              let obj = { rootFolder: path, oldName: oldName, newName: value }
+              this.updateFolder(obj)
+            }
+          } else {
+            this.$message({
+              message: '重命名失败，请刷新后重试'
+            })
+          }
+        })
+      }).catch(() => {
+
+      })
+    },
+    ...mapMutations({ updateFolder: 'UPDATE_FOLDER_NAME', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
   }
 }
 </script>

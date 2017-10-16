@@ -13,7 +13,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { RIGHT_CODE, LEFT_TREE_MENU } from '@/assets/js/const-value.js'
-
+console.log(LEFT_TREE_MENU)
 export default {
   props: {
     info: {
@@ -28,6 +28,7 @@ export default {
      * 鼠标右键抬起
      */
     mouseup(e) {
+      debugger
       if (e.button === RIGHT_CODE && this.info.data.id !== 1) {
         this.changeMenuShow({ isShow: true, left: e.clientX, top: e.clientY, menuType: LEFT_TREE_MENU })
         let node = this.info
@@ -42,14 +43,13 @@ export default {
         debugger
         this.pushPath(path)
         this.setSelectId(this.info.id)
-        // this.setSelect(this.info)
       }
     },
     /**
      * 鼠标按下
      */
     mousedown(e) {
-      this.changeMenuShow({ isShow: false, left: 0, top: 0 })
+      this.changeMenuShow({ isShow: false, left: 0, top: 0, menuType: LEFT_TREE_MENU })
     },
     ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setSelectId: 'SET_SELECT_ID', pushPath: 'PUSH_PATH' })
   }
