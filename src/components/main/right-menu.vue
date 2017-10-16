@@ -26,6 +26,10 @@
         <i class="icon-item rename-icon vertical"></i>
         <span class="vertical">重命名</span>
       </li>
+      <li class="menu-list-item" @mouseup.stop="renameClick" v-show="fileList.length===1||menuType === 0">
+        <i class="attribute-icon fa fa-info vertical"></i>
+        <span class="vertical">属性</span>
+      </li>
     </ul>
   </div>
 </template>
@@ -243,6 +247,25 @@ export default {
       .rename-icon {
         background-position: 0 -64px;
         background-image: url(../../assets/image/menu_icon.png);
+      }
+      .attribute-icon {
+        color: #fff !important;
+        background: #c4e5ff;
+        text-align: center;
+        width: 15px;
+        border-radius: 50%;
+        height: 15px;
+        line-height: 15px;
+        margin-right: 15px;
+        box-shadow: 0 0 0 1px #6db9f5;
+      }
+      .fa-info::before {
+        color: #249dff;
+        background-image: -webkit-linear-gradient(2deg, #249dff, #08558a);
+        background-clip: text;
+        text-fill-color: transparent;
+        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
       }
     }
   }
