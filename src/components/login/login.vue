@@ -37,7 +37,6 @@
 import { LOGIN_URL } from '@/assets/js/const-value.js'
 import Cookies from 'js-cookie'
 import { JWT_TOKEN } from '@/assets/js/const-value'
-import { mapMutations } from 'vuex'
 const SEPARATION = 100
 const AMOUNTX = 50
 const AMOUNTY = 50
@@ -63,13 +62,11 @@ export default {
      */
     loginClick() {
       let params = new URLSearchParams()
-      params.set('userName', this.formdata.username)
       params.set('passWord', this.formdata.password)
       this.$axios.post(LOGIN_URL, params).then((res) => {
         if (res.data.status) {
           this.showError = false
           Cookies.set(JWT_TOKEN, res.data.token)
-          this.setUserName(this.formdata.username)
           this.$router.push('/main')
         } else {
           this.showError = true
@@ -183,8 +180,7 @@ export default {
       }
       this.renderer.render(this.scene, this.camera)
       this.count += 0.1
-    },
-    ...mapMutations({ setUserName: 'SET_USERNAME' })
+    }
   }
 }
 </script>

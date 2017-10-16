@@ -16,7 +16,7 @@ export const top = state => state.top
 // 组织机构数据
 export const orgDatas = state => state.orgDatas
 // 获取用户名
-export const username = state => state.username
+export const userinfo = state => state.userinfo
 // 右键的位置
 export const menuType = state => state.menuType
 // 获取选择的文件fileList

@@ -14,11 +14,13 @@ export const FOLDER_TREE = '/api/cloud/authFolder'
 export const LOGIN_URL = '/api/users/signIn'
 // 注册用户
 export const SIGUP_URL = '/api/users/signUp'
+// 获取当前登录用户信息
+export const GET_CURRENT_USERINFO = '/api/users/userInfo'
 // 更新用户
 export const UPDATE_USER = '/api/users/updateUser'
 // 删除用户
 export const DELETE_USER = '/api/users/deleteUser'
-// 获取用户信息
+// 通过条件查询获取用户信息
 export const GET_USER_BY_OPTS = '/api/users/getUserByOpts'
 // 查询所有的组织机构
 export const GET_ORGS = '/api/org/getOrgs'

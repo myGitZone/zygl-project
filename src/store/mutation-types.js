@@ -14,7 +14,7 @@ export const SET_ORG_DATAS = 'SET_ORG_DATAS'
 // 更新文件目录树
 export const UPDATE_TREE = 'UPDATE_TREE'
 // 更新用户名
-export const SET_USERNAME = 'SET_USERNAME'
+export const SET_USERINFO = 'SET_USERINFO'
 // 设置用户选择的文件数组
 export const SET_SELECT_FILES = 'SET_SELECT_FILES'
 // // 设置右侧目录树

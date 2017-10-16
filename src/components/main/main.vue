@@ -5,7 +5,7 @@
 */
 <template>
   <div id="main-container">
-    <app-header></app-header>
+    <app-header :is-admin="isAdmin"></app-header>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -20,10 +20,15 @@ import AppHeader from './app-header'
 import AppFooter from './app-footer'
 import RigthMenu from './right-menu'
 import UploadComponent from './upload-component'
-import { FOLDER_TREE, GET_ORGS } from '@/assets/js/const-value.js'
+import { FOLDER_TREE, GET_ORGS, GET_CURRENT_USERINFO } from '@/assets/js/const-value.js'
 import { mapMutations, mapGetters } from 'vuex'
 export default {
   name: 'app',
+  data() {
+    return {
+      isAdmin: false
+    }
+  },
   created() {
     this.$axios(FOLDER_TREE).then((res) => {
       if (res.data.status) {
@@ -37,6 +42,9 @@ export default {
         this.setOrgDatas(res.data.data)
       }
     })
+    this.$axios.get(GET_CURRENT_USERINFO).then((res) => {
+      this.setUserInfo(res.data.data)
+    })
   },
   computed: {
     ...mapGetters(['rightMenuShow', 'showUpload'])
@@ -47,7 +55,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations({ changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setTreeData: 'SET_TREE_DATA', setOrgDatas: 'SET_ORG_DATAS', changeIndex: 'CHANGE_INDEX', setSelectId: 'SET_SELECT_ID' })
+    ...mapMutations({ setUserInfo: 'SET_USERINFO', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', setTreeData: 'SET_TREE_DATA', setOrgDatas: 'SET_ORG_DATAS', changeIndex: 'CHANGE_INDEX', setSelectId: 'SET_SELECT_ID' })
   },
   components: {
     AppHeader,

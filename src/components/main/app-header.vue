@@ -9,7 +9,7 @@
       <i class="fa fa-cloud"></i>
       <span class="title">迅传资源管理平台</span>
     </div>
-    <div class="nav-container" v-if="username === 'admin'">
+    <div class="nav-container" v-if="userinfo&&(userinfo.admin === '1'||userinfo.admin === 1)">
       <span class="nav-item" @click="itemClick(1)">
         组织机构
       </span>
@@ -39,7 +39,7 @@ export default {
     title() {
       return this.showDialogIndex === 1 ? '组织机构' : '人员管理'
     },
-    ...mapGetters(['username'])
+    ...mapGetters(['userinfo'])
   },
   methods: {
     /**

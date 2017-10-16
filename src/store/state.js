@@ -20,7 +20,7 @@ const state = {
   // 组织机构的树
   orgDatas: null,
   // 用户名
-  username: null,
+  userinfo: null,
   // 选择的文件，文件名（包含扩展名）的数组
   fileList: [],
   // // 左侧目录树上右键选择的节点

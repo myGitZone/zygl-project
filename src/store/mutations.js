@@ -68,8 +68,8 @@ const mutations = {
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     folderInfo.file.push(...files)
   },
-  [types.SET_USERNAME](state, username) {
-    state.username = username
+  [types.SET_USERINFO](state, userinfo) {
+    state.userinfo = userinfo
   },
   [types.SET_SELECT_FILES](state, files) {
     state.fileList = files

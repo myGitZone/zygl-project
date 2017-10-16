@@ -27,6 +27,10 @@
           </el-breadcrumb>
         </div>
       </div>
+      <div class="search-container">
+        <el-input placeholder="请输入查询条件" size="small" icon="search" v-model="searchVal" :on-icon-click="handleIconClick">
+        </el-input>
+      </div>
     </div>
     <div class="file-container">
       <empty-block v-show="!foldersAndFiles||foldersAndFiles.length===0"></empty-block>
@@ -45,7 +49,8 @@ import { getFoldersAndFiles } from '@/assets/js/util'
 export default {
   data() {
     return {
-      selectFiles: []
+      selectFiles: [],
+      searchVal: null
     }
   },
   computed: {
@@ -77,6 +82,22 @@ export default {
     }
   },
   methods: {
+    /**
+     * 查询图标点击事件
+     */
+    handleIconClick() {
+      debugger
+      if (!this.searchVal) {
+        return
+      }
+      this.selectFiles = []
+      for (let i = 0, len = this.foldersAndFiles.length; i < len; i++) {
+        let item = this.foldersAndFiles[i]
+        if (item.toLocaleLowerCase().includes(this.searchVal)) {
+          this.selectFiles.push(item)
+        }
+      }
+    },
     /**
      * home键点击
      */
@@ -246,6 +267,23 @@ export default {
         .el-breadcrumb {
           line-height: 2;
         }
+      }
+    }
+    .search-container {
+      position: absolute;
+      display: inline-block;
+      right: 20px;
+      width: 20%;
+      height: 100%;
+      vertical-align: top;
+      &:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+      }
+      .el-input {
+        vertical-align: middle;
       }
     }
   }
