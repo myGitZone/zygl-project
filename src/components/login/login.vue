@@ -9,8 +9,8 @@
     <div class="login-info-container">
       <el-form :model=formdata>
         <el-form-item prop="username" :rules="[
-                { required: true, message: '请输入用户名', trigger: 'blur' }
-              ]">
+                  { required: true, message: '请输入用户名', trigger: 'blur' }
+                ]">
           <el-input v-model="formdata.username" placeholder="请输入用户名">
             <template slot="prepend">
               <i class="login-icon fa fa-user-o" aria-hidden="true"></i>
@@ -18,8 +18,8 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password" :rules="[
-                { required: true, message: '请输入密码', trigger: 'blur' }
-              ]">
+                  { required: true, message: '请输入密码', trigger: 'blur' }
+                ]">
           <el-input type="password" v-model="formdata.password" placeholder="请输入密码">
             <template slot="prepend">
               <i class="login-icon fa fa-lock" aria-hidden="true"></i>
@@ -63,6 +63,7 @@ export default {
     loginClick() {
       let params = new URLSearchParams()
       params.set('passWord', this.formdata.password)
+      params.set('userName', this.formdata.username)
       this.$axios.post(LOGIN_URL, params).then((res) => {
         if (res.data.status) {
           this.showError = false

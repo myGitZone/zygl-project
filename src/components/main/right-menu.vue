@@ -6,11 +6,26 @@
 <template>
   <div class="right-menu" :style="style" @mousedown.stop="menuMouseDown">
     <ul class="menu-list" @click="menuClick">
-      <li class="menu-list-item" @mouseup.stop="downloadClick">下载</li>
-      <li class="menu-list-item" @mouseup.stop="uploadClick">上传</li>
-      <li class="menu-list-item" @mouseup.stop="deleteClick">删除</li>
-      <li class="menu-list-item" @mouseup.stop="newFolderClick">新建文件夹</li>
-      <li class="menu-list-item" @mouseup.stop="renameClick" v-show="fileList.length===1||menuType === 0">重命名</li>
+      <li class="menu-list-item" @mouseup.stop="downloadClick">
+        <i class="icon-item download-icon vertical"></i>
+        <span class="vertical">下载</span>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="uploadClick">
+        <i class="icon-item upload-icon vertical"></i>
+        <span class="vertical">上传</span>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="deleteClick">
+        <i class="icon-item delete-icon vertical"></i>
+        <span class="vertical">删除</span>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="newFolderClick">
+        <i class="icon-item new-icon vertical"></i>
+        <span class="vertical">新建文件夹</span>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="renameClick" v-show="fileList.length===1||menuType === 0">
+        <i class="icon-item rename-icon vertical"></i>
+        <span class="vertical">重命名</span>
+      </li>
     </ul>
   </div>
 </template>
@@ -197,6 +212,37 @@ export default {
       cursor: pointer;
       &:hover {
         background: #e1e1e1;
+      }
+      .vertical {
+        vertical-align: middle;
+      }
+      .icon-item {
+        display: inline-block;
+        width: 16px !important;
+        background-size: auto !important;
+        background-repeat: no-repeat;
+        height: 16px;
+        margin-right: 15px;
+      }
+      .download-icon {
+        background-position: -16px -48px;
+        background-image: url(../../assets/image/menu_icon.png);
+      }
+      .upload-icon {
+        background-position: 0px -48px;
+        background-image: url(../../assets/image/menu_icon.png);
+      }
+      .delete-icon {
+        background-position: 0 -80px;
+        background-image: url(../../assets/image/menu_icon.png);
+      }
+      .new-icon {
+        background-position: 0 -15px;
+        background-image: url(../../assets/image/menu_icon.png);
+      }
+      .rename-icon {
+        background-position: 0 -64px;
+        background-image: url(../../assets/image/menu_icon.png);
       }
     }
   }
