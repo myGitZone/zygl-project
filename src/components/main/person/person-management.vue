@@ -168,7 +168,7 @@ export default {
           callback: action => {
             if (action === 'confirm') {
               let params = new URLSearchParams()
-              params.append('id', this.currentSelectRow.id)
+              params.append('deleteUserId', this.currentSelectRow.userid)
               this.$axios.post(DELETE_USER, params).then((res) => {
                 if (res.data.status) {
                   this.getUserInfo()
