@@ -12,6 +12,7 @@
     <app-footer></app-footer>
     <rigth-menu v-if="rightMenuShow"></rigth-menu>
     <upload-component v-if="showUpload"></upload-component>
+    <attribute-dialog v-for="(item,index) in attrbutes" :key="index" :attrbuteInfo="item"></attribute-dialog>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import AppHeader from './app-header'
 import AppFooter from './app-footer'
 import RigthMenu from './right-menu'
 import UploadComponent from './upload-component'
+import AttributeDialog from './attribute-dialog'
 import { FOLDER_TREE, GET_ORGS, GET_CURRENT_USERINFO } from '@/assets/js/const-value.js'
 import { mapMutations, mapGetters } from 'vuex'
 export default {
@@ -47,7 +49,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['rightMenuShow', 'showUpload'])
+    ...mapGetters(['rightMenuShow', 'showUpload', 'attrbutes'])
   },
   mounted() {
     document.addEventListener('mousedown', (e) => {
@@ -61,7 +63,8 @@ export default {
     AppHeader,
     RigthMenu,
     AppFooter,
-    UploadComponent
+    UploadComponent,
+    AttributeDialog
   }
 }
 </script>

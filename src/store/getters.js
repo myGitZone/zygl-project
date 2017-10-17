@@ -27,3 +27,5 @@ export const fileList = state => state.fileList
 export const showUpload = state => state.showUpload
 // 左侧树选择的节点id
 export const selectId = state => state.selectId
+// 获取右键点击属性的时候，获取的所有文件的属性
+export const attrbutes = state => state.attrbutes

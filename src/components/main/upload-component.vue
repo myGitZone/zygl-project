@@ -76,7 +76,6 @@ export default {
   },
   methods: {
     submitUpload() {
-      debugger
       this.$refs.upload.submit()
     },
     closeClick() {

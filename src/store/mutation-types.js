@@ -31,3 +31,7 @@ export const SET_SELECT_ID = 'SET_SELECT_ID'
 export const ADD_FOLDER_NODE = 'ADD_FOLDER_NODE'
 // 文件夹重命名
 export const UPDATE_FOLDER_NAME = 'UPDATE_FOLDER_NAME'
+// 添加右键属性，获取到的属性到数组
+export const PUSH_ATTRIBUTE = 'PUSH_ATTRIBUTE'
+// 删除右键获取的属性
+export const DELETE_ATTRIBUTE = 'DELETE_ATTRIBUTE'

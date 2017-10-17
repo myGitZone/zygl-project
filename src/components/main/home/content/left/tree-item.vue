@@ -28,7 +28,6 @@ export default {
      * 鼠标右键抬起
      */
     mouseup(e) {
-      debugger
       if (e.button === RIGHT_CODE && this.info.data.id !== 1) {
         this.changeMenuShow({ isShow: true, left: e.clientX, top: e.clientY, menuType: LEFT_TREE_MENU })
         let node = this.info
@@ -40,7 +39,6 @@ export default {
           path = node.parent.data.name + '/' + path
           node = node.parent
         }
-        debugger
         this.pushPath(path)
         this.setSelectId(this.info.id)
       }

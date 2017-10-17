@@ -26,7 +26,7 @@
         <i class="icon-item rename-icon vertical"></i>
         <span class="vertical">重命名</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="renameClick" v-show="fileList.length===1||menuType === 0">
+      <li class="menu-list-item" @mouseup.stop="attributeClick" v-show="fileList.length===1||menuType === 0">
         <i class="attribute-icon fa fa-info vertical"></i>
         <span class="vertical">属性</span>
       </li>
@@ -54,7 +54,7 @@ export default {
       }
       return { left: x + 'px', top: y + 'px' }
     },
-    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'leftSelect'])
+    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath'])
   },
   methods: {
     menuMouseDown() {
@@ -92,7 +92,6 @@ export default {
       let params = new URLSearchParams()
       // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
       if (this.menuType === LEFT_TREE_MENU) {
-        debugger
         let path = this.currentPath
         let pathArr = path.split('/')
         let deleteFolder = pathArr[pathArr.length - 1]
@@ -135,7 +134,6 @@ export default {
       params.append('newFolder', '新建文件夹')
       this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
         if (res.data.status) {
-          debugger
           this.addNewFolder(res.data.newName)
         } else {
           this.$message({
@@ -144,12 +142,14 @@ export default {
         }
       })
     },
+    /**
+     * 重命名
+     */
     renameClick() {
       let params = new URLSearchParams()
       let url
       let path = this.currentPath
       let oldName
-      debugger
       if (this.menuType === LEFT_TREE_MENU) {
         oldName = path.split('/')
         let pathArr = path.split('/')
@@ -185,7 +185,29 @@ export default {
 
       })
     },
-    ...mapMutations({ updateFolder: 'UPDATE_FOLDER_NAME', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
+    /**
+     * 属性查询
+     */
+    attributeClick() {
+      let params = new URLSearchParams()
+      let path = this.currentPath
+      if (this.menuType === LEFT_TREE_MENU) {
+        params.append('folderPath', path)
+        let pathArr = path.split('/')
+        let folderName = pathArr[pathArr.length - 1]
+        this.$axios.post('/api/cloud/attrFolder', params).then((res) => {
+          if (res.data.status) {
+            res.data.name = folderName
+            res.data.isFolder = true
+            this.pushAttribute(res.data)
+          }
+        })
+      } else if (this.menuType === FILE_MENU) {
+        params.append('filePath', path + '/' + this.fileList[0])
+        this.$axios.post('/api/cloud/attrFile', params)
+      }
+    },
+    ...mapMutations({ pushAttribute: 'PUSH_ATTRIBUTE', updateFolder: 'UPDATE_FOLDER_NAME', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
   }
 }
 </script>

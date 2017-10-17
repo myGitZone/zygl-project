@@ -1,10 +1,9 @@
 // 定义mutations
 import * as types from './mutation-types'
-import { getFolderInfo } from '@/assets/js/util'
+import { getFolderInfo, generateUUID } from '@/assets/js/util'
 // 给左侧树绑定id
 let id
 function setIdToTreeData(folders) {
-  debugger
   for (let i = 0, len = folders.length; i < len; i++) {
     let folder = folders[i]
     id = id + 1
@@ -91,7 +90,6 @@ const mutations = {
   [types.DELETE_FILE](state, deleteFiles) {
     let currentPath = state.path[state.index]
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
-    debugger
     // let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
     let files = folderInfo.file.filter((item) => {
       return deleteFiles.indexOf(item) < 0
@@ -105,7 +103,6 @@ const mutations = {
     state.selectId = id
   },
   [types.ADD_FOLDER_NODE](state, newFolder) {
-    debugger
     let currentPath = state.path[state.index]
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     let newFolderInfo = {
@@ -121,7 +118,6 @@ const mutations = {
     }
   },
   [types.UPDATE_FOLDER_NAME](state, { rootFolder, oldName, newName }) {
-    debugger
     let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
     let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
     for (let i = 0; i < len; i++) {
@@ -139,6 +135,19 @@ const mutations = {
       let newPath = rootFolder ? `${rootFolder}/${newName}` : newName
       if (pathItem.startsWith(oldPath)) {
         pathArr.splice(i, 1, pathItem.replace(oldPath, newPath))
+      }
+    }
+  },
+  [types.PUSH_ATTRIBUTE](state, attribute) {
+    attribute.uid = generateUUID()
+    state.attrbutes.push(attribute)
+  },
+  [types.DELETE_ATTRIBUTE](state, deleteAttribute) {
+    for (let i = 0, len = state.attrbutes.length; i < len; i++) {
+      let attribute = state.attrbutes[i]
+      if (attribute.uid === deleteAttribute.uid) {
+        state.attrbutes.splice(i, 1)
+        break
       }
     }
   }

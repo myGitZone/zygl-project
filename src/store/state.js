@@ -28,7 +28,9 @@ const state = {
   // 是否显示上传框
   showUpload: false,
   // 左侧树选择的节点id
-  selectId: 0
+  selectId: 0,
+  // 记录右键获取的属性值
+  attrbutes: []
 }
 
 export default state
