@@ -12,7 +12,7 @@
     <app-footer></app-footer>
     <rigth-menu v-if="rightMenuShow"></rigth-menu>
     <upload-component v-if="showUpload"></upload-component>
-    <attribute-dialog v-for="(item,index) in attrbutes" :key="index" :attrbuteInfo="item"></attribute-dialog>
+    <attribute-dialog v-for="(item,index) in attrbutes" :key="item.uid" :index="index" :attrbuteInfo="item"></attribute-dialog>
   </div>
 </template>
 

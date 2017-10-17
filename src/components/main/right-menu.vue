@@ -126,6 +126,7 @@ export default {
     },
     /**
      * 新建文件夹
+     * atime，mtime，ctime就分别代表了访问时间，修改时间以及创建时间
      */
     newFolderClick() {
       let params = new URLSearchParams()
@@ -197,14 +198,19 @@ export default {
         let folderName = pathArr[pathArr.length - 1]
         this.$axios.post('/api/cloud/attrFolder', params).then((res) => {
           if (res.data.status) {
-            res.data.name = folderName
-            res.data.isFolder = true
-            this.pushAttribute(res.data)
+            res.data.data.name = folderName
+            res.data.data.isFolder = true
+            this.pushAttribute(res.data.data)
           }
         })
       } else if (this.menuType === FILE_MENU) {
         params.append('filePath', path + '/' + this.fileList[0])
-        this.$axios.post('/api/cloud/attrFile', params)
+        this.$axios.post('/api/cloud/attrFile', params).then((res) => {
+          if (res.data.status) {
+            res.data.data.name = this.fileList[0]
+            this.pushAttribute(res.data.data)
+          }
+        })
       }
     },
     ...mapMutations({ pushAttribute: 'PUSH_ATTRIBUTE', updateFolder: 'UPDATE_FOLDER_NAME', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
