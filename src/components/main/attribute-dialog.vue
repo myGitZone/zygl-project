@@ -23,17 +23,21 @@
       <div class="line"></div>
       <el-row style="margin-top: 10px">
         <el-col :span="6" style="text-align: right;">创建时间：</el-col>
-        <el-col :span="18" style="padding-left: 12px">{{getDate(attrbuteInfo.isFolder?attrbuteInfo.birthtime:attrbuteInfo.aTime)}}</el-col>
+        <el-col :span="18" style="padding-left: 12px">{{getDate(attrbuteInfo.birthtime)}}</el-col>
       </el-row>
-      <el-row style="margin-top: 10px" v-if="!attrbuteInfo.isFolder">
+      <el-row style="margin-top: 10px">
         <el-col :span="6" style="text-align: right;">修改时间：</el-col>
         <el-col :span="18" style="padding-left: 12px">{{getDate(attrbuteInfo.mTime)}}</el-col>
       </el-row>
-      <el-row style="margin-top: 10px" v-if="!attrbuteInfo.isFolder">
-        <el-col :span="6" style="text-align: right;">最后访问：</el-col>
+      <el-row style="margin-top: 10px">
+        <el-col :span="6" style="text-align: right;">变化时间：</el-col>
         <el-col :span="18" style="padding-left: 12px">{{getDate(attrbuteInfo.cTime)}}</el-col>
       </el-row>
-      <div class="line" v-if="!attrbuteInfo.isFolder"></div>
+      <el-row style="margin-top: 10px">
+        <el-col :span="6" style="text-align: right;">最后访问：</el-col>
+        <el-col :span="18" style="padding-left: 12px">{{getDate(attrbuteInfo.aTime)}}</el-col>
+      </el-row>
+      <div class="line"></div>
       <div class="btn-container">
         <el-button type="primary" size="small" @click="closeClick">确 定</el-button>
       </div>
