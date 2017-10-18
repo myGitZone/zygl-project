@@ -6,7 +6,7 @@
 <template>
   <div class="org-content">
     <div class="left-panel-orgtree">
-      <el-tree :data="orgData" highlight-current :props="defaultProps" @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
+      <el-tree node-key="id"  :default-expanded-keys="[1]" :data="orgData" highlight-current :props="defaultProps" @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
     </div>
     <div class="right-panel-editorg">
       <div class="org-title-content">
@@ -24,14 +24,6 @@
               <el-input v-model="orgname" :disabled="!edit"></el-input>
             </el-col>
           </el-row>
-          <!-- <el-row>
-                                                                  <el-col :span="6">
-                                                                    <label class="middle-label">机构编码：</label>
-                                                                  </el-col>
-                                                                  <el-col :span="18">
-                                                                    <el-input disabled></el-input>
-                                                                  </el-col>
-                                                                </el-row> -->
           <el-row>
             <el-col :span="6">
               <label class="middle-label">机构描述：</label>
