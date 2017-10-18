@@ -59,7 +59,6 @@ export default {
   * 检查当前密码是否输入正确
   */
     var checkCurrentPasswod = (rule, value, callback) => {
-      debugger
       if (value !== this.userinfo.password) {
         callback(new Error('密码不正确，请重新输入'))
       } else {
@@ -135,9 +134,6 @@ export default {
         let isUpdate = this._checkUpdate()
         if (valid && isUpdate) {
           let params = new URLSearchParams()
-          // 修改密码
-          console.log('dsdsadsa', this.activeName === 'second')
-          console.log('dsdsadsa2', this.cloneUserInfo.password)
           if (this.activeName === 'second') {
             params.append('passWord', this.cloneUserInfo.newpassword)
           } else {

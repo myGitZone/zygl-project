@@ -73,7 +73,11 @@ export function format(date, fmt) {
   }
   return fmt
 }
-
+export function axiosBeforeEach(response, vm) {
+  if (!response.data.status && response.data.data === 'login') {
+    vm.$router.push('/login')
+  }
+}
 function getItem(name, data) {
   let folders = data.folder
   let folder

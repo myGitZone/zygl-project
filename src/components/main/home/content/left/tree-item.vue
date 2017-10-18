@@ -13,7 +13,6 @@
 <script>
 import { mapMutations } from 'vuex'
 import { RIGHT_CODE, LEFT_TREE_MENU } from '@/assets/js/const-value.js'
-console.log(LEFT_TREE_MENU)
 export default {
   props: {
     info: {

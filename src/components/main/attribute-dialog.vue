@@ -83,7 +83,6 @@ export default {
      * 获取图标
      */
     initBackgroundImage() {
-      debugger
       if (JSON.stringify(this.attrbuteInfo) === '{}') {
         this.background = `backgroundImage: url("/static/image/file_icon/icon_file/default.png")`
         return
@@ -127,7 +126,6 @@ export default {
     getSize(size) {
       let unit = 'B'
       let mSize = size
-      debugger
       if (size > 512) {
         unit = 'K'
         mSize = (size / 1024).toFixed(2)

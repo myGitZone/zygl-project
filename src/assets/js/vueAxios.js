@@ -6,8 +6,7 @@
 // 为了解决不兼容promise的版本，这里做了兼容处理
 import axios from 'axios'
 import originJsonp from 'jsonp'
-import Cookies from 'js-cookie'
-import { JWT_TOKEN } from '@/assets/js/const-value'
+
 function jsonp(url, option) {
   return new Promise((resolve, reject) => {
     originJsonp(url, option, (err, data) => {
@@ -22,26 +21,6 @@ function jsonp(url, option) {
 
 export default {
   install(Vue) {
-    axios.interceptors.request.use(
-      config => {
-        if (Cookies.get(JWT_TOKEN)) {
-          config.headers.authorization = `${Cookies.get(JWT_TOKEN)}`
-        }
-        return config
-      },
-      err => {
-        return Promise.reject(err)
-      })
-    axios.interceptors.response.use(
-      response => {
-        if (response.headers.authorization) {
-          Cookies.set(JWT_TOKEN, response.headers.authorization)
-        }
-        return response
-      },
-      err => {
-        return Promise.reject(err)
-      })
     Vue.prototype.$axios = axios
     Vue.axios = axios
     Vue.prototype.$jsonp = jsonp

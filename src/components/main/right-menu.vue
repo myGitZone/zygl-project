@@ -39,7 +39,6 @@ import { mapGetters, mapMutations } from 'vuex'
 import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL, RENAME_FOLDER, RENAME_FILE, FILE_ATTRIBUTE, FOLDER_ATTRIBUTE } from '@/assets/js/const-value'
 import { downloadFiles } from '@/assets/js/util'
 import Cookies from 'js-cookie'
-// console.log(BLANK_MENU)
 export default {
   computed: {
     style() {

@@ -27,6 +27,8 @@ import UploadComponent from './upload-component'
 import AttributeDialog from './attribute-dialog'
 import { FOLDER_TREE, GET_ORGS, GET_CURRENT_USERINFO } from '@/assets/js/const-value.js'
 import { mapMutations, mapGetters } from 'vuex'
+import Cookies from 'js-cookie'
+import { JWT_TOKEN } from '@/assets/js/const-value'
 export default {
   name: 'app',
   data() {
@@ -35,6 +37,30 @@ export default {
     }
   },
   created() {
+    this.$axios.interceptors.request.use(
+      config => {
+        if (Cookies.get(JWT_TOKEN)) {
+          config.headers.authorization = `${Cookies.get(JWT_TOKEN)}`
+        }
+        return config
+      },
+      err => {
+        return Promise.reject(err)
+      })
+    this.$axios.interceptors.response.use(
+      response => {
+        if (!response.data.status && response.data.data === 'login') {
+          this.$router.push('/login')
+        } else {
+          if (response.headers.authorization) {
+            Cookies.set(JWT_TOKEN, response.headers.authorization)
+          }
+          return response
+        }
+      },
+      err => {
+        return Promise.reject(err)
+      })
     this.$axios(FOLDER_TREE).then((res) => {
       if (res.data.status) {
         let dataTree = res.data.data
