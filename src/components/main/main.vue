@@ -5,7 +5,7 @@
 */
 <template>
   <div id="main-container">
-    <app-header :is-admin="isAdmin"></app-header>
+    <app-header></app-header>
     <keep-alive>
       <router-view></router-view>
     </keep-alive>
@@ -13,6 +13,9 @@
     <rigth-menu v-if="rightMenuShow"></rigth-menu>
     <upload-component v-if="showUpload"></upload-component>
     <attribute-dialog v-for="(item,index) in attrbutes" :key="item.uid" :index="index" :attrbuteInfo="item"></attribute-dialog>
+    <el-dialog :close-on-click-modal="false" :modal="false" custom-class="dialog-custom dialog-custom-shadow" title="授权" :visible.sync="dialogVisible" size="large">
+
+    </el-dialog>
   </div>
 </template>
 
@@ -28,7 +31,7 @@ export default {
   name: 'app',
   data() {
     return {
-      isAdmin: false
+      dialogVisible: false
     }
   },
   created() {
@@ -69,6 +72,17 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.dialog-custom {
+  width: 60%;
+  height: 70%;
+  .el-dialog__body {
+    padding: 0 !important;
+  }
+}
 
+.dialog-custom-shadow {
+  box-shadow: 0px 0px 20px rgba(0, 140, 255, 0.46);
+  border: 1px solid #71b9f3;
+}
 </style>

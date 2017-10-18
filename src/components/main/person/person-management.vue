@@ -49,7 +49,7 @@
       <el-button size="small" type="primary" @click="editClick">编 辑</el-button>
       <el-button size="small" type="primary" @click="deleteClick">删 除</el-button>
     </div>
-    <el-dialog :modal="false" custom-class="dialog-custom-add-edit" title="提示" :visible.sync="showDialog" size="small">
+    <el-dialog :close-on-click-modal="false" :modal="false" custom-class="dialog-custom-add-edit" title="提示" :visible.sync="showDialog" size="small">
       <add-editPerson @cancelClick="cancelClick" @saveClick="saveClick" :userInfo="userInfo" v-if="showDialog"></add-editPerson>
     </el-dialog>
   </div>

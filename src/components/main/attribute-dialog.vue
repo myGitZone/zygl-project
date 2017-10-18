@@ -1,8 +1,10 @@
 <template>
   <div ref="attributeContent" class="attribute-container" :style="marginStyle">
     <div class="header">
-      <i class="icon-title" :style="background"></i>
-      <span class="title">{{attrbuteInfo.name}}</span>
+      <span class="overflow">
+        <i class="icon-title" :style="background"></i>
+        <span class="title">{{attrbuteInfo.name}}</span>
+      </span>
       <button type="button" aria-label="Close" class="el-dialog__headerbtn" @click="closeClick">
         <i class="el-dialog__close el-icon el-icon-close"></i>
       </button>
@@ -184,6 +186,13 @@ export default {
     box-sizing: border-box;
     font-size: 16px;
     color: #1f2d3d;
+    .overflow {
+      display: inline-block;
+      width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
     .icon-title {
       display: inline-block;
       width: 20px;

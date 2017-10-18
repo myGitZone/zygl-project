@@ -40,3 +40,7 @@ export const CREATE_FOLDER_URL = '/api/cloud/createFolder'
 export const RENAME_FOLDER = '/api/cloud/renameFolder'
 // 文件重命名
 export const RENAME_FILE = '/api/cloud/renameFile'
+// 获取文件的属性
+export const FILE_ATTRIBUTE = '/api/cloud/attrFile'
+// 获取文件夹属性
+export const FOLDER_ATTRIBUTE = '/api/cloud/attrFolder'

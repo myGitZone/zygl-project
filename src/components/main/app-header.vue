@@ -17,10 +17,20 @@
         人员管理
       </span>
     </div>
-    <el-dialog :modal="false" custom-class="dialog-custom" :title="title" :visible.sync="dialogVisible" size="large">
+    <div class="nav-container right-nav" v-if="userinfo">
+      <el-menu class="el-menu-user" mode="horizontal" @select="handleSelect">
+        <el-submenu index="1">
+          <template slot="title">{{userinfo.nickname}}</template>
+          <el-menu-item index="1-1">个人中心</el-menu-item>
+          <el-menu-item index="1-2">退出</el-menu-item>
+        </el-submenu>
+      </el-menu>
+    </div>
+    <el-dialog :close-on-click-modal="false" :modal="false" custom-class="dialog-custom dialog-custom-shadow" :title="title" :visible.sync="dialogVisible" size="large">
       <organization v-if="showDialogIndex===1"></organization>
       <person-manage v-if="showDialogIndex===2" @close="closeClick"></person-manage>
     </el-dialog>
+    <user-info ref='userinfo'></user-info>
   </header>
 </template>
 
@@ -28,6 +38,7 @@
 import Organization from '@/components/main/organization/organization'
 import PersonManage from '@/components/main/person/person-management'
 import { mapGetters } from 'vuex'
+import UserInfo from './user/user-info'
 export default {
   data() {
     return {
@@ -65,11 +76,22 @@ export default {
      */
     closeClick() {
       this.setUploadState(false)
+    },
+    /**
+     * 菜单选择
+     */
+    handleSelect(index) {
+      if (index === '1-1') {
+        this.$refs.userinfo.show()
+      } else {
+        this.$router.push('/login')
+      }
     }
   },
   components: {
     Organization,
-    PersonManage
+    PersonManage,
+    UserInfo
   }
 }
 </script>
@@ -77,10 +99,31 @@ export default {
 .dialog-custom {
   width: 60%;
   height: 70%;
-  box-shadow: 0px 0px 20px rgba(0, 140, 255, 0.46);
-  border: 1px solid #71b9f3;
   .el-dialog__body {
     padding: 0 !important;
+  }
+}
+
+.dialog-custom-shadow {
+  box-shadow: 0px 0px 20px rgba(0, 140, 255, 0.46);
+  border: 1px solid #71b9f3;
+}
+
+.right-nav {
+  position: absolute;
+  right: 20px;
+  .el-menu {
+    background-color: inherit;
+    .el-submenu {
+      .el-submenu__title {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 5px solid transparent !important;
+      }
+      ul {
+        top: 42px !important;
+      }
+    }
   }
 }
 </style>

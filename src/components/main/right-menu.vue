@@ -36,7 +36,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL, RENAME_FOLDER, RENAME_FILE } from '@/assets/js/const-value'
+import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL, RENAME_FOLDER, RENAME_FILE, FILE_ATTRIBUTE, FOLDER_ATTRIBUTE } from '@/assets/js/const-value'
 import { downloadFiles } from '@/assets/js/util'
 import Cookies from 'js-cookie'
 // console.log(BLANK_MENU)
@@ -196,7 +196,7 @@ export default {
         params.append('folderPath', path)
         let pathArr = path.split('/')
         let folderName = pathArr[pathArr.length - 1]
-        this.$axios.post('/api/cloud/attrFolder', params).then((res) => {
+        this.$axios.post(FOLDER_ATTRIBUTE, params).then((res) => {
           if (res.data.status) {
             res.data.data.name = folderName
             res.data.data.isFolder = true
@@ -205,7 +205,7 @@ export default {
         })
       } else if (this.menuType === FILE_MENU) {
         params.append('filePath', path + '/' + this.fileList[0])
-        this.$axios.post('/api/cloud/attrFile', params).then((res) => {
+        this.$axios.post(FILE_ATTRIBUTE, params).then((res) => {
           if (res.data.status) {
             res.data.data.name = this.fileList[0]
             this.pushAttribute(res.data.data)
