@@ -28,6 +28,8 @@ export const GET_ORGS = '/api/org/getOrgs'
 export const ADD_ORG = '/api/org/addOrg'
 // 编辑组织机构
 export const EDIT_ORG = '/api/org/editOrg'
+// 删除组织机构
+export const DELETE_ORG = '/api/org/deleteOrg'
 // 下载接口
 export const DOWNLOAD_URL = '/api/cloud/downloadFile'
 // 删除文件

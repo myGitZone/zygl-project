@@ -254,10 +254,12 @@ export default {
       .path-container {
         display: inline-block;
         width: 70%;
-        height: 26px;
+        height: 28px;
         overflow: hidden;
         border: 1px solid #ddd;
+        margin-top: 1px;
         margin-left: -1px;
+        box-sizing: border-box;
         box-shadow: #e6e6e6 0px 0px 20px inset;
         background: #f8f8f8;
         background: #f8f8f8 url("../../../../../assets/image/bg.gif") 0px -2px repeat-x;

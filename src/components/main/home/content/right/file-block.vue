@@ -4,7 +4,7 @@
 * @description
 */
 <template>
-  <div class="file-block" :title="fileInfo.name||fileInfo" @dblclick="dblclick">
+  <div class="file-block" :title="fileInfo.name||fileInfo">
     <div class="item-select" :class="{'item-check':checked}">
       <i class="fa fa-check" aria-hidden="true"></i>
     </div>
@@ -72,12 +72,6 @@ export default {
         ext = arr[arr.length - 1]
       }
       return ext
-    },
-    dblclick() {
-      if (this.isFolder) {
-        let name = `${this.currentPath}/${this.fileInfo.name}`
-        this.pushPath(name)
-      }
     },
     ...mapMutations({ pushPath: 'PUSH_PATH' })
   }

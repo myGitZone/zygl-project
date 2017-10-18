@@ -6,12 +6,13 @@
 <template>
   <div class="org-content">
     <div class="left-panel-orgtree">
-      <el-tree node-key="id"  :default-expanded-keys="[1]" :data="orgData" highlight-current :props="defaultProps" @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
+      <el-tree node-key="id" :default-expanded-keys="[1]" :data="orgData" highlight-current :props="defaultProps" @node-click="handleNodeClick" :render-content="renderContent"></el-tree>
     </div>
     <div class="right-panel-editorg">
       <div class="org-title-content">
         <div class="btn-content">
           <el-button type="primary" size="small" :disabled="!currentData" @click="addNode(2)">编 辑</el-button>
+          <el-button type="primary" size="small" :disabled="!currentData" @click="deleteClick">删 除</el-button>
           <el-button type="primary" size="small" :disabled="editCanUse" @click="addNode(0)">添加同级机构</el-button>
           <el-button type="primary" size="small" :disabled="!currentData" @click="addNode(1)">添加下级机构</el-button>
         </div>
@@ -50,7 +51,7 @@
 <script>
 import PanelSplit from '@/base/panel-split'
 import TreeItem from './org-tree-item'
-import { ADD_ORG, EDIT_ORG } from '@/assets/js/const-value'
+import { ADD_ORG, EDIT_ORG, DELETE_ORG } from '@/assets/js/const-value'
 import { mapGetters, mapMutations } from 'vuex'
 const ADD_SAME_LEVEL = 0
 const ADD_NEXT_LEVEL = 1
@@ -107,7 +108,7 @@ export default {
     },
     /**
      * 添加节点
-     * @argument type 0-添加同级节点，1-添加下级节点, 2-编辑节点
+     * @argument type 0-添加同级节点，1-添加下级节点, 2-编辑节点， 3-删除节点
      * */
     addNode(type) {
       if (!this.currentData) {
@@ -121,6 +122,21 @@ export default {
         // 组织机构描述
         this.description = this.currentData.description
       }
+    },
+    /**
+     * 删除节点
+     */
+    deleteClick() {
+      let params = new URLSearchParams()
+      debugger
+      params.append('orgid', this.currentData.id)
+      this.$axios.post(DELETE_ORG, params).then((res) => {
+        if (res.data.status) {
+          this.setOrgDatas(res.data.data)
+          this.edit = false
+          this._resetInput()
+        }
+      })
     },
     /**
      * 数据保存
