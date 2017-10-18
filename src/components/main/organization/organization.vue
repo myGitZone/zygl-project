@@ -171,7 +171,7 @@ export default {
      */
     _resetInput() {
       this.orgname = null
-      this.description = null
+      this.description = ''
     },
     ...mapMutations({ setOrgDatas: 'SET_ORG_DATAS' })
   },
