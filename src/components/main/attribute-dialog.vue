@@ -138,7 +138,7 @@ export default {
         unit = 'G'
         mSize = (size / (1024 * 1024 * 1024)).toFixed(2)
       }
-      return `${mSize}${unit}(${size} Byte)`
+      return `${mSize}${unit}&nbsp&nbsp(${size} Byte)`
     },
     /**
      * 获取日期格式

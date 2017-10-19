@@ -1,16 +1,17 @@
 <template>
-  <div class="auth-block" :title="authInfo.name" @click.stop="blockClick" :class="{'auth-select':checked}">
+  <div class="auth-block" :title="authInfo.nickname" @click.stop="blockClick" :class="{'auth-select':checked}">
     <div class="item-select" :class="{'item-check':checked}" @click.stop="deleteClick">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
     <div class="file-icon-content">
       <i class="user-icon" aria-hidden="true"></i>
     </div>
-    <div class="file-name">{{authInfo.name}}</div>
+    <div class="file-name">{{getValue()}}</div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     authInfo: {
@@ -26,12 +27,18 @@ export default {
       default: false
     }
   },
+  computed: {
+    ...mapGetters(['orgDatas'])
+  },
   methods: {
     blockClick() {
       this.$emit('itemClick', this.authInfo)
     },
     deleteClick() {
       this.$emit('deleteClick', this.authInfo)
+    },
+    getValue() {
+      return this.authInfo.orgid ? `${this.authInfo.nickname}(${this.orgDatas[this.authInfo.orgid].orgname})` : `${this.authInfo.nickname}`
     }
   }
 }

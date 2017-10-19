@@ -68,7 +68,6 @@ export default {
       dialog关闭事件
     */
     handleClose() {
-      alert(12345)
       this.showDialogIndex = 0
     },
     /**
@@ -84,7 +83,7 @@ export default {
       if (index === '1-1') {
         this.$refs.userinfo.show()
       } else {
-        this.$router.push('/login')
+        this.$router.push('/login/')
       }
     }
   },

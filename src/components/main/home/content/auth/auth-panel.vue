@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="auth-container">
-      <auth-block v-for="(item, index) in personInfos" :checked="selectPersonInfo===item" :authInfo="item" :key="index" @itemClick="itemClick" @deleteClick="deleteClick">
+      <auth-block v-for="(item, index) in personInfos" :checked="selectPersonInfo===item" v-show="item.show" :authInfo="item" :key="index" @itemClick="itemClick" @deleteClick="deleteClick">
       </auth-block>
     </div>
     <div class="auth-content">
@@ -79,7 +79,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentPath'])
+    ...mapGetters(['currentPath', 'orgDatas'])
   },
   watch: {
     currentPath() {
@@ -130,7 +130,7 @@ export default {
         if (res.data.status) {
           // 这里暂时这么做，以后后台添加了name属性后去掉
           this.personInfos = res.data.data.map((item) => {
-            item.name = item.userid
+            item.show = true
             return item
           })
           this.selectPersonInfo = this.personInfos.length > 0 ? this.personInfos[0] : null
@@ -241,7 +241,23 @@ export default {
         }
       })
     },
-    handleIconClick() { },
+    handleIconClick() {
+      let firstShowPerson
+      this.personInfos.forEach((item) => {
+        if (item.nickname.toLocaleLowerCase().includes(this.searchVal) || (item.orgid && this.orgDatas[item.orgid].orgname.toLocaleLowerCase().includes(item))) {
+          item.show = true
+          firstShowPerson = item
+        } else {
+          item.show = false
+        }
+      })
+      if (firstShowPerson) {
+        this.changeAuth(this.firstShowPerson)
+      } else {
+        this.fileList = []
+        this.folderList = []
+      }
+    },
     /**
      * 关闭按钮点击事件
      */

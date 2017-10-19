@@ -4,7 +4,7 @@
 * @description
 */
 <template>
-  <div class="right-menu" :style="style" @mousedown.stop="menuMouseDown">
+  <div class="right-menu" :style="style" @mousedown.stop="menuMouseDown" v-show="show">
     <ul class="menu-list" @click="menuClick">
       <li class="menu-list-item" @mouseup.stop="downloadClick" v-if="showInfo.download">
         <i class="icon-item download-icon vertical"></i>
@@ -44,11 +44,15 @@ import { DOWNLOAD_URL, JWT_TOKEN, DOWNLOAD_FOLDER_URL, LEFT_TREE_MENU, FILE_MENU
 import { downloadFiles, getFolderInfo } from '@/assets/js/util'
 import Cookies from 'js-cookie'
 export default {
+  data() {
+    return {
+      show: false
+    }
+  },
   computed: {
     showInfo() {
+      debugger
       let showInfo
-      let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
-      let auth = folderInfo.auth
       if (this.userinfo && (this.userinfo.admin === '1' || this.userinfo.admin === 1)) {
         showInfo = {
           download: true,
@@ -58,7 +62,57 @@ export default {
           rename: true,
           attribute: true
         }
-      } else if (this.menuType === LEFT_TREE_MENU) {
+      } else {
+        debugger
+        let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
+        debugger
+        if (folderInfo && folderInfo.auth) {
+          showInfo = this.getShowInfo(folderInfo)
+        } else {
+          let pathArr = this.currentPath.split('/')
+          if (pathArr.length > 0) {
+            let prePathArr = pathArr.slice(0, pathArr.length - 1)
+            folderInfo = this.getAuthFolderInfo(prePathArr.join('/'))
+            if (folderInfo && folderInfo.auth && folderInfo.auth.subinherit === '1') {
+              showInfo = this.getShowInfo(folderInfo)
+            }
+          }
+        }
+      }
+      return showInfo
+    },
+    style() {
+      let x = this.left
+      let y = this.top
+      let count = 0
+      debugger
+      for (let item in this.showInfo) {
+        if (this.showInfo[item]) {
+          count++
+        }
+      }
+      if (count === 0) {
+        this.show = false
+        return
+      } else {
+        this.show = true
+      }
+      let maxHeight = count * 25
+      if (window.innerWidth - x < 200) {
+        x = x - 200
+      }
+      if (window.innerHeight - y < maxHeight) {
+        y = y - maxHeight
+      }
+      return { left: x + 'px', top: y + 'px' }
+    },
+    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo'])
+  },
+  methods: {
+    getShowInfo(folderInfo) {
+      let showInfo
+      let auth = folderInfo.auth
+      if (this.menuType === LEFT_TREE_MENU) {
         showInfo = {
           download: auth.folderdownload === '1',
           upload: auth.folderupload === '1',
@@ -88,21 +142,17 @@ export default {
       }
       return showInfo
     },
-    style() {
-      let x = this.left
-      let y = this.top
-      let maxHeight = 2 * 25 + 20
-      if (window.innerWidth - x < 200) {
-        x = x - 200
+    getAuthFolderInfo(path) {
+      debugger
+      let folderInfo = getFolderInfo(path, this.treeData[0])
+      while ((!folderInfo.auth && path !== '') && folderInfo) {
+        let pathArr = path.split('/')
+        let prePathArr = pathArr.slice(0, pathArr.length - 1)
+        path = prePathArr.join('/')
+        folderInfo = getFolderInfo(path, this.treeData[0])
       }
-      if (window.innerHeight - y < maxHeight) {
-        y = y - maxHeight
-      }
-      return { left: x + 'px', top: y + 'px' }
+      return folderInfo
     },
-    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo'])
-  },
-  methods: {
     menuMouseDown() {
     },
     /**
