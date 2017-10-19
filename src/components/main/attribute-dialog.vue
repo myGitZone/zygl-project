@@ -16,7 +16,7 @@
       </el-row>
       <el-row style="margin-top: 10px">
         <el-col :span="6" style="text-align: right;">大小：</el-col>
-        <el-col :span="18" style="padding-left: 12px">{{getSize(attrbuteInfo.fileSize)}}</el-col>
+        <el-col :span="18" style="padding-left: 12px" v-html="getSize(attrbuteInfo.fileSize)"></el-col>
       </el-row>
       <el-row style="margin-top: 10px" v-if="attrbuteInfo.isFolder">
         <el-col :span="6" style="text-align: right;">包含：</el-col>
