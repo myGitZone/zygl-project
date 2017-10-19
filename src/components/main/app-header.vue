@@ -104,11 +104,6 @@ export default {
   }
 }
 
-.dialog-custom-shadow {
-  box-shadow: 0px 0px 20px rgba(0, 140, 255, 0.46);
-  border: 1px solid #71b9f3;
-}
-
 .right-nav {
   position: absolute;
   right: 20px;
@@ -122,6 +117,9 @@ export default {
       }
       ul {
         top: 42px !important;
+        .el-menu-item {
+          min-width: 100px !important;
+        }
       }
     }
   }

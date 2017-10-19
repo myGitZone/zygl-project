@@ -29,3 +29,5 @@ export const showUpload = state => state.showUpload
 export const selectId = state => state.selectId
 // 获取右键点击属性的时候，获取的所有文件的属性
 export const attrbutes = state => state.attrbutes
+// 授权界面展示
+export const showAuth = state => state.showAuth

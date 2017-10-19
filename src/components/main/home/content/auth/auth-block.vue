@@ -1,6 +1,6 @@
 <template>
-  <div class="auth-block" :title="authInfo.name">
-    <div class="item-select" :class="{'item-check':checked}">
+  <div class="auth-block" :title="authInfo.name" @click.stop="blockClick" :class="{'auth-select':checked}">
+    <div class="item-select" :class="{'item-check':checked}" @click.stop="deleteClick">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
     <div class="file-icon-content">
@@ -20,6 +20,18 @@ export default {
           name: ''
         }
       }
+    },
+    checked: {
+      type: Boolean,
+      default: false
+    }
+  },
+  methods: {
+    blockClick() {
+      this.$emit('itemClick', this.authInfo)
+    },
+    deleteClick() {
+      this.$emit('deleteClick', this.authInfo)
     }
   }
 }
@@ -38,7 +50,7 @@ export default {
     background: #e5f3ff;
     border-color: transparent;
     .item-select {
-      background: rgba(0, 0, 0, 0.05);
+      background: #3b8cff !important;
     }
   }
   .file-icon-content {
@@ -77,5 +89,11 @@ export default {
   .item-check {
     background: #3b8cff !important;
   }
+}
+
+.auth-select {
+  transition: transform 0.2s;
+  background: #cce8ff !important;
+  border-color: #99d1ff !important;
 }
 </style>

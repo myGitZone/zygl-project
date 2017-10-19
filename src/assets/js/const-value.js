@@ -30,8 +30,10 @@ export const ADD_ORG = '/api/org/addOrg'
 export const EDIT_ORG = '/api/org/editOrg'
 // 删除组织机构
 export const DELETE_ORG = '/api/org/deleteOrg'
-// 下载接口
+// 下载文件接口
 export const DOWNLOAD_URL = '/api/cloud/downloadFile'
+// 下载文件夹接口
+export const DOWNLOAD_FOLDER_URL = '/api/cloud/downloadFolder'
 // 删除文件
 export const DELETE_FILE_URL = '/api/cloud/deleteFile'
 // 删除文件
@@ -46,3 +48,11 @@ export const RENAME_FILE = '/api/cloud/renameFile'
 export const FILE_ATTRIBUTE = '/api/cloud/attrFile'
 // 获取文件夹属性
 export const FOLDER_ATTRIBUTE = '/api/cloud/attrFolder'
+// 获取目录权限
+export const GET_FOLDER_AUTH_INFO = '/api/auth/folderAuth'
+// 更新人员的权限
+export const UPDATE_AUTH = '/api/auth/updateAuth'
+// 添加授权人员
+export const ADD_AUTH_PERSON = '/api/auth/addUser'
+// 删除授权人员
+export const DELETE_AUTH_PERSON = '/api/auth/deleteUser'

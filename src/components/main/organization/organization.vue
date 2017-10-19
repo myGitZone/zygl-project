@@ -12,7 +12,7 @@
       <div class="org-title-content">
         <div class="btn-content">
           <el-button type="primary" size="small" :disabled="!currentData" @click="addNode(2)">编 辑</el-button>
-          <el-button type="primary" size="small" :disabled="!currentData" @click="deleteClick">删 除</el-button>
+          <el-button type="primary" size="small" :disabled="editCanUse" @click="deleteClick">删 除</el-button>
           <el-button type="primary" size="small" :disabled="editCanUse" @click="addNode(0)">添加同级机构</el-button>
           <el-button type="primary" size="small" :disabled="!currentData" @click="addNode(1)">添加下级机构</el-button>
         </div>
@@ -127,15 +127,21 @@ export default {
      * 删除节点
      */
     deleteClick() {
-      let params = new URLSearchParams()
-      debugger
-      params.append('orgid', this.currentData.id)
-      this.$axios.post(DELETE_ORG, params).then((res) => {
-        if (res.data.status) {
-          this.setOrgDatas(res.data.data)
-          this.edit = false
-          this._resetInput()
-        }
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = new URLSearchParams()
+        params.append('orgid', this.currentData.id)
+        this.$axios.post(DELETE_ORG, params).then((res) => {
+          if (res.data.status) {
+            this.setOrgDatas(res.data.data)
+            this.edit = false
+            this._resetInput()
+          }
+        })
+      }).catch(() => {
       })
     },
     /**

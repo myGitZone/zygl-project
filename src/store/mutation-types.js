@@ -35,3 +35,5 @@ export const UPDATE_FOLDER_NAME = 'UPDATE_FOLDER_NAME'
 export const PUSH_ATTRIBUTE = 'PUSH_ATTRIBUTE'
 // 删除右键获取的属性
 export const DELETE_ATTRIBUTE = 'DELETE_ATTRIBUTE'
+// 设置授权界面的显隐
+export const CHANGE_AUTH_SHOW = 'CHANGE_AUTH_SHOW'

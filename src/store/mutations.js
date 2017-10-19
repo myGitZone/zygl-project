@@ -150,6 +150,9 @@ const mutations = {
         break
       }
     }
+  },
+  [types.CHANGE_AUTH_SHOW](state, isShow) {
+    state.showAuth = isShow
   }
 }
 export default mutations

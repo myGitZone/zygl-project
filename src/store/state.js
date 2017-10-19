@@ -30,7 +30,9 @@ const state = {
   // 左侧树选择的节点id
   selectId: 0,
   // 记录右键获取的属性值
-  attrbutes: []
+  attrbutes: [],
+  // 授权界面是否显示
+  showAuth: false
 }
 
 export default state

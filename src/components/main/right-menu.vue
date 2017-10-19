@@ -6,29 +6,33 @@
 <template>
   <div class="right-menu" :style="style" @mousedown.stop="menuMouseDown">
     <ul class="menu-list" @click="menuClick">
-      <li class="menu-list-item" @mouseup.stop="downloadClick">
+      <li class="menu-list-item" @mouseup.stop="downloadClick" v-if="showInfo.download">
         <i class="icon-item download-icon vertical"></i>
         <span class="vertical">下载</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="uploadClick">
+      <li class="menu-list-item" @mouseup.stop="uploadClick" v-if="showInfo.upload">
         <i class="icon-item upload-icon vertical"></i>
         <span class="vertical">上传</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="deleteClick">
+      <li class="menu-list-item" @mouseup.stop="deleteClick" v-if="showInfo.delete">
         <i class="icon-item delete-icon vertical"></i>
         <span class="vertical">删除</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="newFolderClick">
+      <li class="menu-list-item" @mouseup.stop="newFolderClick" v-if="showInfo.create">
         <i class="icon-item new-icon vertical"></i>
         <span class="vertical">新建文件夹</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="renameClick" v-show="fileList.length===1||menuType === 0">
+      <li class="menu-list-item" @mouseup.stop="renameClick" v-if="showInfo.rename" v-show="fileList.length===1||menuType === 0">
         <i class="icon-item rename-icon vertical"></i>
         <span class="vertical">重命名</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="attributeClick" v-show="fileList.length===1||menuType === 0">
+      <li class="menu-list-item" @mouseup.stop="attributeClick" v-if="showInfo.attribute" v-show="fileList.length===1||menuType === 0||menuType === 2">
         <i class="attribute-icon fa fa-info vertical"></i>
         <span class="vertical">属性</span>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="authClick" v-show="menuType === 0" v-if="userinfo&&(userinfo.admin === '1'||userinfo.admin === 1)">
+        <i class="icon-item auth-icon vertical"></i>
+        <span class="vertical">授权</span>
       </li>
     </ul>
   </div>
@@ -36,11 +40,54 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import { DOWNLOAD_URL, JWT_TOKEN, LEFT_TREE_MENU, FILE_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL, RENAME_FOLDER, RENAME_FILE, FILE_ATTRIBUTE, FOLDER_ATTRIBUTE } from '@/assets/js/const-value'
-import { downloadFiles } from '@/assets/js/util'
+import { DOWNLOAD_URL, JWT_TOKEN, DOWNLOAD_FOLDER_URL, LEFT_TREE_MENU, FILE_MENU, BLANK_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL, RENAME_FOLDER, RENAME_FILE, FILE_ATTRIBUTE, FOLDER_ATTRIBUTE } from '@/assets/js/const-value'
+import { downloadFiles, getFolderInfo } from '@/assets/js/util'
 import Cookies from 'js-cookie'
 export default {
   computed: {
+    showInfo() {
+      let showInfo
+      let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
+      let auth = folderInfo.auth
+      if (this.userinfo && (this.userinfo.admin === '1' || this.userinfo.admin === 1)) {
+        showInfo = {
+          download: true,
+          upload: true,
+          delete: true,
+          create: true,
+          rename: true,
+          attribute: true
+        }
+      } else if (this.menuType === LEFT_TREE_MENU) {
+        showInfo = {
+          download: auth.folderdownload === '1',
+          upload: auth.folderupload === '1',
+          delete: auth.folderdelete === '1',
+          create: auth.foldercreate === '1',
+          rename: auth.folderrename === '1',
+          attribute: true
+        }
+      } else if (this.menuType === FILE_MENU) {
+        showInfo = {
+          download: auth.filedownload === '1',
+          upload: false,
+          delete: auth.filedelete === '1',
+          create: false,
+          rename: auth.filerename === '1',
+          attribute: true
+        }
+      } else if (this.menuType === BLANK_MENU) {
+        showInfo = {
+          download: auth.folderdownload === '1',
+          upload: auth.folderupload === '1',
+          delete: auth.folderdelete === '1',
+          create: auth.foldercreate === '1',
+          rename: auth.folderrename === '1',
+          attribute: true
+        }
+      }
+      return showInfo
+    },
     style() {
       let x = this.left
       let y = this.top
@@ -53,7 +100,7 @@ export default {
       }
       return { left: x + 'px', top: y + 'px' }
     },
-    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath'])
+    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo'])
   },
   methods: {
     menuMouseDown() {
@@ -69,8 +116,10 @@ export default {
      */
     downloadClick() {
       let urls
-      if (this.menuType === LEFT_TREE_MENU) {
-
+      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
+        debugger
+        let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`
+        urls = [url]
       } else if (this.menuType === FILE_MENU) {
         urls = this.fileList.map((item) => {
           return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item}&authorization=${Cookies.get(JWT_TOKEN)}`
@@ -88,40 +137,54 @@ export default {
      * 删除点击事件
      */
     deleteClick() {
-      let params = new URLSearchParams()
-      // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
-      if (this.menuType === LEFT_TREE_MENU) {
-        let path = this.currentPath
-        let pathArr = path.split('/')
-        let deleteFolder = pathArr[pathArr.length - 1]
-        let rootFolder = pathArr.slice(0, pathArr.length - 1).join('/')
-        params.append('delFolder', deleteFolder)
-        params.append('baseFolder', rootFolder)
-        this.$axios.post(DELETE_FOLDER_URL, params).then((res) => {
-          if (res.data.status) {
-            this.deleteNode({ rootFolder, deleteFolder })
-          } else {
-            this.$message({
-              message: '刪除失败！'
-            })
-          }
-        })
-      } else if (this.menuType === FILE_MENU) {
-        // 删除文件所在文件夹
-        let path = this.currentPath
-        let deleteFiles = this.fileList
-        params.append('baseFolder', path)
-        params.append('delFileNames', deleteFiles.join('*'))
-        this.$axios.post(DELETE_FILE_URL, params).then((res) => {
-          if (res.data.status) {
-            this.deleteFile(deleteFiles)
-          } else {
-            this.$message({
-              message: '刪除失败！'
-            })
-          }
-        })
-      }
+      let menuType = this.menuType
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        let params = new URLSearchParams()
+        // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
+        if (menuType === LEFT_TREE_MENU) {
+          let path = this.currentPath
+          let pathArr = path.split('/')
+          let deleteFolder = pathArr[pathArr.length - 1]
+          let rootFolder = pathArr.slice(0, pathArr.length - 1).join('/')
+          params.append('delFolder', deleteFolder)
+          params.append('baseFolder', rootFolder)
+          this.$axios.post(DELETE_FOLDER_URL, params).then((res) => {
+            if (res.data.status) {
+              this.deleteNode({ rootFolder, deleteFolder })
+            } else {
+              this.$message({
+                message: '刪除失败！'
+              })
+            }
+          })
+        } else if (menuType === FILE_MENU) {
+          // 删除文件所在文件夹
+          let path = this.currentPath
+          let deleteFiles = this.fileList
+          params.append('baseFolder', path)
+          params.append('delFileNames', deleteFiles.join('*'))
+          this.$axios.post(DELETE_FILE_URL, params).then((res) => {
+            if (res.data.status) {
+              this.deleteFile(deleteFiles)
+            } else {
+              this.$message({
+                message: '刪除失败！'
+              })
+            }
+          })
+        }
+      }).catch(() => {
+      })
+    },
+    /**
+     * 授权按钮点击
+     */
+    authClick() {
+      this.changeAuthShow(true)
     },
     /**
      * 新建文件夹
@@ -191,7 +254,7 @@ export default {
     attributeClick() {
       let params = new URLSearchParams()
       let path = this.currentPath
-      if (this.menuType === LEFT_TREE_MENU) {
+      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
         params.append('folderPath', path)
         let pathArr = path.split('/')
         let folderName = pathArr[pathArr.length - 1]
@@ -212,7 +275,7 @@ export default {
         })
       }
     },
-    ...mapMutations({ pushAttribute: 'PUSH_ATTRIBUTE', updateFolder: 'UPDATE_FOLDER_NAME', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
+    ...mapMutations({ changeAuthShow: 'CHANGE_AUTH_SHOW', pushAttribute: 'PUSH_ATTRIBUTE', updateFolder: 'UPDATE_FOLDER_NAME', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
   }
 }
 </script>
@@ -250,7 +313,7 @@ export default {
       .icon-item {
         display: inline-block;
         width: 16px !important;
-        background-size: auto !important;
+        background-size: auto;
         background-repeat: no-repeat;
         height: 16px;
         margin-right: 15px;
@@ -274,6 +337,11 @@ export default {
       .rename-icon {
         background-position: 0 -64px;
         background-image: url(../../assets/image/menu_icon.png);
+      }
+      .auth-icon {
+        background-image: url(../../assets/image/auth.png);
+        background-position: center;
+        background-size: 150% !important;
       }
       .attribute-icon {
         color: #fff !important;
