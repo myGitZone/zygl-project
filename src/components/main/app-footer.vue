@@ -6,7 +6,7 @@
 <template>
   <div class="footer">
     <span class="footer-value">
-      test
+      Copyright©2017 北京迅传网络科技有限公司
     </span>
   </div>
 </template>

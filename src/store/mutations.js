@@ -1,8 +1,9 @@
 // 定义mutations
 import * as types from './mutation-types'
-import { getFolderInfo, generateUUID } from '@/assets/js/util'
+import {getFolderInfo, generateUUID} from '@/assets/js/util'
 // 给左侧树绑定id
 let id
+
 function setIdToTreeData(folders) {
   for (let i = 0, len = folders.length; i < len; i++) {
     let folder = folders[i]
@@ -35,7 +36,7 @@ const mutations = {
     state.path = [path]
     state.index = 0
   },
-  [types.CHANGE_RIGHT_MENU_SHOW](state, { isShow, left, top, menuType }) {
+  [types.CHANGE_RIGHT_MENU_SHOW](state, {isShow, left, top, menuType}) {
     state.left = left
     state.top = top
     if (menuType !== null) {
@@ -57,7 +58,7 @@ const mutations = {
   [types.SET_ORG_DATAS](state, data) {
     state.orgDatas = data
   },
-  [types.UPDATE_TREE](state, { path, files }) {
+  [types.UPDATE_TREE](state, {path, files}) {
     let currentPath
     if (path) {
       currentPath = path
@@ -76,7 +77,7 @@ const mutations = {
   // [types.SET_LEFT_SELECT](state, selectData) {
   //   state.leftSelect = selectData
   // },
-  [types.DELETE_TREE_NODE](state, { rootFolder, deleteFolder }) {
+  [types.DELETE_TREE_NODE](state, {rootFolder, deleteFolder}) {
     let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
     let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
     for (let i = 0; i < len; i++) {
@@ -114,27 +115,40 @@ const mutations = {
     if (folderInfo.folder) {
       folderInfo.folder.push(newFolderInfo)
     } else {
-      folderInfo = Object.assign({}, folderInfo, { folder: [newFolderInfo] })
+      folderInfo = Object.assign({}, folderInfo, {folder: [newFolderInfo]})
     }
   },
-  [types.UPDATE_FOLDER_NAME](state, { rootFolder, oldName, newName }) {
+  [types.UPDATE_FOLDER_NAME](state, {rootFolder, oldName, newName, type}) {
+    debugger
     let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
-    let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
-    for (let i = 0; i < len; i++) {
-      let item = folderInfo.folder[i]
-      if (item.name === oldName) {
-        item.name = newName
-        break
+    if (type === 'folder') {
+      let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
+      for (let i = 0; i < len; i++) {
+        let item = folderInfo.folder[i]
+        if (item.name === oldName) {
+          item.name = newName
+          break
+        }
       }
-    }
-    // // 更新path里面记录的路径
-    let pathArr = state.path
-    for (let i = 0, len = pathArr.length; i < len; i++) {
-      let pathItem = pathArr[i]
-      let oldPath = rootFolder ? `${rootFolder}/${oldName}` : oldName
-      let newPath = rootFolder ? `${rootFolder}/${newName}` : newName
-      if (pathItem.startsWith(oldPath)) {
-        pathArr.splice(i, 1, pathItem.replace(oldPath, newPath))
+      // // 更新path里面记录的路径
+      let pathArr = state.path
+      for (let i = 0, len = pathArr.length; i < len; i++) {
+        let pathItem = pathArr[i]
+        let oldPath = rootFolder ? `${rootFolder}/${oldName}` : oldName
+        let newPath = rootFolder ? `${rootFolder}/${newName}` : newName
+        if (pathItem.startsWith(oldPath)) {
+          pathArr.splice(i, 1, pathItem.replace(oldPath, newPath))
+        }
+      }
+    } else {
+      let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
+      for (let i = 0; i < len; i++) {
+        debugger
+        let item = folderInfo.file[i]
+        if (item === oldName) {
+          folderInfo.file.splice(i, 1, newName)
+          break
+        }
       }
     }
   },
@@ -153,6 +167,17 @@ const mutations = {
   },
   [types.CHANGE_AUTH_SHOW](state, isShow) {
     state.showAuth = isShow
+  },
+  [types.REFRESH_TREE_DATA](state, updateNode) {
+    debugger
+    let rootFolder = state.path[state.index]
+    let oldNode = getFolderInfo(rootFolder, state.treeData[0])
+    if ('folder' in updateNode) {
+      setIdToTreeData(updateNode.folder)
+    }
+    oldNode.folder = updateNode.folder ? updateNode.folder : []
+    oldNode.file = updateNode.file ? updateNode.file : []
+    oldNode.auth = updateNode.auth ? updateNode.auth : ''
   }
 }
 export default mutations

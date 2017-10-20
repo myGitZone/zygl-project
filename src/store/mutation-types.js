@@ -37,3 +37,5 @@ export const PUSH_ATTRIBUTE = 'PUSH_ATTRIBUTE'
 export const DELETE_ATTRIBUTE = 'DELETE_ATTRIBUTE'
 // 设置授权界面的显隐
 export const CHANGE_AUTH_SHOW = 'CHANGE_AUTH_SHOW'
+// 刷新目录树
+export const REFRESH_TREE_DATA = 'REFRESH_TREE_DATA'

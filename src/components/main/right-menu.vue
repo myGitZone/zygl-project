@@ -18,19 +18,26 @@
         <i class="icon-item delete-icon vertical"></i>
         <span class="vertical">删除</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="newFolderClick" v-if="showInfo.create">
+      <li class="menu-list-item" @mouseup.stop="newFolderClick" v-if="showInfo.create&&menuType !== 1">
         <i class="icon-item new-icon vertical"></i>
         <span class="vertical">新建文件夹</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="renameClick" v-if="showInfo.rename" v-show="fileList.length===1||menuType === 0">
+      <li class="menu-list-item" @mouseup.stop="renameClick" v-if="showInfo.rename"
+          v-show="fileList.length===1||menuType === 0">
         <i class="icon-item rename-icon vertical"></i>
         <span class="vertical">重命名</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="attributeClick" v-if="showInfo.attribute" v-show="fileList.length===1||menuType === 0||menuType === 2">
+      <li class="menu-list-item" @mouseup.stop="attributeClick" v-if="showInfo.attribute"
+          v-show="fileList.length===1||menuType === 0||menuType === 2">
         <i class="attribute-icon fa fa-info vertical"></i>
         <span class="vertical">属性</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="authClick" v-show="menuType === 0" v-if="userinfo&&(userinfo.admin === '1'||userinfo.admin === 1)">
+      <li class="menu-list-item" @mouseup.stop="refreshClick" v-if="showInfo.refresh">
+        <i class="icon-item refresh-icon vertical"></i>
+        <span class="vertical">刷新</span>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="authClick" v-show="menuType === 0"
+          v-if="userinfo&&(userinfo.admin === '1'||userinfo.admin === 1)">
         <i class="icon-item auth-icon vertical"></i>
         <span class="vertical">授权</span>
       </li>
@@ -39,380 +46,432 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-import { DOWNLOAD_URL, JWT_TOKEN, DOWNLOAD_FOLDER_URL, LEFT_TREE_MENU, FILE_MENU, BLANK_MENU, DELETE_FILE_URL, DELETE_FOLDER_URL, CREATE_FOLDER_URL, RENAME_FOLDER, RENAME_FILE, FILE_ATTRIBUTE, FOLDER_ATTRIBUTE } from '@/assets/js/const-value'
-import { downloadFiles, getFolderInfo } from '@/assets/js/util'
-import Cookies from 'js-cookie'
-export default {
-  data() {
-    return {
-      show: false
-    }
-  },
-  computed: {
-    showInfo() {
-      debugger
-      let showInfo
-      if (this.userinfo && (this.userinfo.admin === '1' || this.userinfo.admin === 1)) {
-        showInfo = {
-          download: true,
-          upload: true,
-          delete: true,
-          create: true,
-          rename: true,
+  import {mapGetters, mapMutations} from 'vuex'
+  import {
+    DOWNLOAD_URL,
+    JWT_TOKEN,
+    DOWNLOAD_FOLDER_URL,
+    LEFT_TREE_MENU,
+    FILE_MENU,
+    BLANK_MENU,
+    DELETE_FILE_URL,
+    DELETE_FOLDER_URL,
+    CREATE_FOLDER_URL,
+    RENAME_FOLDER,
+    RENAME_FILE,
+    FILE_ATTRIBUTE,
+    FOLDER_ATTRIBUTE,
+    FOLDER_TREE
+  } from '@/assets/js/const-value'
+  import {downloadFiles, getFolderInfo} from '@/assets/js/util'
+  import Cookies from 'js-cookie'
+
+  export default {
+    data() {
+      return {
+        show: false
+      }
+    },
+    computed: {
+      showInfo() {
+        debugger
+        let showInfo = {
+          refresh: true,
           attribute: true
         }
-      } else {
-        debugger
-        let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
-        debugger
-        if (folderInfo && folderInfo.auth) {
-          showInfo = this.getShowInfo(folderInfo)
+        if (this.userinfo && (this.userinfo.admin === '1' || this.userinfo.admin === 1)) {
+          showInfo = {
+            download: true,
+            upload: true,
+            delete: true,
+            create: true,
+            rename: true,
+            refresh: true,
+            attribute: true
+          }
         } else {
-          let pathArr = this.currentPath.split('/')
-          if (pathArr.length > 0) {
-            let prePathArr = pathArr.slice(0, pathArr.length - 1)
-            folderInfo = this.getAuthFolderInfo(prePathArr.join('/'))
-            if (folderInfo && folderInfo.auth && folderInfo.auth.subinherit === '1') {
-              showInfo = this.getShowInfo(folderInfo)
+          debugger
+          let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
+          debugger
+          if (folderInfo && folderInfo.auth) {
+            showInfo = this.getShowInfo(folderInfo)
+          } else {
+            let pathArr = this.currentPath.split('/')
+            if (pathArr.length > 0) {
+              let prePathArr = pathArr.slice(0, pathArr.length - 1)
+              folderInfo = this.getAuthFolderInfo(prePathArr.join('/'))
+              if (folderInfo && folderInfo.auth && folderInfo.auth.subinherit === '1') {
+                showInfo = this.getShowInfo(folderInfo)
+              }
             }
           }
         }
-      }
-      return showInfo
-    },
-    style() {
-      let x = this.left
-      let y = this.top
-      let count = 0
-      debugger
-      for (let item in this.showInfo) {
-        if (this.showInfo[item]) {
-          count++
-        }
-      }
-      if (count === 0) {
-        this.show = false
-        return
-      } else {
-        this.show = true
-      }
-      let maxHeight = count * 25
-      if (window.innerWidth - x < 200) {
-        x = x - 200
-      }
-      if (window.innerHeight - y < maxHeight) {
-        y = y - maxHeight
-      }
-      return { left: x + 'px', top: y + 'px' }
-    },
-    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo'])
-  },
-  methods: {
-    getShowInfo(folderInfo) {
-      let showInfo
-      let auth = folderInfo.auth
-      if (this.menuType === LEFT_TREE_MENU) {
-        showInfo = {
-          download: auth.folderdownload === '1',
-          upload: auth.folderupload === '1',
-          delete: auth.folderdelete === '1',
-          create: auth.foldercreate === '1',
-          rename: auth.folderrename === '1',
-          attribute: true
-        }
-      } else if (this.menuType === FILE_MENU) {
-        showInfo = {
-          download: auth.filedownload === '1',
-          upload: false,
-          delete: auth.filedelete === '1',
-          create: false,
-          rename: auth.filerename === '1',
-          attribute: true
-        }
-      } else if (this.menuType === BLANK_MENU) {
-        showInfo = {
-          download: auth.folderdownload === '1',
-          upload: auth.folderupload === '1',
-          delete: auth.folderdelete === '1',
-          create: auth.foldercreate === '1',
-          rename: auth.folderrename === '1',
-          attribute: true
-        }
-      }
-      return showInfo
-    },
-    getAuthFolderInfo(path) {
-      debugger
-      let folderInfo = getFolderInfo(path, this.treeData[0])
-      while ((!folderInfo.auth && path !== '') && folderInfo) {
-        let pathArr = path.split('/')
-        let prePathArr = pathArr.slice(0, pathArr.length - 1)
-        path = prePathArr.join('/')
-        folderInfo = getFolderInfo(path, this.treeData[0])
-      }
-      return folderInfo
-    },
-    menuMouseDown() {
-    },
-    /**
-     * 右键菜单被点击
-     */
-    menuClick() {
-      this.changeMenuShow({ isShow: false, left: 0, top: 0 })
-    },
-    /**
-     * 下载点击事件
-     */
-    downloadClick() {
-      let urls
-      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
+        return showInfo
+      },
+      style() {
+        let x = this.left
+        let y = this.top
+        let count = 0
         debugger
-        let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`
-        urls = [url]
-      } else if (this.menuType === FILE_MENU) {
-        urls = this.fileList.map((item) => {
-          return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item}&authorization=${Cookies.get(JWT_TOKEN)}`
-        })
-      }
-      downloadFiles(urls)
-    },
-    /**
-     * 上传点击事件
-     */
-    uploadClick() {
-      this.setUploadState(true)
-    },
-    /**
-     * 删除点击事件
-     */
-    deleteClick() {
-      let menuType = this.menuType
-      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        let params = new URLSearchParams()
-        // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
-        if (menuType === LEFT_TREE_MENU) {
-          let path = this.currentPath
-          let pathArr = path.split('/')
-          let deleteFolder = pathArr[pathArr.length - 1]
-          let rootFolder = pathArr.slice(0, pathArr.length - 1).join('/')
-          params.append('delFolder', deleteFolder)
-          params.append('baseFolder', rootFolder)
-          this.$axios.post(DELETE_FOLDER_URL, params).then((res) => {
-            if (res.data.status) {
-              this.deleteNode({ rootFolder, deleteFolder })
-            } else {
-              this.$message({
-                message: '刪除失败！'
-              })
-            }
-          })
-        } else if (menuType === FILE_MENU) {
-          // 删除文件所在文件夹
-          let path = this.currentPath
-          let deleteFiles = this.fileList
-          params.append('baseFolder', path)
-          params.append('delFileNames', deleteFiles.join('*'))
-          this.$axios.post(DELETE_FILE_URL, params).then((res) => {
-            if (res.data.status) {
-              this.deleteFile(deleteFiles)
-            } else {
-              this.$message({
-                message: '刪除失败！'
-              })
-            }
-          })
+        for (let item in this.showInfo) {
+          if (this.showInfo[item]) {
+            count++
+          }
         }
-      }).catch(() => {
-      })
-    },
-    /**
-     * 授权按钮点击
-     */
-    authClick() {
-      this.changeAuthShow(true)
-    },
-    /**
-     * 新建文件夹
-     * atime，mtime，ctime就分别代表了访问时间，修改时间以及创建时间
-     */
-    newFolderClick() {
-      let params = new URLSearchParams()
-      let path = this.currentPath
-      params.append('baseFolder', path)
-      params.append('newFolder', '新建文件夹')
-      this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
-        if (res.data.status) {
-          this.addNewFolder(res.data.newName)
+        if (count === 0) {
+          this.show = false
+          return
         } else {
-          this.$message({
-            message: res.data.message
+          this.show = true
+        }
+        let maxHeight = count * 25
+        if (window.innerWidth - x < 200) {
+          x = x - 200
+        }
+        if (window.innerHeight - y < maxHeight) {
+          y = y - maxHeight
+        }
+        return {left: x + 'px', top: y + 'px'}
+      },
+      ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo'])
+    },
+    methods: {
+      getShowInfo(folderInfo) {
+        let showInfo
+        let auth = folderInfo.auth
+        if (this.menuType === LEFT_TREE_MENU) {
+          showInfo = {
+            download: auth.folderdownload === '1',
+            upload: auth.folderupload === '1',
+            delete: auth.folderdelete === '1',
+            create: auth.foldercreate === '1',
+            rename: auth.folderrename === '1',
+            refresh: true,
+            attribute: true
+          }
+        } else if (this.menuType === FILE_MENU) {
+          showInfo = {
+            download: auth.filedownload === '1',
+            upload: false,
+            delete: auth.filedelete === '1',
+            create: false,
+            rename: auth.filerename === '1',
+            attribute: true
+          }
+        } else if (this.menuType === BLANK_MENU) {
+          showInfo = {
+            download: auth.folderdownload === '1',
+            upload: auth.folderupload === '1',
+            delete: auth.folderdelete === '1',
+            create: auth.foldercreate === '1',
+            rename: auth.folderrename === '1',
+            refresh: true,
+            attribute: true
+          }
+        }
+        return showInfo
+      },
+      getAuthFolderInfo(path) {
+        debugger
+        let folderInfo = getFolderInfo(path, this.treeData[0])
+        while ((!folderInfo.auth && path !== '') && folderInfo) {
+          let pathArr = path.split('/')
+          let prePathArr = pathArr.slice(0, pathArr.length - 1)
+          path = prePathArr.join('/')
+          folderInfo = getFolderInfo(path, this.treeData[0])
+        }
+        return folderInfo
+      },
+      menuMouseDown() {
+      },
+      /**
+       * 右键菜单被点击
+       */
+      menuClick() {
+        this.changeMenuShow({isShow: false, left: 0, top: 0})
+      },
+      /**
+       * 下载点击事件
+       */
+      downloadClick() {
+        let urls
+        if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
+          debugger
+          let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`
+          urls = [url]
+        } else if (this.menuType === FILE_MENU) {
+          urls = this.fileList.map((item) => {
+            return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item}&authorization=${Cookies.get(JWT_TOKEN)}`
           })
         }
-      })
-    },
-    /**
-     * 重命名
-     */
-    renameClick() {
-      let params = new URLSearchParams()
-      let url
-      let path = this.currentPath
-      let oldName
-      if (this.menuType === LEFT_TREE_MENU) {
-        oldName = path.split('/')
-        let pathArr = path.split('/')
-        oldName = pathArr[pathArr.length - 1]
-        path = pathArr.slice(0, pathArr.length - 1).join('/')
-        url = RENAME_FOLDER
-      } else if (this.menuType === FILE_MENU) {
-        // let name = this.fileList[0]
-        oldName = this.fileList[0] // name.substring(0, name.lastIndexOf('.'))
-        url = RENAME_FILE
-      }
-      this.$prompt('请输入文件名称', '重命名', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputValue: oldName
-      }).then(({ value }) => {
-        params.append('oldName', oldName)
+        downloadFiles(urls)
+      },
+      /**
+       * 上传点击事件
+       */
+      uploadClick() {
+        this.setUploadState(true)
+      },
+      /**
+       * 删除点击事件
+       */
+      deleteClick() {
+        let menuType = this.menuType
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let params = new URLSearchParams()
+          // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
+          if (menuType === LEFT_TREE_MENU) {
+            let path = this.currentPath
+            let pathArr = path.split('/')
+            let deleteFolder = pathArr[pathArr.length - 1]
+            let rootFolder = pathArr.slice(0, pathArr.length - 1).join('/')
+            params.append('delFolder', deleteFolder)
+            params.append('baseFolder', rootFolder)
+            this.$axios.post(DELETE_FOLDER_URL, params).then((res) => {
+              if (res.data.status) {
+                this.deleteNode({rootFolder, deleteFolder})
+              } else {
+                this.$message({
+                  message: '刪除失败！'
+                })
+              }
+            })
+          } else if (menuType === FILE_MENU) {
+            // 删除文件所在文件夹
+            let path = this.currentPath
+            let deleteFiles = this.fileList
+            params.append('baseFolder', path)
+            params.append('delFileNames', deleteFiles.join('*'))
+            this.$axios.post(DELETE_FILE_URL, params).then((res) => {
+              if (res.data.status) {
+                this.deleteFile(deleteFiles)
+              } else {
+                this.$message({
+                  message: '刪除失败！'
+                })
+              }
+            })
+          }
+        }).catch(() => {
+        })
+      },
+      /**
+       * 授权按钮点击
+       */
+      authClick() {
+        this.changeAuthShow(true)
+      },
+      /**
+       * 新建文件夹
+       * atime，mtime，ctime就分别代表了访问时间，修改时间以及创建时间
+       */
+      newFolderClick() {
+        let params = new URLSearchParams()
+        let path = this.currentPath
         params.append('baseFolder', path)
-        params.append('newName', value)
-        this.$axios.post(url, params).then((res) => {
+        params.append('newFolder', '新建文件夹')
+        this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
           if (res.data.status) {
-            if (this.menuType === LEFT_TREE_MENU) {
-              let obj = { rootFolder: path, oldName: oldName, newName: value }
-              this.updateFolder(obj)
-            }
+            this.addNewFolder(res.data.newName)
           } else {
             this.$message({
-              message: '重命名失败，请刷新后重试'
+              message: res.data.message
             })
           }
         })
-      }).catch(() => {
+      },
+      /**
+       * 重命名
+       */
+      renameClick() {
+        let params = new URLSearchParams()
+        let url
+        let path = this.currentPath
+        let oldName
+        let menuType = this.menuType
+        if (this.menuType === LEFT_TREE_MENU) {
+          oldName = path.split('/')
+          let pathArr = path.split('/')
+          oldName = pathArr[pathArr.length - 1]
+          path = pathArr.slice(0, pathArr.length - 1).join('/')
+          url = RENAME_FOLDER
+        } else if (this.menuType === FILE_MENU) {
+          // let name = this.fileList[0]
+          oldName = this.fileList[0] // name.substring(0, name.lastIndexOf('.'))
+          url = RENAME_FILE
+        }
+        this.$prompt('请输入文件名称', '重命名', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          inputValue: oldName
+        }).then(({value}) => {
+          params.append('oldName', oldName)
+          params.append('baseFolder', path)
+          params.append('newName', value)
+          this.$axios.post(url, params).then((res) => {
+            if (res.data.status) {
+              if (menuType === LEFT_TREE_MENU) {
+                let obj = {rootFolder: path, oldName: oldName, newName: value, type: 'folder'}
+                this.updateFolder(obj)
+              } else {
+                let obj = {rootFolder: path, oldName: oldName, newName: value, type: 'file'}
+                this.updateFolder(obj)
+              }
+            } else {
+              this.$message({
+                message: '重命名失败，请刷新后重试'
+              })
+            }
+          })
+        }).catch(() => {
 
+        })
+      },
+      /**
+       * 属性查询
+       */
+      attributeClick() {
+        let params = new URLSearchParams()
+        let path = this.currentPath
+        if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
+          params.append('folderPath', path)
+          let pathArr = path.split('/')
+          let folderName = pathArr[pathArr.length - 1]
+          this.$axios.post(FOLDER_ATTRIBUTE, params).then((res) => {
+            if (res.data.status) {
+              res.data.data.name = folderName
+              res.data.data.isFolder = true
+              this.pushAttribute(res.data.data)
+            }
+          })
+        } else if (this.menuType === FILE_MENU) {
+          params.append('filePath', path + '/' + this.fileList[0])
+          this.$axios.post(FILE_ATTRIBUTE, params).then((res) => {
+            if (res.data.status) {
+              res.data.data.name = this.fileList[0]
+              this.pushAttribute(res.data.data)
+            }
+          })
+        }
+      },
+      /**
+       * 刷新点击事件
+       */
+      refreshClick() {
+        this.$axios.get(FOLDER_TREE).then((res) => {
+          if (res.data.status) {
+            let dataTree = res.data.data
+            let folderInfo = getFolderInfo(this.currentPath, dataTree)
+            this.updateTree(folderInfo)
+          }
+        })
+      },
+      ...mapMutations({
+        updateTree: 'REFRESH_TREE_DATA',
+        changeAuthShow: 'CHANGE_AUTH_SHOW',
+        pushAttribute: 'PUSH_ATTRIBUTE',
+        updateFolder: 'UPDATE_FOLDER_NAME',
+        changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW',
+        deleteNode: 'DELETE_TREE_NODE',
+        deleteFile: 'DELETE_FILE',
+        setUploadState: 'SET_UPLOAD_STATE',
+        addNewFolder: 'ADD_FOLDER_NODE'
       })
-    },
-    /**
-     * 属性查询
-     */
-    attributeClick() {
-      let params = new URLSearchParams()
-      let path = this.currentPath
-      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
-        params.append('folderPath', path)
-        let pathArr = path.split('/')
-        let folderName = pathArr[pathArr.length - 1]
-        this.$axios.post(FOLDER_ATTRIBUTE, params).then((res) => {
-          if (res.data.status) {
-            res.data.data.name = folderName
-            res.data.data.isFolder = true
-            this.pushAttribute(res.data.data)
-          }
-        })
-      } else if (this.menuType === FILE_MENU) {
-        params.append('filePath', path + '/' + this.fileList[0])
-        this.$axios.post(FILE_ATTRIBUTE, params).then((res) => {
-          if (res.data.status) {
-            res.data.data.name = this.fileList[0]
-            this.pushAttribute(res.data.data)
-          }
-        })
-      }
-    },
-    ...mapMutations({ changeAuthShow: 'CHANGE_AUTH_SHOW', pushAttribute: 'PUSH_ATTRIBUTE', updateFolder: 'UPDATE_FOLDER_NAME', changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW', deleteNode: 'DELETE_TREE_NODE', deleteFile: 'DELETE_FILE', setUploadState: 'SET_UPLOAD_STATE', addNewFolder: 'ADD_FOLDER_NODE' })
+    }
   }
-}
 </script>
 
 <style lang="scss" scoped>
-.right-menu {
-  position: absolute;
-  width: 200px;
-  z-index: 9999;
-  box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.2);
-  border-radius: 0;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  background-clip: padding-box;
-  background: #fff;
-  margin: 0;
-  margin-left: 4px;
-  font-size: 1.5rem;
-  padding: 8px 0px;
-  animation-duration: 0.25s;
-  .menu-list {
+  .right-menu {
+    position: absolute;
+    width: 200px;
+    z-index: 9999;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-clip: padding-box;
+    background: #fff;
     margin: 0;
-    padding: 0;
-    list-style-type: none;
-    .menu-list-item {
-      line-height: 25px;
-      height: 25px;
-      padding: 0 15px 0 20px;
-      cursor: pointer;
-      &:hover {
-        background: #e1e1e1;
-      }
-      .vertical {
-        vertical-align: middle;
-      }
-      .icon-item {
-        display: inline-block;
-        width: 16px !important;
-        background-size: auto;
-        background-repeat: no-repeat;
-        height: 16px;
-        margin-right: 15px;
-      }
-      .download-icon {
-        background-position: -16px -48px;
-        background-image: url(../../assets/image/menu_icon.png);
-      }
-      .upload-icon {
-        background-position: 0px -48px;
-        background-image: url(../../assets/image/menu_icon.png);
-      }
-      .delete-icon {
-        background-position: 0 -80px;
-        background-image: url(../../assets/image/menu_icon.png);
-      }
-      .new-icon {
-        background-position: 0 -15px;
-        background-image: url(../../assets/image/menu_icon.png);
-      }
-      .rename-icon {
-        background-position: 0 -64px;
-        background-image: url(../../assets/image/menu_icon.png);
-      }
-      .auth-icon {
-        background-image: url(../../assets/image/auth.png);
-        background-position: center;
-        background-size: 150% !important;
-      }
-      .attribute-icon {
-        color: #fff !important;
-        background: #c4e5ff;
-        text-align: center;
-        width: 15px;
-        border-radius: 50%;
-        height: 15px;
-        line-height: 15px;
-        margin-right: 15px;
-        box-shadow: 0 0 0 1px #6db9f5;
-      }
-      .fa-info::before {
-        color: #249dff;
-        background-image: -webkit-linear-gradient(2deg, #249dff, #08558a);
-        background-clip: text;
-        text-fill-color: transparent;
-        -webkit-text-fill-color: transparent;
-        -webkit-background-clip: text;
+    margin-left: 4px;
+    font-size: 1.5rem;
+    padding: 8px 0px;
+    animation-duration: 0.25s;
+    .menu-list {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      .menu-list-item {
+        line-height: 25px;
+        height: 25px;
+        padding: 0 15px 0 20px;
+        cursor: pointer;
+        &:hover {
+          background: #e1e1e1;
+        }
+        .vertical {
+          vertical-align: middle;
+        }
+        .icon-item {
+          display: inline-block;
+          width: 16px !important;
+          background-size: auto;
+          background-repeat: no-repeat;
+          height: 16px;
+          margin-right: 15px;
+        }
+        .download-icon {
+          background-position: -16px -48px;
+          background-image: url(../../assets/image/menu_icon.png);
+        }
+        .upload-icon {
+          background-position: 0px -48px;
+          background-image: url(../../assets/image/menu_icon.png);
+        }
+        .delete-icon {
+          background-position: 0 -80px;
+          background-image: url(../../assets/image/menu_icon.png);
+        }
+        .new-icon {
+          background-position: 0 -15px;
+          background-image: url(../../assets/image/menu_icon.png);
+        }
+        .rename-icon {
+          background-position: 0 -64px;
+          background-image: url(../../assets/image/menu_icon.png);
+        }
+        .refresh-icon {
+          background-position: -17px -513px;
+          background-image: url(../../assets/image/menu_icon.png);
+        }
+        .auth-icon {
+          background-image: url(../../assets/image/auth.png);
+          background-position: center;
+          background-size: 150% !important;
+        }
+        .attribute-icon {
+          color: #fff !important;
+          background: #c4e5ff;
+          text-align: center;
+          width: 15px;
+          border-radius: 50%;
+          height: 15px;
+          line-height: 15px;
+          margin-right: 15px;
+          box-shadow: 0 0 0 1px #6db9f5;
+        }
+        .fa-info::before {
+          color: #249dff;
+          background-image: -webkit-linear-gradient(2deg, #249dff, #08558a);
+          background-clip: text;
+          text-fill-color: transparent;
+          -webkit-text-fill-color: transparent;
+          -webkit-background-clip: text;
+        }
       }
     }
   }
-}
 </style>

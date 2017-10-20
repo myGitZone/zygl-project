@@ -124,6 +124,7 @@ export default {
       debugger
       params.append('userId', personInfo)
       params.append('folder', '/' + this.currentPath)
+      params.append('subinherit', this.inheritCheck ? '1' : '0')
       this.folderList.map((item) => {
         params.append(item, 1)
       })

@@ -10,7 +10,11 @@ import 'babel-polyfill'
 import '@/assets/scss/base.scss'
 import 'font-awesome/css/font-awesome.min.css'
 import 'element-ui/lib/theme-default/index.css'
-
+import URLSearchParams from 'url-search-params'
+// 解决ie不支持URLSearchParams的问题
+if (!window.URLSearchParams) {
+  window.URLSearchParams = URLSearchParams
+}
 document.oncontextmenu = (e) => {
   return false
 }
@@ -26,5 +30,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: {App}
 })
