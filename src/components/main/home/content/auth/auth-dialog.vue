@@ -121,7 +121,6 @@ export default {
     */
     _getParams(personInfo) {
       let params = new URLSearchParams()
-      debugger
       params.append('userId', personInfo)
       params.append('folder', '/' + this.currentPath)
       params.append('subinherit', this.inheritCheck ? '1' : '0')

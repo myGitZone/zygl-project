@@ -74,7 +74,6 @@
     },
     computed: {
       showInfo() {
-        debugger
         let showInfo = {
           refresh: true,
           attribute: true
@@ -90,9 +89,7 @@
             attribute: true
           }
         } else {
-          debugger
           let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
-          debugger
           if (folderInfo && folderInfo.auth) {
             showInfo = this.getShowInfo(folderInfo)
           } else {
@@ -112,7 +109,6 @@
         let x = this.left
         let y = this.top
         let count = 0
-        debugger
         for (let item in this.showInfo) {
           if (this.showInfo[item]) {
             count++
@@ -172,7 +168,6 @@
         return showInfo
       },
       getAuthFolderInfo(path) {
-        debugger
         let folderInfo = getFolderInfo(path, this.treeData[0])
         while ((!folderInfo.auth && path !== '') && folderInfo) {
           let pathArr = path.split('/')
@@ -196,7 +191,6 @@
       downloadClick() {
         let urls
         if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
-          debugger
           let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`
           urls = [url]
         } else if (this.menuType === FILE_MENU) {

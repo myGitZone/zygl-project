@@ -174,7 +174,6 @@ export default {
         params.append('userId', person.userid)
         params.append('folder', '/' + this.currentPath)
         this.$axios.post(DELETE_AUTH_PERSON, params).then((res) => {
-          debugger
           if (res.data.status) {
             for (let i = 0, len = this.personInfos.length; i < len; i++) {
               let item = this.personInfos[i]

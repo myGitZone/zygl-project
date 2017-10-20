@@ -119,7 +119,6 @@ const mutations = {
     }
   },
   [types.UPDATE_FOLDER_NAME](state, {rootFolder, oldName, newName, type}) {
-    debugger
     let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
     if (type === 'folder') {
       let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
@@ -143,7 +142,6 @@ const mutations = {
     } else {
       let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
       for (let i = 0; i < len; i++) {
-        debugger
         let item = folderInfo.file[i]
         if (item === oldName) {
           folderInfo.file.splice(i, 1, newName)
@@ -169,7 +167,6 @@ const mutations = {
     state.showAuth = isShow
   },
   [types.REFRESH_TREE_DATA](state, updateNode) {
-    debugger
     let rootFolder = state.path[state.index]
     let oldNode = getFolderInfo(rootFolder, state.treeData[0])
     if ('folder' in updateNode) {
