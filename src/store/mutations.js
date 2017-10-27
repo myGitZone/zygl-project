@@ -1,6 +1,6 @@
 // 定义mutations
 import * as types from './mutation-types'
-import {getFolderInfo, generateUUID} from '@/assets/js/util'
+import { getFolderInfo, generateUUID } from '@/assets/js/util'
 // 给左侧树绑定id
 let id
 
@@ -36,7 +36,7 @@ const mutations = {
     state.path = [path]
     state.index = 0
   },
-  [types.CHANGE_RIGHT_MENU_SHOW](state, {isShow, left, top, menuType}) {
+  [types.CHANGE_RIGHT_MENU_SHOW](state, { isShow, left, top, menuType }) {
     state.left = left
     state.top = top
     if (menuType !== null) {
@@ -58,7 +58,7 @@ const mutations = {
   [types.SET_ORG_DATAS](state, data) {
     state.orgDatas = data
   },
-  [types.UPDATE_TREE](state, {path, files}) {
+  [types.UPDATE_TREE](state, { path, files }) {
     let currentPath
     if (path) {
       currentPath = path
@@ -77,9 +77,10 @@ const mutations = {
   // [types.SET_LEFT_SELECT](state, selectData) {
   //   state.leftSelect = selectData
   // },
-  [types.DELETE_TREE_NODE](state, {rootFolder, deleteFolder}) {
+  [types.DELETE_TREE_NODE](state, { rootFolder, deleteFolder }) {
     let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
-    let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
+    let len = (len =
+      folderInfo && folderInfo.folder ? folderInfo.folder.length : 0)
     for (let i = 0; i < len; i++) {
       let item = folderInfo.folder[i]
       if (item.name === deleteFolder) {
@@ -92,7 +93,7 @@ const mutations = {
     let currentPath = state.path[state.index]
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     // let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
-    let files = folderInfo.file.filter((item) => {
+    let files = folderInfo.file.filter(item => {
       return deleteFiles.indexOf(item) < 0
     })
     folderInfo.file = files
@@ -115,13 +116,14 @@ const mutations = {
     if (folderInfo.folder) {
       folderInfo.folder.push(newFolderInfo)
     } else {
-      folderInfo = Object.assign({}, folderInfo, {folder: [newFolderInfo]})
+      folderInfo = Object.assign({}, folderInfo, { folder: [newFolderInfo] })
     }
   },
-  [types.UPDATE_FOLDER_NAME](state, {rootFolder, oldName, newName, type}) {
+  [types.UPDATE_FOLDER_NAME](state, { rootFolder, oldName, newName, type }) {
     let folderInfo = getFolderInfo(rootFolder, state.treeData[0])
     if (type === 'folder') {
-      let len = len = folderInfo && folderInfo.folder ? folderInfo.folder.length : 0
+      let len = (len =
+        folderInfo && folderInfo.folder ? folderInfo.folder.length : 0)
       for (let i = 0; i < len; i++) {
         let item = folderInfo.folder[i]
         if (item.name === oldName) {
@@ -140,7 +142,8 @@ const mutations = {
         }
       }
     } else {
-      let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
+      let len = (len =
+        folderInfo && folderInfo.file ? folderInfo.file.length : 0)
       for (let i = 0; i < len; i++) {
         let item = folderInfo.file[i]
         if (item === oldName) {
@@ -175,6 +178,9 @@ const mutations = {
     oldNode.folder = updateNode.folder ? updateNode.folder : []
     oldNode.file = updateNode.file ? updateNode.file : []
     oldNode.auth = updateNode.auth ? updateNode.auth : ''
+  },
+  [types.CHANGE_LABEL_SIZE](state, size) {
+    state.fileBlockSize = size
   }
 }
 export default mutations

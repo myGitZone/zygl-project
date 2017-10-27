@@ -11,7 +11,6 @@
       </div>
       <div class="header-btn-content">
         <el-button size="small" type="primary" @click="addClick">添 加</el-button>
-        <el-button size="small" type="primary" @click="closeClick">关 闭</el-button>
       </div>
     </div>
     <div class="auth-container">
@@ -23,28 +22,28 @@
         <span class="auth-slect">文件夹权限：</span>
         <span class="auth-slect">
           <el-checkbox-group v-model="folderList" @change="folderCheckChange">
-            <el-checkbox label="folderupload">上传</el-checkbox>
-            <el-checkbox label="folderdownload">下载</el-checkbox>
-            <el-checkbox label="folderdelete">删除</el-checkbox>
-            <el-checkbox label="folderrename">重命名</el-checkbox>
-            <el-checkbox label="foldercreate">新建文件夹</el-checkbox>
+            <el-checkbox label="folderupload" :disabled="!selectPersonInfo">上传</el-checkbox>
+            <el-checkbox label="folderdownload" :disabled="!selectPersonInfo">下载</el-checkbox>
+            <el-checkbox label="folderdelete" :disabled="!selectPersonInfo">删除</el-checkbox>
+            <el-checkbox label="folderrename" :disabled="!selectPersonInfo">重命名</el-checkbox>
+            <el-checkbox label="foldercreate" :disabled="!selectPersonInfo">新建文件夹</el-checkbox>
           </el-checkbox-group>
         </span>
         <span class="edit-btn-container">
-          <el-button size="small" type="primary" @click="saveClick('folder')" :disabled="!folderEnable">保 存</el-button>
+          <el-button size="small" type="primary" @click="saveClick('folder')" :disabled="!folderEnable">更 新</el-button>
         </span>
       </div>
       <div class="file-auth bottom-auth">
         <span class="auth-slect" style="padding-left:20px">文件权限：</span>
         <span class="auth-slect">
           <el-checkbox-group v-model="fileList" @change="fileCheckChange">
-            <el-checkbox label="filedownload">下载</el-checkbox>
-            <el-checkbox label="filedelete">删除</el-checkbox>
-            <el-checkbox label="filerename">重命名</el-checkbox>
+            <el-checkbox label="filedownload" :disabled="!selectPersonInfo">下载</el-checkbox>
+            <el-checkbox label="filedelete" :disabled="!selectPersonInfo">删除</el-checkbox>
+            <el-checkbox label="filerename" :disabled="!selectPersonInfo">重命名</el-checkbox>
           </el-checkbox-group>
         </span>
         <span class="edit-btn-container">
-          <el-button size="small" type="primary" @click="saveClick('file')" :disabled="!fileEnable">保 存</el-button>
+          <el-button size="small" type="primary" @click="saveClick('file')" :disabled="!fileEnable">更 新</el-button>
         </span>
       </div>
     </div>
@@ -84,6 +83,13 @@ export default {
   watch: {
     currentPath() {
       this.init()
+    },
+    selectPersonInfo(newVal) {
+      debugger
+      if (!newVal) {
+        this.folderList = []
+        this.fileList = []
+      }
     }
   },
   mounted() {
@@ -179,6 +185,7 @@ export default {
               let item = this.personInfos[i]
               if (item.userid === person.userid) {
                 this.personInfos.splice(i, 1)
+                this.selectPersonInfo = this.personInfos.length > 0 ? this.personInfos[0] : null
                 break
               }
             }
@@ -227,18 +234,20 @@ export default {
      * 改变选择的权限
      */
     changeAuth(person) {
-      this.folderList = []
-      this.fileList = []
-      folderAuth.forEach((item) => {
-        if (person[item] === '1') {
-          this.folderList.push(item)
-        }
-      })
-      fileAuth.forEach((item) => {
-        if (person[item] === '1') {
-          this.fileList.push(item)
-        }
-      })
+      if (person) {
+        this.folderList = []
+        this.fileList = []
+        folderAuth.forEach((item) => {
+          if (person[item] === '1') {
+            this.folderList.push(item)
+          }
+        })
+        fileAuth.forEach((item) => {
+          if (person[item] === '1') {
+            this.fileList.push(item)
+          }
+        })
+      }
     },
     handleIconClick() {
       let firstShowPerson
@@ -288,7 +297,7 @@ export default {
     width: 100%;
     min-width: 600px;
     background: #f8f8f8;
-    background: #f8f8f8 url("../../../../../assets/image/bg.gif") 0px -2px repeat-x;
+    background: #f8f8f8 url('../../../../../assets/image/bg.gif') 0px -2px repeat-x;
     border-bottom: 1px solid #ddd;
     .header-left {
       display: inline-block;
@@ -307,7 +316,7 @@ export default {
     .search-container {
       position: absolute;
       display: inline-block;
-      right: 200px;
+      right: 100px;
       width: 20%;
       height: 100%;
       vertical-align: top;
@@ -340,7 +349,7 @@ export default {
   }
   .auth-container {
     position: absolute;
-    top: 50px;
+    top: 88px;
     bottom: 122px;
     width: 100%;
     overflow: auto;
@@ -362,11 +371,11 @@ export default {
       border-bottom: 1px solid #eee;
       .auth-slect {
         padding-left: 20px;
-        display: inline-block
+        display: inline-block;
       }
       .edit-btn-container {
         position: absolute;
-        right: 30px
+        right: 30px;
       }
     }
     .btn-content {

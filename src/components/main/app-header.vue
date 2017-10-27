@@ -98,8 +98,8 @@
 </script>
 <style lang="scss">
   .dialog-custom {
-    width: 60%;
-    height: 70%;
+    width: 60% !important;
+    height: 70% !important;
     .el-dialog__body {
       padding: 0 !important;
     }

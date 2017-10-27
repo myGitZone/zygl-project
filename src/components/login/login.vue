@@ -7,7 +7,7 @@
   <div class="login-container">
     <div id="canvascontainer" ref='can'></div>
     <div class="login-info-container">
-      <el-form :model=formdata>
+      <el-form :model="formdata">
         <el-form-item prop="username" :rules="[
                   { required: true, message: '请输入用户名', trigger: 'blur' }
                 ]">

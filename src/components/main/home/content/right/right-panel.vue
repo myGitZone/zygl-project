@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import FileBlock from './file-block.vue'
+import FileBlock from './file-block'
 import EmptyBlock from './empty-block'
 import { mapGetters, mapMutations } from 'vuex'
 import { RIGHT_CODE, BLANK_MENU, FILE_MENU } from '@/assets/js/const-value.js'

@@ -31,3 +31,4 @@ export const selectId = state => state.selectId
 export const attrbutes = state => state.attrbutes
 // 授权界面展示
 export const showAuth = state => state.showAuth
+export const fileBlockSize = state => state.fileBlockSize

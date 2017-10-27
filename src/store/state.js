@@ -2,6 +2,7 @@
 // const state = {
 //   key: value
 // }
+// import { NORMAL } from '@/assets/js/const-value'
 const state = {
   // 记录当前所在path目录中个的索引
   index: -1,
@@ -32,7 +33,9 @@ const state = {
   // 记录右键获取的属性值
   attrbutes: [],
   // 授权界面是否显示
-  showAuth: false
+  showAuth: false,
+  // 展示文件的大小
+  fileBlockSize: 'large'
 }
 
 export default state

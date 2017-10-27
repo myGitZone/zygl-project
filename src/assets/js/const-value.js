@@ -6,7 +6,10 @@ export const JWT_TOKEN = 'JWT_TOKEN'
 export const LEFT_TREE_MENU = 0
 export const FILE_MENU = 1
 export const BLANK_MENU = 2
-
+// 展示文件的大小
+export const LARGE = 'large'
+export const NORMAL = 'normal'
+export const SMALL = 'small'
 // url
 // 目录树
 export const FOLDER_TREE = '/api/cloud/authFolder'

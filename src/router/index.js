@@ -15,19 +15,16 @@ export default new Router({
       redirect: '/login'
     }, {
       path: '/main',
-      name: 'main',
       component: Main,
       children: [{
         path: '',
         redirect: 'home'
       }, {
         path: 'home',
-        name: 'home',
         component: Home
       }]
     }, {
       path: '/login',
-      name: 'login',
       component: Login
     }
   ]

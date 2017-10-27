@@ -1,31 +1,33 @@
 <template>
   <el-dialog :close-on-click-modal="false" :modal="false" title="授权" custom-class="dialog-custom-auth dialog-custom-shadow" :visible.sync="dialogVisible" size="small">
-    <el-transfer filterable :titles="titles" :filter-method="filterMethod" filter-placeholder="请输入姓名" v-model="selectPersons" :data="transferData">
-    </el-transfer>
-    <div class="folder-title title-common">
-      文件夹权限
-    </div>
-    <div class="folder-auth">
-      <el-checkbox-group v-model="folderList">
-        <el-checkbox label="folderupload">上传</el-checkbox>
-        <el-checkbox label="folderdownload">下载</el-checkbox>
-        <el-checkbox label="folderdelete">删除</el-checkbox>
-        <el-checkbox label="folderrename">重命名</el-checkbox>
-        <el-checkbox label="foldercreate">新建文件夹</el-checkbox>
-      </el-checkbox-group>
-    </div>
-    <div class="file-title title-common">
-      文件夹权限
-    </div>
-    <div class="file-auth">
-      <el-checkbox-group v-model="fileList">
-        <el-checkbox label="filedownload">下载</el-checkbox>
-        <el-checkbox label="filedelete">删除</el-checkbox>
-        <el-checkbox label="filerename">重命名</el-checkbox>
-      </el-checkbox-group>
-    </div>
-    <div class="inherit-content">
-      <el-checkbox v-model="inheritCheck">子目录继承该权限</el-checkbox>
+    <div class="dialog-content">
+      <el-transfer filterable :titles="titles" :filter-method="filterMethod" filter-placeholder="请输入姓名" v-model="selectPersons" :data="transferData">
+      </el-transfer>
+      <div class="folder-title title-common">
+        文件夹权限
+      </div>
+      <div class="folder-auth">
+        <el-checkbox-group v-model="folderList">
+          <el-checkbox label="folderupload">上传</el-checkbox>
+          <el-checkbox label="folderdownload">下载</el-checkbox>
+          <el-checkbox label="folderdelete">删除</el-checkbox>
+          <el-checkbox label="folderrename">重命名</el-checkbox>
+          <el-checkbox label="foldercreate">新建文件夹</el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <div class="file-title title-common">
+        文件夹权限
+      </div>
+      <div class="file-auth">
+        <el-checkbox-group v-model="fileList">
+          <el-checkbox label="filedownload">下载</el-checkbox>
+          <el-checkbox label="filedelete">删除</el-checkbox>
+          <el-checkbox label="filerename">重命名</el-checkbox>
+        </el-checkbox-group>
+      </div>
+      <div class="inherit-content">
+        <el-checkbox v-model="inheritCheck">子目录继承该权限</el-checkbox>
+      </div>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false" size="small">取 消</el-button>
@@ -155,8 +157,21 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.dialog-custom-auth {
+  position: fixed !important;
+  top: 5% !important;
+  width: 500px !important;
+  .el-transfer-panel__body {
+    height: 180px !important;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
+.dialog-content {
+  padding: 30px 20px;
+}
 .title-common {
   margin: 10px 0;
   font-size: 16px;

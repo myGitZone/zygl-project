@@ -39,3 +39,5 @@ export const DELETE_ATTRIBUTE = 'DELETE_ATTRIBUTE'
 export const CHANGE_AUTH_SHOW = 'CHANGE_AUTH_SHOW'
 // 刷新目录树
 export const REFRESH_TREE_DATA = 'REFRESH_TREE_DATA'
+// 图标大小改变
+export const CHANGE_LABEL_SIZE = 'CHANGE_LABEL_SIZE'

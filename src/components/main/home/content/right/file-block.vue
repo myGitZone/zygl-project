@@ -8,15 +8,16 @@
     <div class="item-select" :class="{'item-check':checked}">
       <i class="fa fa-check" aria-hidden="true"></i>
     </div>
-    <div class="file-icon-content">
+    <div class="file-icon-content" :class="imageSizeClass">
       <i class="file-icon" :style="background"></i>
     </div>
-    <div class="file-name">{{fileInfo.name||fileInfo}}</div>
+    <div class="file-name" :class="fileNameSizeClass">{{fileInfo.name||fileInfo}}</div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
+import { LARGE, SMALL } from '@/assets/js/const-value'
 export default {
   props: {
     currentPath: {
@@ -38,7 +39,26 @@ export default {
   computed: {
     isFolder() {
       return this.fileInfo.file
-    }
+    },
+    imageSizeClass() {
+      let className = 'file-icon-content-normal'
+      if (this.fileBlockSize === LARGE) {
+        className = 'file-icon-content-large'
+      } else if (this.fileBlockSize === SMALL) {
+        className = 'file-icon-content-small'
+      }
+      return className
+    },
+    fileNameSizeClass() {
+      let className = 'file-name-normal'
+      if (this.fileBlockSize === LARGE) {
+        className = 'file-name-large'
+      } else if (this.fileBlockSize === SMALL) {
+        className = 'file-name-small'
+      }
+      return className
+    },
+    ...mapGetters(['fileBlockSize'])
   },
   updated() {
     this.initBackgroundImage()
@@ -96,8 +116,6 @@ export default {
   }
   .file-icon-content {
     padding: 0 5px;
-    height: 70px;
-    width: 70px;
     .file-icon {
       background-repeat: no-repeat;
       background-size: cover;
@@ -108,13 +126,35 @@ export default {
       pointer-events: none;
     }
   }
+  .file-icon-content-small {
+    height: 35px;
+    width: 35px;
+  }
+  .file-icon-content-large {
+    height: 100px;
+    width: 100px;
+  }
+  .file-icon-content-normal {
+    height: 70px;
+    width: 70px;
+  }
   .file-name {
-    width: 80px;
-    font-size: 1.6rem;
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis; // white-space: nowrap;
     word-break: break-all;
+  }
+  .file-name-normal {
+    width: 80px;
+    font-size: 1.6rem;
+  }
+  .file-name-large {
+    width: 110px;
+    font-size: 1.6rem;
+  }
+  .file-name-small {
+    width: 40px;
+    font-size: 1rem;
   }
   .item-select {
     position: absolute;
