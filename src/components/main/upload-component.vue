@@ -7,7 +7,7 @@
       </button>
     </div>
     <div class="content">
-      <el-upload class="upload-content" :data='bodyData' ref="upload" :on-success="success" :action="UPLOAD_URL" multiple :auto-upload="false" name="upfile" :headers="headers">
+      <el-upload class="upload-content" :data='bodyData' ref="upload" :on-success="success" :action="action" multiple :auto-upload="false" name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
       </el-upload>
@@ -24,7 +24,8 @@ export default {
   data() {
     return {
       fileList: [],
-      bodyData: null
+      bodyData: null,
+      action: UPLOAD_URL
     }
   },
   watch: {
