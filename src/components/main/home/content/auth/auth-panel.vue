@@ -85,7 +85,6 @@ export default {
       this.init()
     },
     selectPersonInfo(newVal) {
-      debugger
       if (!newVal) {
         this.folderList = []
         this.fileList = []
