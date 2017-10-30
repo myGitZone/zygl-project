@@ -282,6 +282,8 @@ export default {
       this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
         if (res.data.status) {
           this.addNewFolder(res.data.newName)
+          let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
+          this.pushExpandKey(folderInfo.id)
         } else {
           this.$message({
             message: res.data.message
@@ -391,7 +393,8 @@ export default {
       deleteFile: 'DELETE_FILE',
       setUploadState: 'SET_UPLOAD_STATE',
       addNewFolder: 'ADD_FOLDER_NODE',
-      changeLabelSize: 'CHANGE_LABEL_SIZE'
+      changeLabelSize: 'CHANGE_LABEL_SIZE',
+      pushExpandKey: 'PUSH_EXPAND_KEY'
     })
   }
 }

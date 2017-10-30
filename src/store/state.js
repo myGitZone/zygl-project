@@ -35,7 +35,9 @@ const state = {
   // 授权界面是否显示
   showAuth: false,
   // 展示文件的大小
-  fileBlockSize: 'large'
+  fileBlockSize: 'large',
+  // 目录树默认展开的节点
+  expandedKeys: [1]
 }
 
 export default state

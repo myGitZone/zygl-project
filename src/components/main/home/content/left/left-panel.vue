@@ -5,7 +5,7 @@
 */
 <template>
   <div class="left-panel">
-    <el-tree :data="treeData" highlight-current :props="defaultProps" :render-content="renderContent" :current-node-key="selectId" node-key="id" :default-expanded-keys="[1]" @node-click="handleNodeClick"></el-tree>
+    <el-tree :data="treeData" highlight-current :props="defaultProps" :render-content="renderContent" :current-node-key="selectId" node-key="id" :default-expanded-keys="expandedKeys" @node-click="handleNodeClick"></el-tree>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['treeData', 'selectId'])
+    ...mapGetters(['treeData', 'selectId', 'expandedKeys'])
   },
   methods: {
     /**

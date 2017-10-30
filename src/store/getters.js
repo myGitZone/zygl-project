@@ -32,3 +32,5 @@ export const attrbutes = state => state.attrbutes
 // 授权界面展示
 export const showAuth = state => state.showAuth
 export const fileBlockSize = state => state.fileBlockSize
+// 目录树默认展开的节点
+export const expandedKeys = state => state.expandedKeys

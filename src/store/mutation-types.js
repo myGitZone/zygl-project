@@ -41,3 +41,5 @@ export const CHANGE_AUTH_SHOW = 'CHANGE_AUTH_SHOW'
 export const REFRESH_TREE_DATA = 'REFRESH_TREE_DATA'
 // 图标大小改变
 export const CHANGE_LABEL_SIZE = 'CHANGE_LABEL_SIZE'
+// 添加目录展开节点额id，为了新建文件夹的时候，默认自动展开
+export const PUSH_EXPAND_KEY = 'PUSH_EXPAND_KEY'

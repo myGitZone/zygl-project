@@ -181,6 +181,9 @@ const mutations = {
   },
   [types.CHANGE_LABEL_SIZE](state, size) {
     state.fileBlockSize = size
+  },
+  [types.PUSH_EXPAND_KEY](state, key) {
+    state.expandedKeys.push(key)
   }
 }
 export default mutations
