@@ -36,132 +36,132 @@
 </template>
 
 <script>
-  import Organization from '@/components/main/organization/organization'
-  import PersonManage from '@/components/main/person/person-management'
-  import {mapGetters} from 'vuex'
-  import UserInfo from './user/user-info'
+import Organization from '@/components/main/organization/organization'
+import PersonManage from '@/components/main/person/person-management'
+import { mapGetters } from 'vuex'
+import UserInfo from './user/user-info'
 
-  export default {
-    data() {
-      return {
-        dialogVisible: false,
-        showDialogIndex: 0
-      }
-    },
-    computed: {
-      title() {
-        return this.showDialogIndex === 1 ? '组织机构' : '人员管理'
-      },
-      ...mapGetters(['userinfo'])
-    },
-    methods: {
-      /**
-       切换点击事件
-       **/
-      itemClick(type) {
-        if (type === 0) {
-          this.dialogVisible = false
-        } else {
-          this.dialogVisible = true
-        }
-        this.showDialogIndex = type
-      },
-      /**
-       dialog关闭事件
-       */
-      handleClose() {
-        this.showDialogIndex = 0
-      },
-      /**
-       * 上传弹框关闭
-       */
-      closeClick() {
-        this.setUploadState(false)
-      },
-      /**
-       * 菜单选择
-       */
-      handleSelect(index) {
-        if (index === '1-1') {
-          this.$refs.userinfo.show()
-        } else {
-          this.$router.push('/login/')
-        }
-      }
-    },
-    components: {
-      Organization,
-      PersonManage,
-      UserInfo
+export default {
+  data() {
+    return {
+      dialogVisible: false,
+      showDialogIndex: 0
     }
+  },
+  computed: {
+    title() {
+      return this.showDialogIndex === 1 ? '组织机构' : '人员管理'
+    },
+    ...mapGetters(['userinfo'])
+  },
+  methods: {
+    /**
+     切换点击事件
+     **/
+    itemClick(type) {
+      if (type === 0) {
+        this.dialogVisible = false
+      } else {
+        this.dialogVisible = true
+      }
+      this.showDialogIndex = type
+    },
+    /**
+     dialog关闭事件
+     */
+    handleClose() {
+      this.showDialogIndex = 0
+    },
+    /**
+     * 上传弹框关闭
+     */
+    closeClick() {
+      this.setUploadState(false)
+    },
+    /**
+     * 菜单选择
+     */
+    handleSelect(index) {
+      if (index === '1-1') {
+        this.$refs.userinfo.show()
+      } else {
+        this.$router.push('/login/')
+      }
+    }
+  },
+  components: {
+    Organization,
+    PersonManage,
+    UserInfo
   }
+}
 </script>
 <style lang="scss">
-  .dialog-custom {
-    width: 60% !important;
-    height: 70% !important;
-    .el-dialog__body {
-      padding: 0 !important;
-    }
+.dialog-custom {
+  width: 60% !important;
+  height: 70% !important;
+  .el-dialog__body {
+    padding: 0 !important;
   }
+}
 
-  .right-nav {
-    position: absolute;
-    right: 20px;
-    .el-menu {
-      background-color: inherit;
-      .el-submenu {
-        .el-submenu__title {
-          height: 40px;
-          line-height: 40px;
-          border-bottom: 5px solid transparent !important;
-        }
-        ul {
-          top: 42px !important;
-          .el-menu-item {
-            min-width: 100px !important;
-          }
+.right-nav {
+  position: absolute;
+  right: 20px;
+  .el-menu {
+    background-color: inherit;
+    .el-submenu {
+      .el-submenu__title {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 5px solid transparent !important;
+      }
+      ul {
+        top: 42px !important;
+        .el-menu-item {
+          min-width: 100px !important;
         }
       }
     }
   }
+}
 </style>
 <style lang="scss" scoped>
-  .header-container {
-    height: 40px;
-    line-height: 40px;
-    box-sizing: border-box;
-    border-bottom: 1px solid #eee;
-    .title-content {
-      display: inline-block;
-      width: 200px;
-      padding-left: 20px;
-      vertical-align: top;
-      text-align: center;
-      .fa-cloud {
-        font-size: 2.2rem;
-        vertical-align: baseline;
-        opacity: 0.6;
-      }
-      .title {
-        font-size: 2rem;
-        /*vertical-align: middle;*/
-      }
+.header-container {
+  height: 40px;
+  line-height: 40px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #eee;
+  .title-content {
+    display: inline-block;
+    width: 200px;
+    padding-left: 20px;
+    vertical-align: top;
+    text-align: center;
+    .fa-cloud {
+      font-size: 2.2rem;
+      vertical-align: baseline;
+      opacity: 0.6;
     }
-    .nav-container {
+    .title {
+      font-size: 2rem;
+      /*vertical-align: middle;*/
+    }
+  }
+  .nav-container {
+    display: inline-block;
+    vertical-align: top;
+    font-size: 1.6rem;
+    margin-left: 175px;
+    .nav-item {
       display: inline-block;
-      vertical-align: top;
-      font-size: 1.6rem;
-      margin-left: 40px;
-      .nav-item {
-        display: inline-block;
-        padding: 0 5px;
-        background: rgba(255, 255, 255, 0.3);
-        cursor: pointer;
-        &:hover {
-          background: #eee;
-        }
+      padding: 0 5px;
+      background: rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      &:hover {
+        background: #eee;
       }
     }
   }
+}
 </style>
