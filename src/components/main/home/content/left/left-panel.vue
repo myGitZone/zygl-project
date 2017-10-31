@@ -5,7 +5,7 @@
 */
 <template>
   <div class="left-panel">
-    <el-tree :data="treeData" highlight-current :props="defaultProps" :render-content="renderContent" :current-node-key="selectId" node-key="id" :default-expanded-keys="expandedKeys" @node-click="handleNodeClick"></el-tree>
+    <el-tree :data="treeData" :expand-on-click-node="false" highlight-current :props="defaultProps" :render-content="renderContent" :current-node-key="selectId" node-key="id" :default-expanded-keys="expandedKeys" @node-click="handleNodeClick"></el-tree>
   </div>
 </template>
 
