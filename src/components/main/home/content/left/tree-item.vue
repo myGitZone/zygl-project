@@ -4,7 +4,7 @@
 * @description
 */
 <template>
-  <div class="tree-item-container" @mouseup.prevent.stop="mouseup" @mousedown.prevent.stop="mousedown">
+  <div class="tree-item-container" @dblclick="itemDbclick" @mouseup.prevent.stop="mouseup" @mousedown.prevent.stop="mousedown">
     <i class="font-icon-common" :class="[id===1?'font-icon-home':'font-icon-folder']"></i>
     <span class="item-text">{{info.data.name}}</span>
   </div>
@@ -23,6 +23,12 @@ export default {
     }
   },
   methods: {
+    /**
+      节点双击
+     */
+    itemDbclick() {
+      this.info.expanded = !this.info.expanded
+    },
     /**
      * 鼠标右键抬起
      */
@@ -70,13 +76,13 @@ export default {
   }
   .font-icon-home {
     margin-top: -2px;
-    background-image: url("../../../../../assets/image/menu_icon.png");
+    background-image: url('../../../../../assets/image/menu_icon.png');
     background-position: -16px -496px;
   }
   .font-icon-folder {
     height: 18px !important;
     width: 18px !important;
-    background-image: url("../../../../../assets/image/folder_win10_small.png");
+    background-image: url('../../../../../assets/image/folder_win10_small.png');
   }
   .item-text {
     vertical-align: middle;
