@@ -34,7 +34,7 @@ export const EDIT_ORG = '/api/org/editOrg'
 // 删除组织机构
 export const DELETE_ORG = '/api/org/deleteOrg'
 // 上传文件
-export const UPLOAD_URL = '/api/org/uploadFile'
+export const UPLOAD_URL = '/api/cloud/uploadFile'
 // 下载文件接口
 export const DOWNLOAD_URL = '/api/cloud/downloadFile'
 // 下载文件夹接口
