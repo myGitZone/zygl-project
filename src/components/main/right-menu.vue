@@ -277,18 +277,26 @@ export default {
     newFolderClick() {
       let params = new URLSearchParams()
       let path = this.currentPath
-      params.append('baseFolder', path)
-      params.append('newFolder', '新建文件夹')
-      this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
-        if (res.data.status) {
-          this.addNewFolder(res.data.newName)
-          let folderInfo = getFolderInfo(this.currentPath, this.treeData[0])
-          this.pushExpandKey(folderInfo.id)
-        } else {
-          this.$message({
-            message: res.data.message
-          })
-        }
+      this.$prompt('请输入文件名称', '新建文件夹', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputValue: '新建文件夹'
+      }).then(({ value }) => {
+        params.append('baseFolder', path)
+        params.append('newFolder', value)
+        this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
+          if (res.data.status) {
+            this.addNewFolder(res.data.newName)
+            let folderInfo = getFolderInfo(path, this.treeData[0])
+            this.pushExpandKey(folderInfo.id)
+          } else {
+            this.$message({
+              message: res.data.message
+            })
+          }
+        })
+      }).catch(() => {
+
       })
     },
     /**
