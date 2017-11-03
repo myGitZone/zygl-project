@@ -141,7 +141,8 @@ export default {
   .file-name {
     text-align: center;
     overflow: hidden;
-    text-overflow: ellipsis; // white-space: nowrap;
+    text-overflow: ellipsis;
+    white-space: nowrap; //text-overflow: ellipsis; //
     word-break: break-all;
   }
   .file-name-normal {
