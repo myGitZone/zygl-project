@@ -22,6 +22,10 @@
         <i class="icon-item new-icon vertical"></i>
         <span class="vertical">新建文件夹</span>
       </li>
+      <li class="menu-list-item" @mouseup.stop="refreshClick" v-if="showInfo.refresh">
+        <i class="icon-item refresh-icon vertical"></i>
+        <span class="vertical">{{menuType === 0?'刷新目录树':'刷新'}}</span>
+      </li>
       <li class="menu-list-item" @mouseup.stop="renameClick" v-if="showInfo.rename"
           v-show="fileList.length===1||menuType === 0">
         <i class="icon-item rename-icon vertical"></i>
@@ -37,14 +41,26 @@
           <li class="menu-list-item" @click="labelSizeChange('small')">小图标</li>
         </ul>
       </li>
+      <li class="menu-list-item" @mouseup.stop="sortClick" v-show="menuType === 2">
+        <i class="icon-item sort-icon vertical"></i>
+        <span class="vertical">排序方式</span>
+        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 55px;"></i>
+        <ul class="item-menu">
+          <li class="menu-list-item" >名称</li>
+          <li class="menu-list-item" >大小</li>
+          <li class="menu-list-item" >类型</li>
+          <li class="menu-list-item" >修改时间</li>
+        </ul>
+      </li>
       <li class="menu-list-item" @mouseup.stop="attributeClick" v-if="showInfo.attribute"
           v-show="fileList.length===1||menuType === 0||menuType === 2">
         <i class="attribute-icon fa fa-info vertical"></i>
         <span class="vertical">属性</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="refreshClick" v-if="showInfo.refresh">
-        <i class="icon-item refresh-icon vertical"></i>
-        <span class="vertical">刷新</span>
+      <li class="menu-list-item" @mouseup.stop="searchClick"
+          v-show="menuType === 0">
+        <i class="icon-item search-icon vertical"></i>
+        <span class="vertical">在文件夹中搜索</span>
       </li>
       <li class="menu-list-item" @mouseup.stop="authClick" v-show="menuType === 0"
           v-if="userinfo&&(userinfo.admin === '1'||userinfo.admin === 1)">
@@ -143,6 +159,7 @@ export default {
     ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo'])
   },
   methods: {
+    searchClick() { },
     getShowInfo(folderInfo) {
       let showInfo
       let auth = folderInfo.auth
@@ -200,13 +217,19 @@ export default {
      * 下载点击事件
      */
     downloadClick() {
+      debugger
       let urls
       if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
         let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`
         urls = [url]
       } else if (this.menuType === FILE_MENU) {
         urls = this.fileList.map((item) => {
-          return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item}&authorization=${Cookies.get(JWT_TOKEN)}`
+          if (item.isFolder) {
+            let path = this.currentPath + '/' + item.name
+            return `${DOWNLOAD_FOLDER_URL}?folder=${path}&authorization=${Cookies.get(JWT_TOKEN)}`
+          } else {
+            return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item.name}&authorization=${Cookies.get(JWT_TOKEN)}`
+          }
         })
       }
       downloadFiles(urls)
@@ -316,8 +339,12 @@ export default {
         url = RENAME_FOLDER
       } else if (this.menuType === FILE_MENU) {
         // let name = this.fileList[0]
-        oldName = this.fileList[0] // name.substring(0, name.lastIndexOf('.'))
-        url = RENAME_FILE
+        oldName = this.fileList[0].name // name.substring(0, name.lastIndexOf('.'))
+        if (this.fileList[0].isFolder) {
+          url = RENAME_FOLDER
+        } else {
+          url = RENAME_FILE
+        }
       }
       this.$prompt('请输入文件名称', '重命名', {
         confirmButtonText: '确定',
@@ -352,7 +379,11 @@ export default {
     attributeClick() {
       let params = new URLSearchParams()
       let path = this.currentPath
-      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
+      let file = this.fileList[0]
+      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU || (this.menuType === FILE_MENU && file.isFolder)) {
+        if (this.menuType === FILE_MENU && file.isFolder) {
+          path = path + '/' + file.name
+        }
         params.append('folderPath', path)
         let pathArr = path.split('/')
         let folderName = pathArr[pathArr.length - 1]
@@ -363,11 +394,11 @@ export default {
             this.pushAttribute(res.data.data)
           }
         })
-      } else if (this.menuType === FILE_MENU) {
-        params.append('filePath', path + '/' + this.fileList[0])
+      } else { //  if (this.menuType === FILE_MENU)
+        params.append('filePath', path + '/' + file.name)
         this.$axios.post(FILE_ATTRIBUTE, params).then((res) => {
           if (res.data.status) {
-            res.data.data.name = this.fileList[0]
+            res.data.data.name = file.name
             this.pushAttribute(res.data.data)
           }
         })
@@ -377,11 +408,18 @@ export default {
      * 刷新点击事件
      */
     refreshClick() {
+      let menuType = this.menuType
       this.$axios.get(FOLDER_TREE).then((res) => {
         if (res.data.status) {
-          let dataTree = res.data.data
-          let folderInfo = getFolderInfo(this.currentPath, dataTree)
-          this.updateTree(folderInfo)
+          if (menuType === LEFT_TREE_MENU) {
+            let dataTree = res.data.data
+            let data = [dataTree]
+            this.setTreeData(data)
+          } else {
+            let dataTree = res.data.data
+            let folderInfo = getFolderInfo(this.currentPath, dataTree)
+            this.updateTree(folderInfo)
+          }
         }
       })
     },
@@ -399,6 +437,7 @@ export default {
       changeMenuShow: 'CHANGE_RIGHT_MENU_SHOW',
       deleteNode: 'DELETE_TREE_NODE',
       deleteFile: 'DELETE_FILE',
+      setTreeData: 'SET_TREE_DATA',
       setUploadState: 'SET_UPLOAD_STATE',
       addNewFolder: 'ADD_FOLDER_NODE',
       changeLabelSize: 'CHANGE_LABEL_SIZE',
@@ -474,6 +513,10 @@ export default {
         background-position: 0 -529px;
         background-image: url(../../assets/image/menu_icon.png);
       }
+      .sort-icon {
+        background-position: 0px -561px;
+        background-image: url(../../assets/image/menu_icon.png);
+      }
       .refresh-icon {
         background-position: -17px -513px;
         background-image: url(../../assets/image/menu_icon.png);
@@ -482,6 +525,10 @@ export default {
         background-image: url(../../assets/image/auth.png);
         background-position: center;
         background-size: 150% !important;
+      }
+      .search-icon {
+        background-position: 0px -735px;
+        background-image: url(../../assets/image/menu_icon.png);
       }
       .attribute-icon {
         color: #fff !important;

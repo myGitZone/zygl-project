@@ -94,7 +94,14 @@ const mutations = {
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     // let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
     let files = folderInfo.file.filter(item => {
-      return deleteFiles.indexOf(item) < 0
+      let result = true
+      for (let obj of deleteFiles) {
+        if ((obj.name = item)) {
+          result = false
+          break
+        }
+      }
+      return result
     })
     folderInfo.file = files
   },

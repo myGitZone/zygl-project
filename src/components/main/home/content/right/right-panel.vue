@@ -43,7 +43,7 @@
 import FileBlock from './file-block'
 import EmptyBlock from './empty-block'
 import { mapGetters, mapMutations } from 'vuex'
-import { RIGHT_CODE, BLANK_MENU, FILE_MENU } from '@/assets/js/const-value.js'
+import { RIGHT_CODE, BLANK_MENU, FILE_MENU, FOLDER_MENU } from '@/assets/js/const-value.js'
 import { getFoldersAndFiles } from '@/assets/js/util'
 
 export default {
@@ -92,7 +92,12 @@ export default {
       for (let i = 0, len = this.foldersAndFiles.length; i < len; i++) {
         let item = this.foldersAndFiles[i]
         if (item.toLocaleLowerCase().includes(this.searchVal)) {
-          this.selectFiles.push(item)
+          let isFolder = item.file
+          this.selectFiles = [{
+            isFolder: isFolder,
+            name: isFolder ? item.name : item
+          }]
+          // this.selectFiles.push(item)
         }
       }
     },
@@ -107,7 +112,11 @@ export default {
      */
     fileMouseup(item, e) {
       if (e.button === RIGHT_CODE) {
-        this.menutype = FILE_MENU
+        if (item.file) {
+          this.menutype = FOLDER_MENU
+        } else {
+          this.menutype = FILE_MENU
+        }
         this._showMenu(e)
       }
     },
@@ -117,29 +126,44 @@ export default {
     fileMousedown(item, e) {
       // 设置右键不显示
       this.changeMenuShow({ isShow: false, left: 0, top: 0 })
-      // 如果点击的是勾选钮，这执行添加
-      if (e.target.className === 'fa fa-check') {
-        // 如果已经包含了，这移除
-        if (this.selectFiles.includes(item)) {
-          let i, len
-          for (i = 0, len = this.selectFiles.length; i < len; i++) {
-            if (this.selectFiles[i] === item) {
-              break
-            }
-          }
-          this.selectFiles.splice(i, 1)
-        } else {
-          this.selectFiles.push(item)
-        }
-      } else {
-        this.selectFiles.includes(item) || (this.selectFiles = [item])
-      }
+      let isFolder = item.file
+      this.selectFiles = [{
+        isFolder: isFolder,
+        name: isFolder ? item.name : item
+      }]
+      // // 如果点击的是勾选钮，这执行添加
+      // if (e.target.className === 'fa fa-check') {
+      //   // 如果已经包含了，这移除
+      //   if (this.selectFiles.includes(item)) {
+      //     let i, len
+      //     for (i = 0, len = this.selectFiles.length; i < len; i++) {
+      //       if (this.selectFiles[i] === item) {
+      //         break
+      //       }
+      //     }
+      //     this.selectFiles.splice(i, 1)
+      //   } else {
+      //     this.selectFiles.push(item)
+      //   }
+      // } else {
+      //   this.selectFiles.includes(item) || (this.selectFiles = [item])
+      // }
     },
     /**
      * 获取文件是否被选中的class
      */
     getClass(item) {
-      return this.selectFiles.includes(item) ? 'file-select' : ''
+      let includes = false
+      for (let obj of this.selectFiles) {
+        if (item.file && obj.name === item.name) {
+          includes = true
+        } else {
+          if (obj.name === item) {
+            includes = true
+          }
+        }
+      }
+      return includes ? 'file-select' : ''
     },
     /**
      * 面包屑点击
@@ -204,7 +228,7 @@ export default {
     width: 100%;
     min-width: 600px;
     background: #f8f8f8;
-    background: #f8f8f8 url("../../../../../assets/image/bg.gif") 0px -2px repeat-x;
+    background: #f8f8f8 url('../../../../../assets/image/bg.gif') 0px -2px repeat-x;
     border-bottom: 1px solid #ddd;
     .header-left {
       display: inline-block;
@@ -242,7 +266,7 @@ export default {
         cursor: pointer;
         .font-icon-home {
           display: inline-block;
-          background-image: url("../../../../../assets/image/menu_icon.png");
+          background-image: url('../../../../../assets/image/menu_icon.png');
           width: 16px !important;
           background-position: -16px -496px;
           background-size: auto !important;
@@ -262,7 +286,7 @@ export default {
         box-sizing: border-box;
         box-shadow: #e6e6e6 0px 0px 20px inset;
         background: #f8f8f8;
-        background: #f8f8f8 url("../../../../../assets/image/bg.gif") 0px -2px repeat-x;
+        background: #f8f8f8 url('../../../../../assets/image/bg.gif') 0px -2px repeat-x;
         vertical-align: middle;
         .el-breadcrumb {
           line-height: 2;
@@ -300,7 +324,7 @@ export default {
   display: inline-block;
   padding: 3px 7px;
   border-color: #ddd;
-  background: url("../../../../../assets/image/buttons_40.png") 0 0px repeat-x;
+  background: url('../../../../../assets/image/buttons_40.png') 0 0px repeat-x;
   border-radius: 0px;
   font-size: 12px;
   box-sizing: border-box;

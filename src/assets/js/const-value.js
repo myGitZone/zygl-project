@@ -6,6 +6,7 @@ export const JWT_TOKEN = 'JWT_TOKEN'
 export const LEFT_TREE_MENU = 0
 export const FILE_MENU = 1
 export const BLANK_MENU = 2
+export const FOLDER_MENU = 3
 // 展示文件的大小
 export const LARGE = 'large'
 export const NORMAL = 'normal'

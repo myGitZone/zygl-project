@@ -67,7 +67,8 @@ export default {
   left: 100%;
   padding-left: 20px;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   .el-tree {
     border: none;
   }
