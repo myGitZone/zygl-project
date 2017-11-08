@@ -23,14 +23,8 @@ import Draggabilly from 'draggabilly'
 export default {
   data() {
     return {
-      fileList: [],
       bodyData: null,
       action: UPLOAD_URL
-    }
-  },
-  watch: {
-    fileList() {
-      alert(1234)
     }
   },
   computed: {
@@ -58,15 +52,17 @@ export default {
     //     folderPath: this.currentPath
     //   }
     // },
-    ...mapGetters(['currentPath', 'menuType'])
+    ...mapGetters(['currentPath', 'menuType', 'fileList'])
   },
   mounted() {
+    let menuType = this.menuType
     this.$nextTick(() => {
       /* eslint-disable no-new */
       new Draggabilly(this.$refs.uploadContent, {
         // options...
       })
-      this.path = this.currentPath
+      debugger
+      this.path = menuType === 3 ? this.currentPath + '/' + this.fileList[0].name : this.currentPath
       this.bodyData = {
         folderPath: this.path
       }

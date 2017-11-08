@@ -4,7 +4,7 @@
 * @description
 */
 <template>
-  <div class="file-block" :title="fileInfo.name||fileInfo">
+  <div class="file-block" :title="fileInfo.name||fileInfo" @dblclick="dblclick">
     <div class="item-select" :class="{'item-check':checked}">
       <i class="fa fa-check" aria-hidden="true"></i>
     </div>
@@ -58,7 +58,7 @@ export default {
       }
       return className
     },
-    ...mapGetters(['fileBlockSize'])
+    ...mapGetters(['fileBlockSize', 'currentPath'])
   },
   updated() {
     this.initBackgroundImage()
@@ -67,6 +67,11 @@ export default {
     this.initBackgroundImage()
   },
   methods: {
+    dblclick() {
+      if (this.isFolder) {
+        this.pushPath(this.currentPath + '/' + this.fileInfo.name)
+      }
+    },
     initBackgroundImage() {
       if (this.isFolder) {
         this.background = 'backgroundImage: url("/static/image/folder_win10.png")'

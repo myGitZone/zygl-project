@@ -10,7 +10,7 @@
         <i class="icon-item download-icon vertical"></i>
         <span class="vertical">下载</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="uploadClick" v-if="showInfo.upload">
+      <li class="menu-list-item" @mouseup.stop="uploadClick" v-if="showInfo.upload&&menuType !== 1">
         <i class="icon-item upload-icon vertical"></i>
         <span class="vertical">上传</span>
       </li>
@@ -22,7 +22,7 @@
         <i class="icon-item new-icon vertical"></i>
         <span class="vertical">新建文件夹</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="refreshClick" v-if="showInfo.refresh">
+      <li class="menu-list-item" @mouseup.stop="refreshClick" v-if="showInfo.refresh&&(menuType === 0||menuType === 2)">
         <i class="icon-item refresh-icon vertical"></i>
         <span class="vertical">{{menuType === 0?'刷新目录树':'刷新'}}</span>
       </li>
@@ -87,7 +87,8 @@ import {
   RENAME_FILE,
   FILE_ATTRIBUTE,
   FOLDER_ATTRIBUTE,
-  FOLDER_TREE
+  FOLDER_TREE,
+  FOLDER_MENU
 } from '@/assets/js/const-value'
 import { downloadFiles, getFolderInfo } from '@/assets/js/util'
 import Cookies from 'js-cookie'
@@ -217,12 +218,11 @@ export default {
      * 下载点击事件
      */
     downloadClick() {
-      debugger
       let urls
       if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
         let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`
         urls = [url]
-      } else if (this.menuType === FILE_MENU) {
+      } else if (this.menuType === FILE_MENU || this.menuType === FOLDER_MENU) {
         urls = this.fileList.map((item) => {
           if (item.isFolder) {
             let path = this.currentPath + '/' + item.name
@@ -252,8 +252,8 @@ export default {
       }).then(() => {
         let params = new URLSearchParams()
         // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
-        if (menuType === LEFT_TREE_MENU) {
-          let path = this.currentPath
+        if (menuType === LEFT_TREE_MENU || menuType === FOLDER_MENU) {
+          let path = menuType === FOLDER_MENU ? this.currentPath + '/' + this.fileList[0].name : this.currentPath
           let pathArr = path.split('/')
           let deleteFolder = pathArr[pathArr.length - 1]
           let rootFolder = pathArr.slice(0, pathArr.length - 1).join('/')
@@ -299,7 +299,7 @@ export default {
      */
     newFolderClick() {
       let params = new URLSearchParams()
-      let path = this.currentPath
+      let path = this.menuType === FOLDER_MENU ? this.currentPath + '/' + this.fileList[0].name : this.currentPath
       this.$prompt('请输入文件名称', '新建文件夹', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -309,7 +309,7 @@ export default {
         params.append('newFolder', value)
         this.$axios.post(CREATE_FOLDER_URL, params).then((res) => {
           if (res.data.status) {
-            this.addNewFolder(res.data.newName)
+            this.addNewFolder({ newFolder: res.data.newName, currentPath: path })
             let folderInfo = getFolderInfo(path, this.treeData[0])
             this.pushExpandKey(folderInfo.id)
           } else {
@@ -345,6 +345,10 @@ export default {
         } else {
           url = RENAME_FILE
         }
+      } else if (this.menuType === FOLDER_MENU) {
+        oldName = this.fileList[0].name
+        path = this.currentPath
+        url = RENAME_FOLDER
       }
       this.$prompt('请输入文件名称', '重命名', {
         confirmButtonText: '确定',
@@ -356,7 +360,7 @@ export default {
         params.append('newName', value)
         this.$axios.post(url, params).then((res) => {
           if (res.data.status) {
-            if (menuType === LEFT_TREE_MENU) {
+            if (menuType === LEFT_TREE_MENU || menuType === FOLDER_MENU) {
               let obj = { rootFolder: path, oldName: oldName, newName: value, type: 'folder' }
               this.updateFolder(obj)
             } else {
@@ -380,8 +384,8 @@ export default {
       let params = new URLSearchParams()
       let path = this.currentPath
       let file = this.fileList[0]
-      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU || (this.menuType === FILE_MENU && file.isFolder)) {
-        if (this.menuType === FILE_MENU && file.isFolder) {
+      if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU || this.menuType === FOLDER_MENU) {
+        if (this.menuType === FOLDER_MENU) {
           path = path + '/' + file.name
         }
         params.append('folderPath', path)

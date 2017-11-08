@@ -111,8 +111,7 @@ const mutations = {
   [types.SET_SELECT_ID](state, id) {
     state.selectId = id
   },
-  [types.ADD_FOLDER_NODE](state, newFolder) {
-    let currentPath = state.path[state.index]
+  [types.ADD_FOLDER_NODE](state, { newFolder, currentPath }) {
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     let newFolderInfo = {
       id: ++id,

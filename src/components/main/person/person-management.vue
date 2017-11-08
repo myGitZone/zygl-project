@@ -36,8 +36,8 @@
         </el-table-column>
         <el-table-column prop="username" label="帐号">
         </el-table-column>
-        <el-table-column prop="password" label="密码">
-        </el-table-column>
+        <!-- <el-table-column prop="password" label="密码">
+        </el-table-column> -->
         <el-table-column prop="email" label="邮箱">
         </el-table-column>
         <el-table-column prop="mobilephone" label="电话">
