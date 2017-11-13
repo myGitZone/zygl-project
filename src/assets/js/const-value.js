@@ -11,6 +11,12 @@ export const FOLDER_MENU = 3
 export const LARGE = 'large'
 export const NORMAL = 'normal'
 export const SMALL = 'small'
+
+// 排序方式
+export const SORT_NAME = 'sort_name'
+export const SORT_SIZE = 'sort_size'
+export const SORT_TYPE = 'sort_type'
+export const SORT_TIME = 'sort_time'
 // url
 // 目录树
 export const FOLDER_TREE = '/api/cloud/authFolder'

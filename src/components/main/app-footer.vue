@@ -6,7 +6,7 @@
 <template>
   <div class="footer">
     <span class="footer-value">
-      <a href="http://www.bjxunchuan.com/">Copyright©2017 北京迅传网络科技有限公司</a>
+      <a href="http://www.bjxunchuan.com/" target="view_window">Copyright©2017 北京迅传网络科技有限公司</a>
     </span>
   </div>
 </template>
