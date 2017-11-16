@@ -13,10 +13,16 @@ export const NORMAL = 'normal'
 export const SMALL = 'small'
 
 // 排序方式
-export const SORT_NAME = 'sort_name'
-export const SORT_SIZE = 'sort_size'
-export const SORT_TYPE = 'sort_type'
-export const SORT_TIME = 'sort_time'
+export const SORT_TYPE = {
+  name_order: 1,
+  name_reverseOrder: 2,
+  size_order: 3,
+  size_reverseOrder: 4,
+  type_order: 5,
+  type_reverseOrder: 6,
+  time_order: 7,
+  time_reverseOrder: 8
+}
 // url
 // 目录树
 export const FOLDER_TREE = '/api/cloud/authFolder'

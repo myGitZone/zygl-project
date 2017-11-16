@@ -190,6 +190,9 @@ const mutations = {
   },
   [types.PUSH_EXPAND_KEY](state, key) {
     state.expandedKeys.push(key)
+  },
+  [types.CHANGE_SORT_TYPE](state, type) {
+    state.sortType = type
   }
 }
 export default mutations

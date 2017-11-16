@@ -20,10 +20,6 @@ import { mapMutations, mapGetters } from 'vuex'
 import { LARGE, SMALL } from '@/assets/js/const-value'
 export default {
   props: {
-    currentPath: {
-      type: String,
-      default: ''
-    },
     checked: {
       type: Boolean,
       default: false

@@ -2,7 +2,7 @@
 // const state = {
 //   key: value
 // }
-// import { NORMAL } from '@/assets/js/const-value'
+import { SORT_TYPE } from '@/assets/js/const-value'
 const state = {
   // 记录当前所在path目录中个的索引
   index: -1,
@@ -37,7 +37,9 @@ const state = {
   // 展示文件的大小
   fileBlockSize: 'normal',
   // 目录树默认展开的节点
-  expandedKeys: [1]
+  expandedKeys: [1],
+  // 排序方式
+  sortType: SORT_TYPE.name_order
 }
 
 export default state

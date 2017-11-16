@@ -14,10 +14,7 @@
         <i class="icon-item upload-icon vertical"></i>
         <span class="vertical">上传</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="deleteClick" v-if="showInfo.delete">
-        <i class="icon-item delete-icon vertical"></i>
-        <span class="vertical">删除</span>
-      </li>
+      <div class="border-line"></div>
       <li class="menu-list-item" @mouseup.stop="newFolderClick" v-if="showInfo.create&&menuType !== 1">
         <i class="icon-item new-icon vertical"></i>
         <span class="vertical">新建文件夹</span>
@@ -31,32 +28,11 @@
         <i class="icon-item rename-icon vertical"></i>
         <span class="vertical">重命名</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="labelClick" v-show="menuType === 2">
-        <i class="icon-item label-icon vertical"></i>
-        <span class="vertical">图标大小</span>
-        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 55px;"></i>
-        <ul class="item-menu">
-          <li class="menu-list-item" @click="labelSizeChange('large')">大图标</li>
-          <li class="menu-list-item" @click="labelSizeChange('normal')">中图标</li>
-          <li class="menu-list-item" @click="labelSizeChange('small')">小图标</li>
-        </ul>
+      <li class="menu-list-item" @mouseup.stop="deleteClick" v-if="showInfo.delete">
+        <i class="icon-item delete-icon vertical"></i>
+        <span class="vertical">删除</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="sortClick" v-show="menuType === 2">
-        <i class="icon-item sort-icon vertical"></i>
-        <span class="vertical">排序方式</span>
-        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 55px;"></i>
-        <ul class="item-menu">
-          <li class="menu-list-item" >名称</li>
-          <li class="menu-list-item" >大小</li>
-          <li class="menu-list-item" >类型</li>
-          <li class="menu-list-item" >修改时间</li>
-        </ul>
-      </li>
-      <li class="menu-list-item" @mouseup.stop="attributeClick" v-if="showInfo.attribute"
-          v-show="fileList.length===1||menuType === 0||menuType === 2">
-        <i class="attribute-icon fa fa-info vertical"></i>
-        <span class="vertical">属性</span>
-      </li>
+      <div class="border-line"></div>
       <li class="menu-list-item" @mouseup.stop="searchClick"
           v-show="menuType === 0">
         <i class="icon-item search-icon vertical"></i>
@@ -66,6 +42,32 @@
           v-if="userinfo&&(userinfo.admin === '1'||userinfo.admin === 1)">
         <i class="icon-item auth-icon vertical"></i>
         <span class="vertical">授权</span>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="labelClick" v-show="menuType === 2">
+        <i class="icon-item label-icon vertical"></i>
+        <span class="vertical">查看</span>
+        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 85px;"></i>
+        <ul class="item-menu" :style="subPosition">
+          <li class="menu-list-item" @click="labelSizeChange('large')">大图标</li>
+          <li class="menu-list-item" @click="labelSizeChange('normal')">中图标</li>
+          <li class="menu-list-item" @click="labelSizeChange('small')">小图标</li>
+        </ul>
+      </li>
+      <li class="menu-list-item"v-show="menuType === 2">
+        <i class="icon-item sort-icon vertical"></i>
+        <span class="vertical">排序方式</span>
+        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 55px;"></i>
+        <ul class="item-menu" :style="subPosition">
+          <li class="menu-list-item" @click="sortClick('name')">名称</li>
+          <li class="menu-list-item" @click="sortClick('size')">大小</li>
+          <li class="menu-list-item" @click="sortClick('type')">类型</li>
+          <li class="menu-list-item" @click="sortClick('time')">修改时间</li>
+        </ul>
+      </li>
+      <li class="menu-list-item" @mouseup.stop="attributeClick" v-if="showInfo.attribute"
+          v-show="fileList.length===1||menuType === 0||menuType === 2">
+        <i class="attribute-icon fa fa-info vertical"></i>
+        <span class="vertical">属性</span>
       </li>
     </ul>
   </div>
@@ -88,6 +90,7 @@ import {
   FILE_ATTRIBUTE,
   FOLDER_ATTRIBUTE,
   FOLDER_TREE,
+  SORT_TYPE,
   FOLDER_MENU
 } from '@/assets/js/const-value'
 import { downloadFiles, getFolderInfo } from '@/assets/js/util'
@@ -151,16 +154,67 @@ export default {
       let maxHeight = count * 25
       if (window.innerWidth - x < 200) {
         x = x - 200
+        this.subPosition = { marginLeft: '-144px' }
+      } else {
+        this.subPosition = { marginLeft: '182px' }
       }
       if (window.innerHeight - y < maxHeight) {
         y = y - maxHeight
       }
       return { left: x + 'px', top: y + 'px' }
     },
-    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo'])
+    ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo', 'sortType'])
   },
   methods: {
     searchClick() { },
+    /**
+     * 排序
+     */
+    sortClick(type) {
+      let sortType = this.sortType
+      switch (type) {
+        case 'name':
+          if (this.sortType === SORT_TYPE.name_order) {
+            sortType = SORT_TYPE.name_reverseOrder
+          } else {
+            sortType = SORT_TYPE.name_order
+          }
+          break
+        case 'size':
+          if (this.sortType === SORT_TYPE.size_order) {
+            sortType = SORT_TYPE.size_reverseOrder
+          } else {
+            sortType = SORT_TYPE.size_order
+          }
+          break
+        case 'type':
+          if (this.sortType === SORT_TYPE.type_order) {
+            sortType = SORT_TYPE.type_reverseOrder
+          } else {
+            sortType = SORT_TYPE.type_order
+          }
+          break
+        case 'time':
+          if (this.sortType === SORT_TYPE.time_order) {
+            sortType = SORT_TYPE.time_reverseOrder
+          } else {
+            sortType = SORT_TYPE.time_order
+          }
+          break
+      }
+      this.$axios.get(FOLDER_TREE, {
+        params: {
+          sortType: sortType
+        }
+      }).then((res) => {
+        if (res.data.status) {
+          let dataTree = res.data.data
+          let folderInfo = getFolderInfo(this.currentPath, dataTree)
+          this.updateTree(folderInfo)
+          this.changeSortType(sortType)
+        }
+      })
+    },
     getShowInfo(folderInfo) {
       let showInfo
       let auth = folderInfo.auth
@@ -445,7 +499,8 @@ export default {
       setUploadState: 'SET_UPLOAD_STATE',
       addNewFolder: 'ADD_FOLDER_NODE',
       changeLabelSize: 'CHANGE_LABEL_SIZE',
-      pushExpandKey: 'PUSH_EXPAND_KEY'
+      pushExpandKey: 'PUSH_EXPAND_KEY',
+      changeSortType: 'CHANGE_SORT_TYPE'
     })
   }
 }
@@ -470,6 +525,10 @@ export default {
     margin: 0;
     padding: 0;
     list-style-type: none;
+    .border-line {
+      border-bottom: 1px solid #ddd;
+      margin: 0 10px;
+    }
     .menu-list-item {
       position: relative;
       line-height: 25px;
@@ -556,7 +615,6 @@ export default {
       .item-menu {
         position: absolute;
         display: none;
-        margin-left: 182px;
         width: 120px;
         top: -8px;
         list-style-type: none;
