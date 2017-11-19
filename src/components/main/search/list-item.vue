@@ -41,7 +41,6 @@ export default {
       // let path = this.fileInfo.folder.name
       // while (this.fileInfo.folder) {
       let name = this.isFolder ? this.fileInfo.value.name : this.fileInfo.value
-      console.log(name)
       this.changePathAndSelectFile({
         path: this.fileInfo.path,
         files: [{

@@ -77,7 +77,6 @@ export default {
   },
   watch: {
     fileList() {
-      debugger
       this.selectFiles = this.fileList
     },
     selectFiles() {

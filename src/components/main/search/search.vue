@@ -58,7 +58,6 @@ export default {
     ...mapGetters(['treeData', 'currentPath'])
   },
   mounted() {
-    debugger
     this.pathValue = this.currentPath
     this.$nextTick(() => {
       /* eslint-disable no-new */
@@ -78,7 +77,6 @@ export default {
       this.files = []
       this.folders = []
       let paths = []
-      debugger
       if (this.pathValue) {
         paths.push(...this.pathValue.split('/'))
       }
@@ -93,10 +91,7 @@ export default {
           break
         }
       }
-      debugger
       this._getSearchInfo(searchPath, this.searchValue, this.pathValue)
-      console.log(this.files)
-      console.log(this.folders)
     },
     _getFolderInfoByName(rootPath, name) {
       if (rootPath.name === name) {
