@@ -222,7 +222,8 @@
             }
           })
         } else {
-          params.append('id', this.currentSelectRow.id)
+          params.append('userId', this.currentSelectRow.userid)
+          debugger
           this.$axios.post(UPDATE_USER, params).then((res) => {
             if (res.data.status) {
               this.getUserInfo()
