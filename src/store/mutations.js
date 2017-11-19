@@ -193,6 +193,9 @@ const mutations = {
   },
   [types.CHANGE_SORT_TYPE](state, type) {
     state.sortType = type
+  },
+  [types.CHANGE_SEARCH_DIALOG_SHOW](state, value) {
+    state.showSearch = value
   }
 }
 export default mutations

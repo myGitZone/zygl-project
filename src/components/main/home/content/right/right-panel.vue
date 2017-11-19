@@ -73,9 +73,13 @@ export default {
     rightDisable() {
       return this.path.length === 0 || this.index === this.path.length - 1
     },
-    ...mapGetters(['path', 'index', 'currentPath', 'treeData'])
+    ...mapGetters(['path', 'index', 'currentPath', 'treeData', 'fileList'])
   },
   watch: {
+    fileList() {
+      debugger
+      this.selectFiles = this.fileList
+    },
     selectFiles() {
       this.setSelectFiles(this.selectFiles)
     }

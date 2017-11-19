@@ -18,6 +18,7 @@
                :visible="showAuth" size="large">
       <AuthPanel></AuthPanel>
     </el-dialog>
+    <search  v-if="showSearch"></search>
   </div>
 </template>
 
@@ -32,6 +33,7 @@ import { mapMutations, mapGetters } from 'vuex'
 import Cookies from 'js-cookie'
 import { JWT_TOKEN } from '@/assets/js/const-value'
 import AuthPanel from './home/content/auth/auth-panel'
+import Search from './search/search'
 export default {
   name: 'app',
   data() {
@@ -81,7 +83,7 @@ export default {
     })
   },
   computed: {
-    ...mapGetters(['rightMenuShow', 'showUpload', 'attrbutes', 'showAuth'])
+    ...mapGetters(['rightMenuShow', 'showUpload', 'attrbutes', 'showAuth', 'showSearch'])
   },
   mounted() {
     document.addEventListener('mousedown', (e) => {
@@ -108,7 +110,8 @@ export default {
     AppFooter,
     UploadComponent,
     AttributeDialog,
-    AuthPanel
+    AuthPanel,
+    Search
   }
 }
 </script>

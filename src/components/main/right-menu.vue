@@ -166,7 +166,9 @@ export default {
     ...mapGetters(['left', 'top', 'menuType', 'fileList', 'currentPath', 'treeData', 'userinfo', 'sortType'])
   },
   methods: {
-    searchClick() { },
+    searchClick() {
+      this.changeShow(true)
+    },
     /**
      * 排序
      */
@@ -500,7 +502,8 @@ export default {
       addNewFolder: 'ADD_FOLDER_NODE',
       changeLabelSize: 'CHANGE_LABEL_SIZE',
       pushExpandKey: 'PUSH_EXPAND_KEY',
-      changeSortType: 'CHANGE_SORT_TYPE'
+      changeSortType: 'CHANGE_SORT_TYPE',
+      changeShow: 'CHANGE_SEARCH_DIALOG_SHOW'
     })
   }
 }

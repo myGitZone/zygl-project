@@ -39,7 +39,9 @@ const state = {
   // 目录树默认展开的节点
   expandedKeys: [1],
   // 排序方式
-  sortType: SORT_TYPE.name_order
+  sortType: SORT_TYPE.name_order,
+  // 是否展示查询窗口
+  showSearch: false
 }
 
 export default state

@@ -59,9 +59,8 @@ export default {
     this.$nextTick(() => {
       /* eslint-disable no-new */
       new Draggabilly(this.$refs.uploadContent, {
-        // options...
+        handle: '.header'
       })
-      debugger
       this.path = menuType === 3 ? this.currentPath + '/' + this.fileList[0].name : this.currentPath
       this.bodyData = {
         folderPath: this.path

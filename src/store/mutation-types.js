@@ -45,3 +45,5 @@ export const CHANGE_LABEL_SIZE = 'CHANGE_LABEL_SIZE'
 export const PUSH_EXPAND_KEY = 'PUSH_EXPAND_KEY'
 // 修改排序方式
 export const CHANGE_SORT_TYPE = 'CHANGE_SORT_TYPE'
+// 改变查询窗口是不是显示
+export const CHANGE_SEARCH_DIALOG_SHOW = 'CHANGE_SEARCH_DIALOG_SHOW'
