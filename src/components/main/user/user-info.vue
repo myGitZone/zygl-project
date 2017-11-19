@@ -146,6 +146,7 @@
             params.append('nickName', this.cloneUserInfo.nickname)
             params.append('orgId', this.cloneUserInfo.orgid)
             params.append('userName', this.cloneUserInfo.username)
+            params.append('userId', this.cloneUserInfo.userid)
             this.$axios.post(UPDATE_USER, params).then((res) => {
               console.log(res)
               if (res.data.status) {
