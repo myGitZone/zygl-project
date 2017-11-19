@@ -82,7 +82,6 @@ export default {
      * 菜单选择
      */
     handleSelect(index) {
-      debugger
       if (index === '1-1') {
         this.$refs.userinfo.show()
       } else {
