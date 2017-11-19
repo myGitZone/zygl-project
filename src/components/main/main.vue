@@ -74,6 +74,7 @@ export default {
       }
     })
     this.$axios.get(GET_ORGS).then((res) => {
+      console.log(res)
       if (res.data.status) {
         this.setOrgDatas(res.data.data)
       }
