@@ -156,7 +156,6 @@ export default {
      * 保存按钮点击事件
      */
     saveClick() {
-      debugger
       let params = {
         nickName: this.nickName,
         orgId: this.orgId,
