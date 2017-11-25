@@ -65,7 +65,8 @@ export default {
   methods: {
     dblclick() {
       if (this.isFolder) {
-        this.pushPath(this.currentPath + '/' + this.fileInfo.name)
+        let path = this.currentPath ? this.currentPath + '/' + this.fileInfo.name : this.fileInfo.name
+        this.pushPath(path)
       }
     },
     initBackgroundImage() {

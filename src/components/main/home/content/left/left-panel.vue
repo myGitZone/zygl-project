@@ -43,11 +43,13 @@ export default {
      * @param node
      */
     handleNodeClick(obj, node) {
+      let path = null
       if (node.data.id && node.data.id === 1) {
-        return
+        path = ''
+      } else {
+        path = node.data.name
       }
-      let path = node.data.name
-      while (node.parent && node.parent.data.id !== 1) {
+      while (node.parent && node.parent.data.id && node.parent.data.id !== 1) {
         path = node.parent.data.name + '/' + path
         node = node.parent
       }

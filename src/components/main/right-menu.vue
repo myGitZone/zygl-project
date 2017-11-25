@@ -274,6 +274,7 @@ export default {
      * 下载点击事件
      */
     downloadClick() {
+      debugger
       let urls
       if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
         let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`

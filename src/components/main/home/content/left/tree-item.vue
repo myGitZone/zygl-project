@@ -33,14 +33,17 @@ export default {
      * 鼠标右键抬起
      */
     mouseup(e) {
-      if (e.button === RIGHT_CODE && this.info.data.id !== 1) {
+      if (e.button === RIGHT_CODE) {
         this.changeMenuShow({ isShow: true, left: e.clientX, top: e.clientY, menuType: LEFT_TREE_MENU })
         let node = this.info
+        let path = null
+        debugger
         if (node.data.id && node.data.id === 1) {
-          return
+          path = ''
+        } else {
+          path = node.data.name
         }
-        let path = node.data.name
-        while (node.parent && node.parent.data.id !== 1) {
+        while (node.parent && node.parent.data.id && node.parent.data.id !== 1) {
           path = node.parent.data.name + '/' + path
           node = node.parent
         }

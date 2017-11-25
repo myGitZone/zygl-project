@@ -4,14 +4,17 @@ export function isEmptyObject(e) {
   }
   return !0
 }
+
 export function getFoldersAndFiles(path, root) {
+  debugger
   let folderInfo = getFolderInfo(path, root)
   return folderInfo ? [...folderInfo.folder, ...folderInfo.file] : []
   // return folderInfo && folderInfo.file ? [...folderInfo.file] : []
 }
+
 export function getFolderInfo(path, root) {
   let folderInfo = root
-  if (path) {
+  if (path && path !== '') {
     // 将路径分割
     let pathArr = path.split('/')
     if (root.name === pathArr[0]) {
@@ -29,6 +32,7 @@ export function getFolderInfo(path, root) {
   }
   return folderInfo
 }
+
 export function downloadFiles(urls) {
   urls.forEach((url) => {
     let elFrame = document.createElement('iframe')
@@ -37,6 +41,7 @@ export function downloadFiles(urls) {
     document.body.appendChild(elFrame)
   })
 }
+
 export function generateUUID() {
   var d = new Date().getTime()
   var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -46,6 +51,7 @@ export function generateUUID() {
   })
   return uuid
 }
+
 /**
  * 日期格式化函数
  * @param date Date类型的日期对象
@@ -73,11 +79,13 @@ export function format(date, fmt) {
   }
   return fmt
 }
+
 export function axiosBeforeEach(response, vm) {
   if (!response.data.status && response.data.data === 'login') {
     vm.$router.push('/login')
   }
 }
+
 function getItem(name, data) {
   let folders = data.folder
   let folder
