@@ -93,15 +93,21 @@ export default {
       }
       this.selectFiles = []
       for (let i = 0, len = this.foldersAndFiles.length; i < len; i++) {
+        debugger
         let item = this.foldersAndFiles[i].file ? this.foldersAndFiles[i].name : this.foldersAndFiles[i]
         if (item.toLocaleLowerCase().includes(this.searchVal)) {
           let isFolder = item.file
-          this.selectFiles = [{
+          this.selectFiles.push({
             isFolder: isFolder,
             name: isFolder ? item.name : item
-          }]
+          })
           // this.selectFiles.push(item)
         }
+      }
+      if (this.selectFiles.length === 0) {
+        this.$message({
+          message: '未找到匹配文件！'
+        })
       }
     },
     /**
