@@ -26,7 +26,7 @@
         </el-submenu>
       </el-menu>
     </div>
-    <el-dialog :close-on-click-modal="false" :modal="false" custom-class="dialog-custom dialog-custom-shadow"
+    <el-dialog @close="handleClose" :close-on-click-modal="false" :modal="false" custom-class="dialog-custom dialog-custom-shadow"
                :title="title" :visible.sync="dialogVisible" size="large">
       <organization v-if="showDialogIndex===1"></organization>
       <person-manage v-if="showDialogIndex===2" @close="closeClick"></person-manage>

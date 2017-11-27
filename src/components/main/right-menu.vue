@@ -14,8 +14,7 @@
         <i class="icon-item upload-icon vertical"></i>
         <span class="vertical">上传</span>
       </li>
-      <div class="border-line"></div>
-      <li class="menu-list-item" @mouseup.stop="newFolderClick" v-if="showInfo.create&&menuType !== 1">
+      <li class="menu-list-item border-line" @mouseup.stop="newFolderClick" v-if="showInfo.create&&menuType !== 1">
         <i class="icon-item new-icon vertical"></i>
         <span class="vertical">新建文件夹</span>
       </li>
@@ -32,8 +31,7 @@
         <i class="icon-item delete-icon vertical"></i>
         <span class="vertical">删除</span>
       </li>
-      <div class="border-line"></div>
-      <li class="menu-list-item" @mouseup.stop="searchClick"
+      <li class="menu-list-item border-line" @mouseup.stop="searchClick"
           v-show="menuType === 0">
         <i class="icon-item search-icon vertical"></i>
         <span class="vertical">在文件夹中搜索</span>
@@ -307,6 +305,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        debugger
         let params = new URLSearchParams()
         // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
         if (menuType === LEFT_TREE_MENU || menuType === FOLDER_MENU) {
@@ -329,8 +328,12 @@ export default {
           // 删除文件所在文件夹
           let path = this.currentPath
           let deleteFiles = this.fileList
+          let deletes = []
+          for (var i of deleteFiles) {
+            deletes.push(i.name)
+          }
           params.append('baseFolder', path)
-          params.append('delFileNames', deleteFiles.join('*'))
+          params.append('delFileNames', deletes.join('*'))
           this.$axios.post(DELETE_FILE_URL, params).then((res) => {
             if (res.data.status) {
               this.deleteFile(deleteFiles)
@@ -527,11 +530,10 @@ export default {
   animation-duration: 0.25s;
   .menu-list {
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     list-style-type: none;
     .border-line {
       border-bottom: 1px solid #ddd;
-      margin: 0 10px;
     }
     .menu-list-item {
       position: relative;

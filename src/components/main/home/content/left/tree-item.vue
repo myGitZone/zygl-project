@@ -89,6 +89,10 @@ export default {
   }
   .item-text {
     vertical-align: middle;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; //text-overflow: ellipsis; //
+    word-break: break-all;
   }
 }
 </style>

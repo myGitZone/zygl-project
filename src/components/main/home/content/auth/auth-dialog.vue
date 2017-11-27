@@ -16,7 +16,7 @@
         </el-checkbox-group>
       </div>
       <div class="file-title title-common">
-        文件夹权限
+        文件权限
       </div>
       <div class="file-auth">
         <el-checkbox-group v-model="fileList">
@@ -164,6 +164,9 @@ export default {
   width: 500px !important;
   .el-transfer-panel__body {
     height: 180px !important;
+  }
+  .el-transfer-panel__list.is-filterable {
+    height: 145px !important;
   }
 }
 </style>

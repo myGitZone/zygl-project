@@ -74,6 +74,7 @@ export default {
   },
   computed: {
     editCanUse() {
+      debugger
       return !this.currentData || this.currentData.level === 0
     },
     orgData() {
@@ -82,6 +83,7 @@ export default {
     ...mapGetters(['orgDatas'])
   },
   mounted() {
+    this.currentData = null
   },
   methods: {
     /**
@@ -149,6 +151,12 @@ export default {
      * @argument
      */
     saveData() {
+      if (!this.orgname) {
+        this.$message({
+          message: '名称不能为空！'
+        })
+        return
+      }
       let params = new URLSearchParams()
       if (this.type === ADD_SAME_LEVEL || this.type === ADD_NEXT_LEVEL) {
         params.append('orgname', this.orgname)
