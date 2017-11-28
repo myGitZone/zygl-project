@@ -22,7 +22,6 @@ function setIdToTreeData(folders) {
 
 const mutations = {
   [types.PUSH_PATH](state, path) {
-    debugger
     if (state.path[state.path.length - 1] === path) {
       state.index = state.path.length - 1
       return
@@ -49,7 +48,6 @@ const mutations = {
     id = 1
     data[0].id = id
     setIdToTreeData(data[0].folder)
-    debugger
     // let name = data[0].folder.length > 0 ? data[0].folder[0].name : ''
     // let currentId = data[0].folder.length > 0 ? data[0].folder[0].id : 0
     state.selectId = 1
@@ -96,7 +94,6 @@ const mutations = {
     let folderInfo = getFolderInfo(currentPath, state.treeData[0])
     // let len = len = folderInfo && folderInfo.file ? folderInfo.file.length : 0
     let files = folderInfo.file.filter(item => {
-      debugger
       let result = true
       for (let obj of deleteFiles) {
         if ((obj.name === item)) {

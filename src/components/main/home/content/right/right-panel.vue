@@ -93,7 +93,6 @@ export default {
       }
       this.selectFiles = []
       for (let i = 0, len = this.foldersAndFiles.length; i < len; i++) {
-        debugger
         let item = this.foldersAndFiles[i].file ? this.foldersAndFiles[i].name : this.foldersAndFiles[i]
         if (item.toLocaleLowerCase().includes(this.searchVal)) {
           let isFolder = item.file
@@ -120,7 +119,6 @@ export default {
      * 文件鼠标抬起
      */
     fileMouseup(item, e) {
-      debugger
       if (e.button === RIGHT_CODE) {
         if (item.file) {
           this.menutype = FOLDER_MENU

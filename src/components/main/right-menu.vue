@@ -272,7 +272,6 @@ export default {
      * 下载点击事件
      */
     downloadClick() {
-      debugger
       let urls
       if (this.menuType === LEFT_TREE_MENU || this.menuType === BLANK_MENU) {
         let url = `${DOWNLOAD_FOLDER_URL}?folder=${this.currentPath}&authorization=${Cookies.get(JWT_TOKEN)}`
@@ -305,7 +304,6 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        debugger
         let params = new URLSearchParams()
         // 如果点击的是左侧目录是，是文件夹的话，则删除文件夹
         if (menuType === LEFT_TREE_MENU || menuType === FOLDER_MENU) {
@@ -358,7 +356,6 @@ export default {
      * atime，mtime，ctime就分别代表了访问时间，修改时间以及创建时间
      */
     newFolderClick() {
-      debugger
       let params = new URLSearchParams()
       let path = this.menuType === FOLDER_MENU ? this.currentPath ? this.currentPath + '/' + this.fileList[0].name : this.fileList[0].name : this.currentPath
       this.$prompt('请输入文件名称', '新建文件夹', {

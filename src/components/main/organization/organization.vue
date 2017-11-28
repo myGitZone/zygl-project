@@ -74,7 +74,6 @@ export default {
   },
   computed: {
     editCanUse() {
-      debugger
       return !this.currentData || this.currentData.level === 0
     },
     orgData() {

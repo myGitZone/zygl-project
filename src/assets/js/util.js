@@ -6,7 +6,6 @@ export function isEmptyObject(e) {
 }
 
 export function getFoldersAndFiles(path, root) {
-  debugger
   let folderInfo = getFolderInfo(path, root)
   return folderInfo ? [...folderInfo.folder, ...folderInfo.file] : []
   // return folderInfo && folderInfo.file ? [...folderInfo.file] : []

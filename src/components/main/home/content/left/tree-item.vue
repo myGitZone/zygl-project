@@ -37,7 +37,6 @@ export default {
         this.changeMenuShow({ isShow: true, left: e.clientX, top: e.clientY, menuType: LEFT_TREE_MENU })
         let node = this.info
         let path = null
-        debugger
         if (node.data.id && node.data.id === 1) {
           path = ''
         } else {

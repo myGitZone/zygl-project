@@ -250,7 +250,6 @@ export default {
      * 改变选择的权限
      */
     changeAuth(person) {
-      debugger
       if (person) {
         this.folderList = []
         this.fileList = []
