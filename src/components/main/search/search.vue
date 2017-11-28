@@ -198,6 +198,7 @@ export default {
         overflow: auto;
         list-style: none;
         .list-item {
+          position: relative;
           height: 30px;
           line-height: 30px;
           margin: 5px 10px;

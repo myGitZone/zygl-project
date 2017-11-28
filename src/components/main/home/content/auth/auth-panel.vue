@@ -46,6 +46,14 @@
           <el-button size="small" type="primary" @click="saveClick('file')" :disabled="!fileEnable">更 新</el-button>
         </span>
       </div>
+      <div class="file-auth bottom-auth">
+        <span class="auth-slect">
+          <el-checkbox @change='inheritChange' :disabled="!selectPersonInfo" v-model="inheritCheck">子目录继承该权限</el-checkbox>
+        </span>
+        <span class="edit-btn-container">
+          <el-button size="small" type="primary" @click="saveClick('inherit')" :disabled="!checkEnable">更 新</el-button>
+        </span>
+      </div>
     </div>
     <auth-dialog :currentPersnInfos='personInfos' ref="authDialog" @authSuccess="authSuccess"></auth-dialog>
   </div>
@@ -74,7 +82,9 @@ export default {
       // 文件夹权限保存按钮是否可用
       folderEnable: false,
       // 文件权限保存按钮是否可用
-      fileEnable: false
+      fileEnable: false,
+      checkEnable: false,
+      inheritCheck: true
     }
   },
   computed: {
@@ -95,6 +105,9 @@ export default {
     this.init()
   },
   methods: {
+    inheritChange() {
+      this.checkEnable = true
+    },
     /**
      * 文件夹权限按钮是否勾选
      */
@@ -115,6 +128,7 @@ export default {
       this.changeAuth(item)
       this.fileEnable = false
       this.folderEnable = false
+      this.checkEnable = false
     },
     /**
      * 添加授权成功
@@ -155,8 +169,10 @@ export default {
           })
           if (type === 'folder') {
             this.folderEnable = false
-          } else {
+          } else if (type === 'file') {
             this.fileEnable = false
+          } else {
+            this.checkEnable = false
           }
           this._updatePersonInfo()
         } else {
@@ -227,12 +243,14 @@ export default {
       this.fileList.map((item) => {
         params.append(item, 1)
       })
+      params.append('subinherit', this.inheritCheck ? 1 : 0)
       return params
     },
     /**
      * 改变选择的权限
      */
     changeAuth(person) {
+      debugger
       if (person) {
         this.folderList = []
         this.fileList = []
@@ -246,6 +264,7 @@ export default {
             this.fileList.push(item)
           }
         })
+        this.inheritCheck = person.subinherit === '1'
       }
     },
     handleIconClick() {
@@ -349,7 +368,7 @@ export default {
   .auth-container {
     position: absolute;
     top: 88px;
-    bottom: 122px;
+    bottom: 123px;
     width: 100%;
     overflow: auto;
     box-sizing: border-box;
@@ -357,16 +376,16 @@ export default {
   }
   .auth-content {
     position: absolute;
-    height: 122px;
+    height: 123px;
     bottom: 0;
     width: 100%;
     overflow: auto;
     box-sizing: border-box;
     .bottom-auth {
       position: relative;
-      height: 60px;
+      height: 40px;
       font-size: 16px;
-      line-height: 60px;
+      line-height: 40px;
       border-bottom: 1px solid #eee;
       .auth-slect {
         padding-left: 20px;

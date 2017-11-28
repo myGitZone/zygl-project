@@ -46,7 +46,8 @@ export default {
         files: [{
           isFolder: this.isFolder,
           name: name
-        }]})
+        }]
+      })
       // }
     },
     initBackgroundImage() {
@@ -112,13 +113,17 @@ export default {
     display: inline-block;
     font-size: 12px;
     vertical-align: middle;
+    width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .open-path {
     display: inline-block;
     font-size: 12px;
     vertical-align: middle;
     position: absolute;
-    right: 20px;
+    right: 0;
     width: 40px;
     text-align: center;
     &:hover {

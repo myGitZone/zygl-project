@@ -27,7 +27,7 @@
         <i class="icon-item rename-icon vertical"></i>
         <span class="vertical">重命名</span>
       </li>
-      <li class="menu-list-item" @mouseup.stop="deleteClick" v-if="showInfo.delete">
+      <li class="menu-list-item" @mouseup.stop="deleteClick" v-if="showInfo.delete&&menuType !== 2">
         <i class="icon-item delete-icon vertical"></i>
         <span class="vertical">删除</span>
       </li>
@@ -44,7 +44,7 @@
       <li class="menu-list-item" @mouseup.stop="labelClick" v-show="menuType === 2">
         <i class="icon-item label-icon vertical"></i>
         <span class="vertical">查看</span>
-        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 85px;"></i>
+        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 65px;"></i>
         <ul class="item-menu" :style="subPosition">
           <li class="menu-list-item" @click="labelSizeChange('large')">大图标</li>
           <li class="menu-list-item" @click="labelSizeChange('normal')">中图标</li>
@@ -54,7 +54,7 @@
       <li class="menu-list-item"v-show="menuType === 2">
         <i class="icon-item sort-icon vertical"></i>
         <span class="vertical">排序方式</span>
-        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 55px;"></i>
+        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 35px;"></i>
         <ul class="item-menu" :style="subPosition">
           <li class="menu-list-item" @click="sortClick('name')">名称</li>
           <li class="menu-list-item" @click="sortClick('size')">大小</li>
@@ -152,9 +152,9 @@ export default {
       let maxHeight = count * 25
       if (window.innerWidth - x < 200) {
         x = x - 200
-        this.subPosition = { marginLeft: '-144px' }
+        this.subPosition = { marginLeft: '-150px' }
       } else {
-        this.subPosition = { marginLeft: '182px' }
+        this.subPosition = { marginLeft: '170px' }
       }
       if (window.innerHeight - y < maxHeight) {
         y = y - maxHeight
@@ -358,8 +358,9 @@ export default {
      * atime，mtime，ctime就分别代表了访问时间，修改时间以及创建时间
      */
     newFolderClick() {
+      debugger
       let params = new URLSearchParams()
-      let path = this.menuType === FOLDER_MENU ? this.currentPath + '/' + this.fileList[0].name : this.currentPath
+      let path = this.menuType === FOLDER_MENU ? this.currentPath ? this.currentPath + '/' + this.fileList[0].name : this.fileList[0].name : this.currentPath
       this.$prompt('请输入文件名称', '新建文件夹', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

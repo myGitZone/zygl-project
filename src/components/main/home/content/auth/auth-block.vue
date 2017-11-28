@@ -58,6 +58,7 @@ export default {
     border-color: transparent;
     .item-select {
       background: #3b8cff !important;
+      cursor: pointer;
     }
   }
   .file-icon-content {

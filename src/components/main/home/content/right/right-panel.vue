@@ -120,6 +120,7 @@ export default {
      * 文件鼠标抬起
      */
     fileMouseup(item, e) {
+      debugger
       if (e.button === RIGHT_CODE) {
         if (item.file) {
           this.menutype = FOLDER_MENU
@@ -204,13 +205,13 @@ export default {
      * 文件面板点击事件
      */
     panelMouseDown(e) {
+      this.selectFiles = []
       if (e.button === RIGHT_CODE) {
         this.menutype = BLANK_MENU
         this._showMenu(e)
       } else {
         // 设置右键不显示
         this.changeMenuShow({ isShow: false, left: 0, top: 0 })
-        this.selectFiles = []
       }
     },
     _showMenu(e) {
