@@ -218,7 +218,7 @@ export default {
     getShowInfo(folderInfo) {
       let showInfo
       let auth = folderInfo.auth
-      if (this.menuType === LEFT_TREE_MENU) {
+      if (this.menuType === LEFT_TREE_MENU || this.menuType === FOLDER_MENU) {
         showInfo = {
           download: auth.folderdownload === '1',
           upload: auth.folderupload === '1',
@@ -279,10 +279,11 @@ export default {
       } else if (this.menuType === FILE_MENU || this.menuType === FOLDER_MENU) {
         urls = this.fileList.map((item) => {
           if (item.isFolder) {
-            let path = this.currentPath + '/' + item.name
+            let path = this.currentPath ? this.currentPath + '/' + item.name : item.name
             return `${DOWNLOAD_FOLDER_URL}?folder=${path}&authorization=${Cookies.get(JWT_TOKEN)}`
           } else {
-            return `${DOWNLOAD_URL}?filePath=${this.currentPath}/${item.name}&authorization=${Cookies.get(JWT_TOKEN)}`
+            let filePath = this.currentPath ? `${this.currentPath}/${item.name}` : item.name
+            return `${DOWNLOAD_URL}?filePath=${filePath}&authorization=${Cookies.get(JWT_TOKEN)}`
           }
         })
       }

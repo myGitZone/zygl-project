@@ -44,7 +44,6 @@ export default {
       // 查找关键字
       searchValue: null,
       // 结果的提示 ，如：未查到结果，  1个文件，2个文件夹等
-      result: '',
       // 查到的文件夹
       folders: [],
       // 查到的文件
@@ -54,6 +53,13 @@ export default {
   computed: {
     resultList() {
       return [...this.folders, ...this.files]
+    },
+    result() {
+      if (this.folders.length === 0 && this.files.length === 0) {
+        return '没有搜索结果'
+      } else {
+        return `${this.files.length}文件，${this.folders.length}文件夹`
+      }
     },
     ...mapGetters(['treeData', 'currentPath'])
   },

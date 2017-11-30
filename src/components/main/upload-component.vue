@@ -7,9 +7,10 @@
       </button>
     </div>
     <div class="content">
-      <el-upload class="upload-content" :data='bodyData' ref="upload" :on-success="success" :action="action" multiple :auto-upload="false" name="upfile" :headers="headers">
+      <el-upload class="upload-content" :data='bodyData' ref="upload" :on-success="success" :on-error="error" :action="action" multiple :auto-upload="false" name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+        <el-checkbox v-model="isOverwrite">是否覆盖同名文件</el-checkbox>
       </el-upload>
     </div>
   </div>
@@ -23,13 +24,19 @@ import Draggabilly from 'draggabilly'
 export default {
   data() {
     return {
-      bodyData: null,
-      action: UPLOAD_URL
+      action: UPLOAD_URL,
+      isOverwrite: false
     }
   },
   computed: {
     headers() {
       return { 'authorization': Cookies.get(JWT_TOKEN) }
+    },
+    bodyData() {
+      return {
+        folderPath: this.path,
+        overwrite: this.isOverwrite
+      }
     },
     // bodyData() {
     //   debugger
@@ -62,9 +69,6 @@ export default {
         handle: '.header'
       })
       this.path = menuType === 3 ? this.currentPath + '/' + this.fileList[0].name : this.currentPath
-      this.bodyData = {
-        folderPath: this.path
-      }
     })
   },
   methods: {
@@ -75,9 +79,16 @@ export default {
       this.setUploadState(false)
     },
     success(res, file, files) {
-      this.updateTree({
-        path: this.path,
-        files: [file.name]
+      if (!res.isOverwrite) {
+        this.updateTree({
+          path: this.path,
+          files: [file.name]
+        })
+      }
+    },
+    error(res, file, files) {
+      this.$message({
+        message: `${file.name} 上传失败，确定文件是否已存在，请刷新后再试！`
       })
     },
     ...mapMutations({ updateTree: 'UPDATE_TREE', setUploadState: 'SET_UPLOAD_STATE' })
@@ -121,6 +132,9 @@ export default {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
+    .el-checkbox {
+      margin-left: 140px;
+    }
     .file-content {
       height: 200px;
     }

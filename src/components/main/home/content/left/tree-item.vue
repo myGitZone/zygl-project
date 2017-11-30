@@ -64,9 +64,10 @@ export default {
 <style lang="scss" scoped>
 .tree-item-container {
   display: inline-block;
-  width: 100%;
+  width: 85%;
   font-size: 10px;
   vertical-align: middle;
+  overflow: hidden;
   .font-icon-common {
     display: inline-block;
     height: 16px;
@@ -92,6 +93,8 @@ export default {
     text-overflow: ellipsis;
     white-space: nowrap; //text-overflow: ellipsis; //
     word-break: break-all;
+    width: 90%;
+    display: inline-block;
   }
 }
 </style>
