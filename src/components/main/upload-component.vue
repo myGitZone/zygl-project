@@ -10,7 +10,6 @@
       <el-upload class="upload-content" :data='bodyData' ref="upload" :on-success="success" :on-error="error" :action="action" multiple :auto-upload="false" name="upfile" :headers="headers">
         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-        <el-checkbox v-model="isOverwrite">是否覆盖同名文件</el-checkbox>
       </el-upload>
     </div>
   </div>
@@ -25,7 +24,7 @@ export default {
   data() {
     return {
       action: UPLOAD_URL,
-      isOverwrite: false
+      bodyData: null
     }
   },
   computed: {
@@ -34,8 +33,7 @@ export default {
     },
     bodyData() {
       return {
-        folderPath: this.path,
-        overwrite: this.isOverwrite
+        folderPath: this.path
       }
     },
     // bodyData() {
@@ -69,6 +67,9 @@ export default {
         handle: '.header'
       })
       this.path = menuType === 3 ? this.currentPath + '/' + this.fileList[0].name : this.currentPath
+      this.bodyData = {
+        folderPath: this.path
+      }
     })
   },
   methods: {
