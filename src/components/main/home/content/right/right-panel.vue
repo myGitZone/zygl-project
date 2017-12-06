@@ -258,7 +258,7 @@ export default {
     }
     .header-address {
       display: inline-block;
-      width: 50%;
+      width: 70%;
       height: 100%;
       vertical-align: top;
       &:before {
@@ -285,7 +285,7 @@ export default {
       }
       .path-container {
         display: inline-block;
-        width: 70%;
+        width: 80%;
         height: 28px;
         overflow: hidden;
         border: 1px solid #ddd;

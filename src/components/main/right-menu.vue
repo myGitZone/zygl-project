@@ -44,7 +44,7 @@
       <li class="menu-list-item" @mouseup.stop="labelClick" v-show="menuType === 2">
         <i class="icon-item label-icon vertical"></i>
         <span class="vertical">查看</span>
-        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 65px;"></i>
+        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 60px;"></i>
         <ul class="item-menu" :style="subPosition">
           <li class="menu-list-item" @click="labelSizeChange('large')">大图标</li>
           <li class="menu-list-item" @click="labelSizeChange('normal')">中图标</li>
@@ -54,7 +54,7 @@
       <li class="menu-list-item"v-show="menuType === 2">
         <i class="icon-item sort-icon vertical"></i>
         <span class="vertical">排序方式</span>
-        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 35px;"></i>
+        <i class="fa fa-angle-right" aria-hidden="true" style="margin-left: 30px;"></i>
         <ul class="item-menu" :style="subPosition">
           <li class="menu-list-item" @click="sortClick('name')">名称</li>
           <li class="menu-list-item" @click="sortClick('size')">大小</li>
@@ -428,7 +428,7 @@ export default {
             }
           } else {
             this.$message({
-              message: '重命名失败，请刷新后重试'
+              message: res.data.message
             })
           }
         })
